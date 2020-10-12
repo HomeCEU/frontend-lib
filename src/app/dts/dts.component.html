@@ -1,0 +1,35 @@
+<form [formGroup]="templateForm">
+  <mat-form-field appearance="fill">
+    <mat-label>Search By: </mat-label>
+    <mat-select formControlName="type">
+      <mat-option value="type">Document Type</mat-option>
+      <mat-option value="key">Template Key</mat-option>
+      <mat-option value="search">Search</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <input matInput
+           formControlName="searchValue"
+           type="text"/>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="getTemplates()" type="button">
+    Search
+  </button>
+
+</form>
+
+<br>
+
+<ngx-datatable
+  class="material"
+  [rows]="rows | async"
+  [columns]="columns"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  [rowHeight]="50"
+  [messages]="{ emptyMessage: 'No templates found.' }"
+  [sorts]="[{prop: 'author', dir: 'asc'}]">
+</ngx-datatable>
+
