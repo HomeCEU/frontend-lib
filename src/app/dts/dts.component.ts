@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {Observable} from 'rxjs';
 import {DtsService} from './dts.service';
 import {Template} from './template.types';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {environment} from '../../environments/environment.prod';
 
 @Component({
   selector: 'app-dts',
@@ -10,9 +10,14 @@ import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
   styleUrls: ['./dts.component.scss']
 })
 export class DtsComponent {
-  rows: Observable<Template>;
-  templateForm: FormGroup;
+  /**
+   * List of templates as an observable.
+   */
+  rows: Observable<Template[]>;
 
+  /**
+   * Row columns in the data grid.
+   */
   columns = [
     { prop: 'author', name: 'Author'},
     { prop: 'templateKey', name: 'Template Key'},
@@ -20,18 +25,14 @@ export class DtsComponent {
     { prop: 'createdAt', name: 'Created'}
   ];
 
-  constructor(private dtsService: DtsService, private formBuilder: FormBuilder) {
-
-    this.templateForm = this.formBuilder.group({
-      searchValue: new FormControl('enrollment'),
-      type: new FormControl()
-    });
+  constructor(private dtsService: DtsService) {
+    console.log(environment.production);
   }
 
+  /**
+   * Populates the data grid with a list of templates.
+   */
   getTemplates(): void {
-    const searchValue = this.templateForm.controls['searchValue'].value;
-    const searchType = this.templateForm.controls['type'].value;
-
-    this.rows = this.dtsService.getTemplates(searchType, searchValue);
+    this.rows = this.dtsService.getTemplates();
   }
 }

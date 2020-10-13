@@ -43,7 +43,7 @@ import {MatIconModule} from '@angular/material/icon';
 export class AppModule {
   constructor(private injector: Injector) {}
 
-  ngDoBootstrap() {
+  ngDoBootstrap(): void {
     const el = createCustomElement(DtsComponent, { injector: this.injector });
     if (!customElements.get('app-dts')) {
       customElements.define('app-dts', el);

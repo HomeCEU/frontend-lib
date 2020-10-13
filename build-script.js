@@ -11,7 +11,7 @@ const concat = require('concat');
 
   await fs.ensureDir('elements')
 
-  await concat(files, 'elements/ng-dts-element.js')
+  await concat(files, 'elements/frontend-lib.js')
   console.info('Frontend-lib Elements created successfully!')
 
 })()

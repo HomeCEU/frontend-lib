@@ -1,6 +1,6 @@
 # FrontendLib
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.6.
+This project libraray contains Angular Custom Elements for managing functionality within HomeCEU.
 
 ## Development server
 
@@ -12,7 +12,8 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+- Run `run npm build:elements`
+- Copy `\elements\frontend-lib.js` and `\dist\frontend-lib\styles.css` to the Server where the element is exposed.
 
 ## Running unit tests
 
