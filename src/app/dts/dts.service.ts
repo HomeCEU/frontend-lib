@@ -34,8 +34,8 @@ export class DtsService {
   public getTemplates(documentType?: string): Observable<any> {
     let url = this.url + 'template';
 
-    // Query by the docyment type
-    if (documentType !== undefined) {
+    // Query by the document type
+    if (documentType) {
       url = url + '?filter[type]=' + documentType;
     }
 
