@@ -4,7 +4,7 @@ import {HttpClient, HttpHandler} from '@angular/common/http';
 import {DtsService} from './dts.service';
 import {of} from 'rxjs';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
-import {templates} from '../../test/templates';
+import {templatesAll, templatesEnrollment} from '../../test/templates';
 
 describe('DtsComponent', () => {
   let component: DtsComponent;
@@ -39,8 +39,21 @@ describe('DtsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display a list of templates', done  => {
-    spyOn(dtsService, 'getTemplates').and.returnValue(of(templates.items));
+  it('should display a list of all available templates', done  => {
+    const localTemplateItems = templatesAll.items;
+    spyOn(dtsService, 'getTemplates').and.returnValue(of(localTemplateItems));
+
+    component.getTemplates();
+
+    dtsService.getTemplates().subscribe( result => {
+      expect(result.length).toEqual(3);
+      done();
+    });
+  });
+
+  it('should display a list of templates by document type', done  => {
+    //const localTemplateItems = templates.items.filter(template => template.docType === 'enrollment');
+    spyOn(dtsService, 'getTemplates').and.returnValue(of(templatesEnrollment.items));
 
     component.getTemplates();
 
