@@ -2,7 +2,7 @@ import {inject, TestBed, waitForAsync} from '@angular/core/testing';
 import {DtsService} from './dts.service';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {of} from 'rxjs';
-import {templates} from '../../test/templates';
+import {templatesAll, templatesEnrollment} from '../../test/templates';
 
 describe('DtsService', () => {
   let service: DtsService;
@@ -31,11 +31,23 @@ describe('DtsService', () => {
       });
     })));
 
-  it('should return a list of templates', waitForAsync(inject([DtsService, HttpClient],
+  it('should return a list of all templates', waitForAsync(inject([DtsService, HttpClient],
     (dtsService: DtsService, http: HttpClient) => {
-      const serviceSpy = spyOn(http, 'get').and.returnValue(of(templates));
+      const serviceSpy = spyOn(http, 'get').and.returnValue(of(templatesAll));
 
       dtsService.getTemplates().subscribe(result => {
+        expect(result[0].templateId).toBe('2fa85f64-5717-4562-b3fc-2c963f66afa6');
+        expect(result[1].templateId).toBe('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+        expect(result[2].templateId).toBe('1fa85f64-5717-4562-b3fc-2c963f66afa6');
+        expect(serviceSpy).toHaveBeenCalled();
+      });
+    })));
+
+  it('should return a templates by document type', waitForAsync(inject([DtsService, HttpClient],
+    (dtsService: DtsService, http: HttpClient) => {
+      const serviceSpy = spyOn(http, 'get').and.returnValue(of(templatesEnrollment));
+
+      dtsService.getTemplates('enrollment').subscribe(result => {
         expect(result[0].templateId).toBe('3fa85f64-5717-4562-b3fc-2c963f66afa6');
         expect(result[1].templateId).toBe('1fa85f64-5717-4562-b3fc-2c963f66afa6');
         expect(serviceSpy).toHaveBeenCalled();

@@ -16,7 +16,7 @@ export class DtsComponent {
   rows: Observable<Template[]>;
 
   /**
-   * Row columns in the data grid.
+   * Columns in the data grid.
    */
   columns = [
     { prop: 'author', name: 'Author'},
@@ -29,10 +29,12 @@ export class DtsComponent {
     console.log(environment.production);
   }
 
+
   /**
    * Populates the data grid with a list of templates.
+   * @param documentType indicates type of document
    */
-  getTemplates(): void {
-    this.rows = this.dtsService.getTemplates();
+  getTemplates(documentType?: string): void {
+    this.rows = this.dtsService.getTemplates(documentType);
   }
 }
