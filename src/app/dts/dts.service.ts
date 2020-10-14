@@ -29,8 +29,15 @@ export class DtsService {
 
   /**
    * Retrieves a list of document templates
+   * @param documentType indicates the type of document
    */
-  public getTemplates(): Observable<any> {
+  public getTemplates(documentType?: string): Observable<any> {
+
+    // Query by the docyment type
+    if (documentType !== undefined) {
+      this.url = this.url + 'template?filter[type]=' + documentType;
+    }
+
     return this.http.get(this.url + 'template')
       .pipe(map((result: any) => {
           return result.items;
