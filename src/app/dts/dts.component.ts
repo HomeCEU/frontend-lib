@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {Observable} from 'rxjs';
 import {DtsService} from './dts.service';
 import {Template} from './template.types';
-import {environment} from '../../environments/environment.prod';
 
 @Component({
   selector: 'app-dts',
@@ -26,9 +25,7 @@ export class DtsComponent {
   ];
 
   constructor(private dtsService: DtsService) {
-    console.log(environment.production);
   }
-
 
   /**
    * Populates the data grid with a list of templates.
@@ -45,6 +42,7 @@ export class DtsComponent {
   rowClick(rowEvent): void {
     if (rowEvent.type === 'click') {
       this.dtsService.getTemplateByKey(rowEvent.row.docType, rowEvent.row.templateKey).subscribe(data => {
+        // TODO: CEMS 2078 - Frontend DTS displays selected template in template editor
         console.log(data);
       });
     }

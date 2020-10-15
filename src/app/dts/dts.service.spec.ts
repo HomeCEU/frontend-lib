@@ -56,11 +56,9 @@ describe('DtsService', () => {
 
   it('should return a template given a document type and template key', waitForAsync(inject([DtsService, HttpClient],
     (dtsService: DtsService, http: HttpClient) => {
-      //const template = '<html>\n<head>\n<head>\n<body>\n<p>Hello World</p></body>\n</html>';
       const serviceSpy = spyOn(http, 'get').and.returnValue(of(template));
 
       dtsService.getStatus().subscribe(result => {
-        console.log(result);
         expect(result).toEqual(template);
         expect(serviceSpy).toHaveBeenCalled();
       });
