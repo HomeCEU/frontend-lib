@@ -52,7 +52,7 @@ export class DtsService {
    * @param templateKey unique template identifier
    */
   public getTemplateByKey(documentType: string, templateKey: string): Observable<string> {
-    const url = this.url + 'template/' + documentType + '/' + templateKey;
+    const url =  `${this.url}template/${documentType}/${templateKey}`
 
     return this.http.get(url, {responseType: 'text'});
   }

@@ -2,7 +2,8 @@ import {inject, TestBed, waitForAsync} from '@angular/core/testing';
 import {DtsService} from './dts.service';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {of} from 'rxjs';
-import {template, templatesAll, templatesEnrollment} from '../../test/templates';
+import {templatesAll, templatesEnrollment} from '../../test/templates';
+import {template} from '../../test/template';
 
 describe('DtsService', () => {
   let service: DtsService;
