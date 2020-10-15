@@ -37,4 +37,16 @@ export class DtsComponent {
   getTemplates(documentType?: string): void {
     this.rows = this.dtsService.getTemplates(documentType);
   }
+
+  /**
+   * Handle row click
+   * @param rowEvent event data for the activated row
+   */
+  rowClick(rowEvent): void {
+    if (rowEvent.type === 'click') {
+      this.dtsService.getTemplateByKey(rowEvent.row.docType, rowEvent.row.templateKey).subscribe(data => {
+        console.log(data);
+      });
+    }
+  }
 }

@@ -1,3 +1,8 @@
+export const template = '<html>\n<head>\n<style>\n.page {\npadding-left: 10px;\npadding-right: 10px;\npage-break-after: auto;\n}\n ' +
+  '</style>\n</head>\n<body>\n<div id="container" class="page">\n<p style="text-align:center;">Enrollment #: <span>{{ enrollmentId }}' +
+  '</span></p>\n<p><span class="char-style-override-2" style="line-height: 1.2;">Course Certificate</span></p>\n</body>\n</html>';
+
+
 export const templatesAll = {
   total: 3,
   items: [

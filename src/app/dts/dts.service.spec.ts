@@ -2,7 +2,7 @@ import {inject, TestBed, waitForAsync} from '@angular/core/testing';
 import {DtsService} from './dts.service';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {of} from 'rxjs';
-import {templatesAll, templatesEnrollment} from '../../test/templates';
+import {template, templatesAll, templatesEnrollment} from '../../test/templates';
 
 describe('DtsService', () => {
   let service: DtsService;
@@ -50,6 +50,18 @@ describe('DtsService', () => {
       dtsService.getTemplates('enrollment').subscribe(result => {
         expect(result[0].templateId).toBe('3fa85f64-5717-4562-b3fc-2c963f66afa6');
         expect(result[1].templateId).toBe('1fa85f64-5717-4562-b3fc-2c963f66afa6');
+        expect(serviceSpy).toHaveBeenCalled();
+      });
+    })));
+
+  it('should return a template given a document type and template key', waitForAsync(inject([DtsService, HttpClient],
+    (dtsService: DtsService, http: HttpClient) => {
+      //const template = '<html>\n<head>\n<head>\n<body>\n<p>Hello World</p></body>\n</html>';
+      const serviceSpy = spyOn(http, 'get').and.returnValue(of(template));
+
+      dtsService.getStatus().subscribe(result => {
+        console.log(result);
+        expect(result).toEqual(template);
         expect(serviceSpy).toHaveBeenCalled();
       });
     })));
