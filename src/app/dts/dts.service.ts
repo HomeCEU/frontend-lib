@@ -45,4 +45,15 @@ export class DtsService {
         })
       );
   }
+
+  /**
+   * Gets an HTML template body by document type and template key
+   * @param documentType currently limited to 'enrollment'
+   * @param templateKey unique template identifier
+   */
+  public getTemplateByKey(documentType: string, templateKey: string): Observable<string> {
+    const url =  `${this.url}template/${documentType}/${templateKey}`
+
+    return this.http.get(url, {responseType: 'text'});
+  }
 }

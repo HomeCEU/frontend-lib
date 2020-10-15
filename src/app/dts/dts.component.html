@@ -11,7 +11,8 @@
   [headerHeight]="50"
   [footerHeight]="50"
   [rowHeight]="50"
+  (activate)="rowClick($event)"
   [messages]="{ emptyMessage: 'No templates found.' }"
-  [sorts]="[{prop: 'author', dir: 'asc'}]">
+  [sorts]="[ {prop: 'author', dir: 'asc'} ]">
 </ngx-datatable>
 

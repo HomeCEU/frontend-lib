@@ -3,6 +3,7 @@ import {DtsService} from './dts.service';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {of} from 'rxjs';
 import {templatesAll, templatesEnrollment} from '../../test/templates';
+import {template} from '../../test/template';
 
 describe('DtsService', () => {
   let service: DtsService;
@@ -50,6 +51,16 @@ describe('DtsService', () => {
       dtsService.getTemplates('enrollment').subscribe(result => {
         expect(result[0].templateId).toBe('3fa85f64-5717-4562-b3fc-2c963f66afa6');
         expect(result[1].templateId).toBe('1fa85f64-5717-4562-b3fc-2c963f66afa6');
+        expect(serviceSpy).toHaveBeenCalled();
+      });
+    })));
+
+  it('should return a template given a document type and template key', waitForAsync(inject([DtsService, HttpClient],
+    (dtsService: DtsService, http: HttpClient) => {
+      const serviceSpy = spyOn(http, 'get').and.returnValue(of(template));
+
+      dtsService.getStatus().subscribe(result => {
+        expect(result).toEqual(template);
         expect(serviceSpy).toHaveBeenCalled();
       });
     })));
