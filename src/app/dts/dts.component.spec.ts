@@ -1,4 +1,4 @@
-import {ComponentFixture, inject, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {DtsComponent} from './dts.component';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {DtsService} from './dts.service';
@@ -11,7 +11,6 @@ describe('DtsComponent', () => {
   let component: DtsComponent;
   let fixture: ComponentFixture<DtsComponent>;
   let dtsService: DtsService;
-  let getTemplateSpy = null;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -30,7 +29,7 @@ describe('DtsComponent', () => {
     .compileComponents();
 
     dtsService = TestBed.get(DtsService);
-    getTemplateSpy = spyOn(dtsService, 'getTemplates').and.returnValue(of(null));
+    spyOn(dtsService, 'getTemplates').and.returnValue(of(null));
   });
 
   beforeEach(() => {
