@@ -1,18 +1,25 @@
-<div>
-  <button mat-raised-button (click)="getTemplates('enrollment')" type="button">
-    Search
-  </button>
-</div>
-<br>
-<ngx-datatable
-  class="material striped"
-  [rows]="rows | async"
-  [columns]="columns"
-  [headerHeight]="50"
-  [footerHeight]="50"
-  [rowHeight]="50"
-  (activate)="rowClick($event)"
-  [messages]="{ emptyMessage: 'No templates found.' }"
-  [sorts]="[ {prop: 'author', dir: 'asc'} ]">
-</ngx-datatable>
-
+<form [formGroup]="dtsForm">
+  <mat-tab-group (selectedTabChange)="tabClick($event)">
+    <mat-tab label="Template">
+      <mat-form-field>
+        <mat-label>Template Key</mat-label>
+        <input matInput type="text" formControlName="templateKey">
+      </mat-form-field>
+      <ngx-datatable
+        class="material striped"
+        [rows]="rows | async"
+        [columns]="columns"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="50"
+        (activate)="rowClick($event)"
+        [messages]="{ emptyMessage: 'No templates found.' }"
+        [sorts]="[ {prop: 'author', dir: 'asc'} ]">
+      </ngx-datatable>
+    </mat-tab>
+    <mat-tab label="Edit" [disabled]="selectedTemplate == null">
+      <app-template-editor *ngIf="showEditor" [templateObject]="selectedTemplate">
+      </app-template-editor>
+    </mat-tab>
+  </mat-tab-group>
+</form>

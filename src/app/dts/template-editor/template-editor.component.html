@@ -1,0 +1,26 @@
+<form [formGroup]="templateEditor">
+  <mat-form-field>
+    <mat-label>Template Key</mat-label>
+    <input matInput type="text" formControlName="templateKey" [readonly]="true">
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Template Id</mat-label>
+    <input matInput type="text" formControlName="templateId" [readonly]="true">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Author</mat-label>
+    <input matInput type="text" formControlName="author" [readonly]="true">
+  </mat-form-field>
+  <ckeditor formControlName="templateData"
+    [config]="{
+      toolbar: [
+        { name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
+        { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
+        { name: 'document', items: ['Source'] }
+      ],
+      allowedContent: true,
+      fullPage: true,
+      startupMode: 'source',
+      height: '700px'}">
+  </ckeditor>
+</form>

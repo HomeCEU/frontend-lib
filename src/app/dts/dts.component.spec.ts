@@ -1,15 +1,17 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, inject, TestBed} from '@angular/core/testing';
 import {DtsComponent} from './dts.component';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {DtsService} from './dts.service';
 import {of} from 'rxjs';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {templatesAll, templatesEnrollment} from '../../test/templates';
+import {FormBuilder} from '@angular/forms';
 
 describe('DtsComponent', () => {
   let component: DtsComponent;
   let fixture: ComponentFixture<DtsComponent>;
   let dtsService: DtsService;
+  let getTemplateSpy = null;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -21,12 +23,14 @@ describe('DtsComponent', () => {
       ],
       providers: [
         HttpClient,
-        HttpHandler
+        HttpHandler,
+        FormBuilder
       ]
     })
     .compileComponents();
 
     dtsService = TestBed.get(DtsService);
+    getTemplateSpy = spyOn(dtsService, 'getTemplates').and.returnValue(of(null));
   });
 
   beforeEach(() => {
@@ -40,10 +44,10 @@ describe('DtsComponent', () => {
   });
 
   it('should display a list of all available templates', done  => {
-    const localTemplateItems = templatesAll.items;
-    spyOn(dtsService, 'getTemplates').and.returnValue(of(localTemplateItems));
+    // reset the spy and expected result
+    dtsService.getTemplates = jasmine.createSpy().and.returnValue(of(templatesAll.items));
 
-    component.getTemplates();
+    fixture.detectChanges();
 
     dtsService.getTemplates().subscribe( result => {
       expect(result.length).toEqual(3);
@@ -52,10 +56,10 @@ describe('DtsComponent', () => {
   });
 
   it('should display a list of templates by document type', done  => {
-    //const localTemplateItems = templates.items.filter(template => template.docType === 'enrollment');
-    spyOn(dtsService, 'getTemplates').and.returnValue(of(templatesEnrollment.items));
+    // reset the spy and expected result
+    dtsService.getTemplates = jasmine.createSpy().and.returnValue(of(templatesEnrollment.items));
 
-    component.getTemplates();
+    fixture.detectChanges();
 
     dtsService.getTemplates().subscribe( result => {
       expect(result.length).toEqual(2);

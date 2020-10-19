@@ -3,6 +3,7 @@ import { Injector, NgModule } from '@angular/core';
 
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { createCustomElement } from '@angular/elements';
+import {CKEditorModule} from 'ckeditor4-angular';
 import { DtsComponent } from './dts/dts.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
@@ -13,13 +14,18 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
+import {MatTabsModule} from '@angular/material/tabs';
+
+import {TemplateEditorComponent} from './dts/template-editor/template-editor.component';
 
 @NgModule({
   declarations: [
-    DtsComponent
+    DtsComponent,
+    TemplateEditorComponent
   ],
   imports: [
     BrowserModule,
+    CKEditorModule,
     NoopAnimationsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
@@ -31,6 +37,7 @@ import {MatIconModule} from '@angular/material/icon';
     MatButtonModule,
     MatInputModule,
     MatSelectModule,
+    MatTabsModule
   ],
   providers: [
     HttpClient
