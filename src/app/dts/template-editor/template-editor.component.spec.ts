@@ -1,4 +1,4 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
 import {TemplateEditorComponent} from './template-editor.component';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpHandler} from '@angular/common/http';
@@ -64,17 +64,22 @@ describe('TemplateEditorComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get a template by template key on initialization', done  => {
+  it('should get a template by template key on initialization', fakeAsync(() => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
 
     component.templateObject.docType = 'dummyDocType';
     component.templateObject.templateKey = 'dummyTemplateKey';
     component.ngOnInit();
+    tick();
 
-    dtsService.getTemplateByKey(component.templateObject.docType, component.templateObject.templateKey).subscribe( result => {
-      expect(result).toEqual(template);
-      done();
-    });
-  });
+    // verify the form control has received the template data
+    expect(component.templateEditor.controls['templateData'].value).toEqual(template);
+
+    // When executing the unit test you can see the template text displayed in the editor so the functionality is working correctly,
+    // however at this point in time the ckeditor control is not yet rendered. Eventually it is rendered as a textarea element with nine
+    // attributes however there is no inner HTML representing the template text so it's currently not possible to verify the editor
+    // displayed with text.
+    // const templateData = fixture.debugElement.nativeElement.querySelectorAll('.cke_source');
+  }));
 
 });
