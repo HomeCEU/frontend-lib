@@ -1,11 +1,13 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {TemplateEditorComponent} from './template-editor.component';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {Template} from '../template.types';
 import {of} from 'rxjs';
 import {DtsService} from '../dts.service';
 import {template} from '../../../test/template';
+import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
+import {CKEditorModule} from 'ckeditor4-angular';
 
 describe('TemplateEditorComponent', () => {
   let component: TemplateEditorComponent;
@@ -14,7 +16,18 @@ describe('TemplateEditorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TemplateEditorComponent ],
+      imports: [
+        ReactiveFormsModule,
+        FormsModule,
+        CKEditorModule
+      ],
+      declarations: [
+        TemplateEditorComponent
+      ],
+      schemas: [
+        NO_ERRORS_SCHEMA,
+        CUSTOM_ELEMENTS_SCHEMA
+      ],
       providers: [
         HttpClient,
         HttpHandler,
@@ -29,6 +42,18 @@ describe('TemplateEditorComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TemplateEditorComponent);
     component = fixture.componentInstance;
+
+    component.editorConfig = {
+      toolbar: [
+        { name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
+        { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
+        { name: 'document', items: ['Source'] }
+      ],
+      allowedContent: true,
+      fullPage: true,
+      startupMode: 'source',
+      height: '700px'
+    };
 
     component.templateObject = {} as Template;
 

@@ -5,7 +5,8 @@ import {DtsService} from './dts.service';
 import {of} from 'rxjs';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {templatesAll, templatesEnrollment} from '../../test/templates';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 describe('DtsComponent', () => {
   let component: DtsComponent;
@@ -15,11 +16,13 @@ describe('DtsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        NgxDatatableModule
+        NgxDatatableModule,
+        ReactiveFormsModule
       ],
       declarations: [
         DtsComponent
       ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         HttpClient,
         HttpHandler,
