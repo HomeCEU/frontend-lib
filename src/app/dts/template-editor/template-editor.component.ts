@@ -16,6 +16,21 @@ export class TemplateEditorComponent implements OnInit {
   @Input()
   templateObject: Template;
 
+  /**
+   * CKEditor configuration
+   */
+  editorConfig = {
+    toolbar: [
+      { name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
+      { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
+      { name: 'document', items: ['Source'] }
+    ],
+    allowedContent: true,
+    fullPage: true,
+    startupMode: 'source',
+    height: '700px'
+  };
+
   templateEditor: FormGroup;
 
   constructor(private dtsService: DtsService, private formBuilder: FormBuilder) {

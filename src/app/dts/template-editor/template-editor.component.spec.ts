@@ -30,14 +30,7 @@ describe('TemplateEditorComponent', () => {
     fixture = TestBed.createComponent(TemplateEditorComponent);
     component = fixture.componentInstance;
 
-    component.templateObject = new class implements Template {
-      author: '';
-      bodyUri: '';
-      createdAt: '';
-      docType: '';
-      templateId: '';
-      templateKey: '';
-    };
+    component.templateObject = {} as Template;
 
     fixture.detectChanges();
   });

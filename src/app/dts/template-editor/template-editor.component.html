@@ -12,15 +12,6 @@
     <input matInput type="text" formControlName="author" [readonly]="true">
   </mat-form-field>
   <ckeditor formControlName="templateData"
-    [config]="{
-      toolbar: [
-        { name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
-        { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
-        { name: 'document', items: ['Source'] }
-      ],
-      allowedContent: true,
-      fullPage: true,
-      startupMode: 'source',
-      height: '700px'}">
+    [config]="editorConfig">
   </ckeditor>
 </form>

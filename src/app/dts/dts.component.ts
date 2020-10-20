@@ -22,7 +22,7 @@ export class DtsComponent {
   showEditor = false;
 
   /**
-   * Selected template whch is passed to the editor component
+   * Selected template passed to the editor component
    */
   selectedTemplate: Template = null;
 
@@ -70,19 +70,7 @@ export class DtsComponent {
 
       this.dtsForm.controls['templateKey'].setValue(rowEvent.row.templateKey);
 
-      this.selectedTemplate = new class implements Template {
-        author: string;
-        bodyUri: string;
-        createdAt: string;
-        docType: string;
-        templateId: string;
-        templateKey: string;
-      };
-      this.selectedTemplate.docType = rowEvent.row.docType;
-      this.selectedTemplate.templateKey = rowEvent.row.templateKey;
-      this.selectedTemplate.createdAt =  rowEvent.row.createdAt;
-      this.selectedTemplate.templateId =  rowEvent.row.templateId;
-      this.selectedTemplate.author =  rowEvent.row.author;
+      this.selectedTemplate = {... rowEvent.row} as Template;
     }
   }
 
