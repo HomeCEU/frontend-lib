@@ -10,9 +10,19 @@ import {Template} from './template.types';
 })
 export class DtsComponent {
   /**
-   * List of templates as an observable.
+   * List of templates as an observable
    */
   rows: Observable<Template[]>;
+
+  /**
+   * Prevent CKEditor error when editor tab is not active and no instance of the editor exists
+   */
+  showEditor = false;
+
+  /**
+   * Selected template passed to the editor component
+   */
+  selectedTemplate: Template = null;
 
   /**
    * Columns in the data grid.
@@ -25,26 +35,26 @@ export class DtsComponent {
   ];
 
   constructor(private dtsService: DtsService) {
+    this.rows = this.dtsService.getTemplates('enrollment');
   }
 
   /**
-   * Populates the data grid with a list of templates.
-   * @param documentType indicates type of document
-   */
-  getTemplates(documentType?: string): void {
-    this.rows = this.dtsService.getTemplates(documentType);
-  }
-
-  /**
-   * Handle row click
+   * Handle selection of a template
    * @param rowEvent event data for the activated row
    */
   rowClick(rowEvent): void {
     if (rowEvent.type === 'click') {
-      this.dtsService.getTemplateByKey(rowEvent.row.docType, rowEvent.row.templateKey).subscribe(data => {
-        // TODO: CEMS 2078 - Frontend DTS displays selected template in template editor
-        console.log(data);
-      });
+      this.selectedTemplate = {... rowEvent.row} as Template;
+    }
+  }
+
+  /**
+   * Handles selections of a tab
+   * @param tab selected
+   */
+  tabClick(tab): void {
+    if (tab.index === 1) {
+      this.showEditor = true;
     }
   }
 }
