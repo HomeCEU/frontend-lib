@@ -1,4 +1,4 @@
-<form [formGroup]="templateEditor">
+<form [formGroup]="templateEditor" (ngSubmit)="onSubmit()">
   <mat-form-field>
     <mat-label>Template Key</mat-label>
     <input matInput type="text" formControlName="templateKey" [readonly]="true">
@@ -11,6 +11,9 @@
     <mat-label>Author</mat-label>
     <input matInput type="text" formControlName="author" [readonly]="true">
   </mat-form-field>
+  <button type="submit" mat-button [disabled]="!canSave">
+    Save
+  </button>
   <ckeditor formControlName="templateData"
     [config]="editorConfig">
   </ckeditor>
