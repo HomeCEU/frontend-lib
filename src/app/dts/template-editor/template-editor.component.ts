@@ -17,14 +17,9 @@ export class TemplateEditorComponent implements OnInit {
   templateObject: Template;
 
   /**
-   * Enable/disable template changes
+   * Indicator to display message indicating template saved
    */
-  canSave = false;
-
-  /**
-   * Original template content
-   */
-  originalTemplate = null;
+  templateSaved = false;
 
   /**
    * CKEditor configuration
@@ -38,7 +33,22 @@ export class TemplateEditorComponent implements OnInit {
     allowedContent: true,
     fullPage: true,
     startupMode: 'source',
-    height: '700px'
+    height: '700px',
+    on: {
+      // Fired after setting the editing mode. Cannot bind to the event in the template.
+      mode(event): void {
+        const disableSaveButtonCss = ' mat-button-disabled';
+        const saveButton = document.getElementById('saveButton') as HTMLInputElement;
+        if (event.editor.mode === 'source') {
+          saveButton.disabled = true;
+          saveButton.className += disableSaveButtonCss;
+        }
+        else {
+          saveButton.disabled = false;
+          saveButton.className = saveButton.className.replace(disableSaveButtonCss, '');
+        }
+      }
+    }
   };
 
   templateEditor: FormGroup;
@@ -64,19 +74,6 @@ export class TemplateEditorComponent implements OnInit {
         this.templateEditor.controls['author'].setValue(this.templateObject.author);
       });
     }
-
-    // trap template changes
-    this.templateEditor.get('templateData').valueChanges.subscribe(val => {
-      if (this.originalTemplate) {
-        // changes made so enable save
-        // TODO - compare "val" against "originalTemplate" to determine if actual changes were made
-        this.canSave = true;
-      }
-      else {
-        // template is loaded into the editor in "preview" mode - do not enable saving
-        this.originalTemplate = val;
-      }
-    });
   }
 
   /**
@@ -88,7 +85,8 @@ export class TemplateEditorComponent implements OnInit {
       this.templateEditor.value.author,
       this.templateEditor.value.templateData
     ).subscribe( data => {
-      // TODO - will remove this at a later point
+      // TODO - remove console log and notify if save failed
+      this.templateSaved = true;
       console.log(data);
     });
   }
