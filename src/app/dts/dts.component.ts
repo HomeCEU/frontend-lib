@@ -53,6 +53,8 @@ export class DtsComponent {
    * @param tab selected
    */
   tabClick(tab): void {
+    // initialize and show the editor when the edit tab is selected
+    this.showEditor = false;
     if (tab.index === 1) {
       this.showEditor = true;
     }

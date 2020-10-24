@@ -17,6 +17,16 @@ export class TemplateEditorComponent implements OnInit {
   templateObject: Template;
 
   /**
+   * Enable/disable template changes
+   */
+  canSave = false;
+
+  /**
+   * Original template content
+   */
+  originalTemplate = null;
+
+  /**
    * CKEditor configuration
    */
   editorConfig = {
@@ -48,11 +58,38 @@ export class TemplateEditorComponent implements OnInit {
   ngOnInit(): void {
     if (this.templateObject.docType && this.templateObject.templateKey) {
       this.dtsService.getTemplateByKey(this.templateObject.docType, this.templateObject.templateKey).subscribe(data => {
-        this.templateEditor.controls['templateData'].setValue(data);
+        this.templateEditor.controls['templateData'].setValue(data, { emitEvent: false });
         this.templateEditor.controls['templateKey'].setValue(this.templateObject.templateKey);
         this.templateEditor.controls['templateId'].setValue(this.templateObject.templateId);
         this.templateEditor.controls['author'].setValue(this.templateObject.author);
       });
     }
+
+    // trap template changes
+    this.templateEditor.get('templateData').valueChanges.subscribe(val => {
+      if (this.originalTemplate) {
+        // changes made so enable save
+        // TODO - compare "val" against "originalTemplate" to determine if actual changes were made
+        this.canSave = true;
+      }
+      else {
+        // template is loaded into the editor in "preview" mode - do not enable saving
+        this.originalTemplate = val;
+      }
+    });
+  }
+
+  /**
+   * Saves the template
+   */
+  onSubmit(): void {
+    this.dtsService.saveTemplate(
+      this.templateEditor.value.templateKey,
+      this.templateEditor.value.author,
+      this.templateEditor.value.templateData
+    ).subscribe( data => {
+      // TODO - will remove this at a later point
+      console.log(data);
+    });
   }
 }

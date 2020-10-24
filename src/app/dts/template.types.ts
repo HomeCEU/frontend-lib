@@ -9,3 +9,11 @@ export interface Template {
   createdAt: string;
   bodyUri: string;
 }
+
+/**
+ * Collection of templates
+ */
+export interface TemplateList {
+  total: number;
+  items: Template[];
+}
