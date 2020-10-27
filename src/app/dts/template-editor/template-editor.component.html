@@ -11,9 +11,12 @@
     <mat-label>Author</mat-label>
     <input matInput type="text" formControlName="author" [readonly]="true">
   </mat-form-field>
-  <button type="submit" mat-button [disabled]="!canSave">
+  <button id="saveButton" type="submit" mat-button>
     Save
   </button>
+  <div *ngIf="templateSaved">
+    <strong>Template saved!</strong>
+  </div>
   <ckeditor formControlName="templateData"
     [config]="editorConfig">
   </ckeditor>
