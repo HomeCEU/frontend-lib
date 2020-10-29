@@ -59,6 +59,18 @@ export class DtsService {
   }
 
   /**
+   * Retrieves a rendered template as a certificate populated with data
+   * @param documentType currently limited to 'enrollment'
+   * @param templateKey unique template identifier
+   * @param dataKey unique data identifier
+   */
+  public renderTemplate(documentType: string, templateKey: string, dataKey: string): Observable<string> {
+    const url =  `${this.url}render/${documentType}/${templateKey}/${dataKey}`;
+
+    return this.http.get(url, {responseType: 'text'});
+  }
+
+  /**
    * Saves a template
    * @param templateKeyValue unique template identifier
    * @param authorValue person saving/modifying this template

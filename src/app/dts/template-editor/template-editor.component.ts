@@ -58,7 +58,8 @@ export class TemplateEditorComponent implements OnInit {
       templateData: new FormControl(),
       templateKey: new FormControl(),
       templateId: new FormControl(),
-      author: new FormControl()
+      author: new FormControl(),
+      dataKey: new FormControl()
     });
   }
 
@@ -89,5 +90,20 @@ export class TemplateEditorComponent implements OnInit {
       this.templateSaved = true;
       console.log(data);
     });
+  }
+
+  /**
+   * Displays a modal window containing a certificate populated with data
+   */
+  renderTemplate(): void {
+    if (this.templateObject.docType && this.templateObject.templateKey && this.templateEditor.value.dataKey) {
+      this.dtsService.renderTemplate(this.templateObject.docType, this.templateObject.templateKey, this.templateEditor.value.dataKey)
+        .subscribe(certificate => {
+          const modal = window.open('', 'certificate', 'scrollbars=1,resizable=1');
+          modal.document.open();
+          modal.document.write(certificate);
+          modal.document.close();
+      });
+    }
   }
 }

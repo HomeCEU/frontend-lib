@@ -3,7 +3,7 @@ import {DtsService} from './dts.service';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {of} from 'rxjs';
 import {templatesAll, templatesEnrollment} from '../../test/templates';
-import {template} from '../../test/template';
+import {certificate, template} from '../../test/template';
 
 describe('DtsService', () => {
   let service: DtsService;
@@ -61,6 +61,17 @@ describe('DtsService', () => {
 
       dtsService.getStatus().subscribe(result => {
         expect(result).toEqual(template);
+        expect(serviceSpy).toHaveBeenCalled();
+      });
+    })));
+
+  it('should return a template populated with data (certificate) given a document type, template key, and data key',
+    waitForAsync(inject([DtsService, HttpClient],
+    (dtsService: DtsService, http: HttpClient) => {
+      const serviceSpy = spyOn(http, 'get').and.returnValue(of(certificate));
+
+      dtsService.getStatus().subscribe(result => {
+        expect(result).toEqual(certificate);
         expect(serviceSpy).toHaveBeenCalled();
       });
     })));

@@ -11,6 +11,15 @@
     <mat-label>Author</mat-label>
     <input matInput type="text" formControlName="author" [readonly]="true">
   </mat-form-field>
+  <div>
+    <mat-form-field>
+      <mat-label>Data Key</mat-label>
+      <input matInput type="text" formControlName="dataKey">
+    </mat-form-field>
+    <button [disabled]="!templateEditor.value.dataKey" (click)="renderTemplate()" type="button" mat-button>
+      Preview
+    </button>
+  </div>
   <button id="saveButton" type="submit" mat-button>
     Save
   </button>
