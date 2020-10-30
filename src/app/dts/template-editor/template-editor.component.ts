@@ -55,11 +55,11 @@ export class TemplateEditorComponent implements OnInit {
 
   constructor(private dtsService: DtsService, private formBuilder: FormBuilder) {
     this.templateEditor = this.formBuilder.group({
-      templateData: new FormControl(),
-      templateKey: new FormControl(),
-      templateId: new FormControl(),
-      author: new FormControl(),
-      dataKey: new FormControl()
+      templateData: '',
+      templateKey: '',
+      templateId: '',
+      author: '',
+      dataKey: ''
     });
   }
 
