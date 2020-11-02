@@ -5,7 +5,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { createCustomElement } from '@angular/elements';
 import {CKEditorModule} from 'ckeditor4-angular';
 import { DtsComponent } from './dts/dts.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -38,8 +38,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatInputModule,
     MatSelectModule,
     MatTabsModule,
-    MatDialogModule,
-    FormsModule
+    MatDialogModule
   ],
   providers: [
     HttpClient

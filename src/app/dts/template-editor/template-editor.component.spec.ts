@@ -1,6 +1,6 @@
-import {ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {TemplateEditorComponent} from './template-editor.component';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {Template} from '../template.types';
 import {of} from 'rxjs';
@@ -25,7 +25,6 @@ describe('TemplateEditorComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
-        FormsModule,
         CKEditorModule
       ],
       declarations: [
@@ -75,9 +74,9 @@ describe('TemplateEditorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create',  fakeAsync(() => {
+  it('should create',  () => {
     expect(component).toBeTruthy();
-  }));
+  });
 
   it('should initialize and allow creating a new template', (done) => {
     const expectedBody = `<p><br></p>`;
