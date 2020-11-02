@@ -43,10 +43,7 @@ import {MatDialogModule} from '@angular/material/dialog';
   providers: [
     HttpClient
   ],
-  bootstrap: [],
-  entryComponents: [
-    DtsComponent
-  ]
+  bootstrap: []
 })
 export class AppModule {
   constructor(private injector: Injector) {}

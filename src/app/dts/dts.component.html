@@ -4,7 +4,7 @@
   </button>
   <mat-form-field class="filterby-form-field">
     <input class="filterBy" matInput type="text" formControlName="templateFilter" placeholder="Type to filter by key or author...">
-    <button mat-button *ngIf="dtsForm.value.templateFilter" matSuffix mat-icon-button aria-label="Clear" (click)="dtsForm.controls['templateFilter'].setValue('')">
+    <button mat-button *ngIf="dtsForm.value.templateFilter" matSuffix mat-icon-button aria-label="Clear" (click)="dtsForm.reset()">
       &#120;
     </button>
   </mat-form-field>
@@ -49,8 +49,8 @@
       [canAutoResize]="false">
       <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
         <a href="javascript:void(0)"
-          [class.datatable-icon-right]="!expanded"
-          [class.datatable-icon-down]="expanded"
+          [class.arrow-right]="!expanded"
+          [class.arrow-down]="expanded"
           title="Expand/Collapse Row"
           (click)="toggleExpandRow(row)">
         </a>
