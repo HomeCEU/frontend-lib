@@ -1,19 +1,73 @@
-<mat-tab-group (selectedTabChange)="tabClick($event)">
-  <mat-tab label="Template">
-    <ngx-datatable
-      class="material striped"
-      [rows]="rows | async"
-      [columns]="columns"
-      [headerHeight]="50"
-      [footerHeight]="50"
-      [rowHeight]="50"
-      (activate)="rowClick($event)"
-      [messages]="{ emptyMessage: 'No templates found.' }"
-      [sorts]="[ {prop: 'author', dir: 'asc'} ]">
-    </ngx-datatable>
-  </mat-tab>
-  <mat-tab label="Edit" [disabled]="selectedTemplate == null">
-    <app-template-editor *ngIf="showEditor" [templateObject]="selectedTemplate">
-    </app-template-editor>
-  </mat-tab>
-</mat-tab-group>
+<form [formGroup]="dtsForm">
+  <button type="button" (click)="newTemplate()" mat-button>
+    <b>&#43;</b>
+  </button>
+  <mat-form-field class="filterby-form-field">
+    <input class="filterBy" matInput type="text" formControlName="templateFilter" placeholder="Type to filter by key or author...">
+    <button mat-button *ngIf="dtsForm.value.templateFilter" matSuffix mat-icon-button aria-label="Clear" (click)="dtsForm.controls['templateFilter'].setValue('')">
+      &#120;
+    </button>
+  </mat-form-field>
+  <ngx-datatable
+    #templateTable
+    class="material striped"
+    [rows]="rows | async"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    [rowHeight]="50"
+    [limit]="2"
+    (activate)="rowClick($event)"
+    [messages]="{ emptyMessage: 'No templates found.' }"
+    [columnMode]="'flex'"
+    [sorts]="[ {prop: 'templateKey', dir: 'asc'} ]">
+
+    <!-- Row Detail Template -->
+    <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow >
+      <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+        <table>
+          <tr>
+            <td>Template Id</td>
+            <td>{{ row.templateId }}</td>
+          </tr>
+          <tr>
+            <td>Body Uri</td>
+            <td>{{ row.bodyUri }}</td>
+          </tr>
+          <tr>
+            <td>Document Type</td>
+            <td>{{ row.docType }}</td>
+          </tr>
+        </table>
+      </ng-template>
+    </ngx-datatable-row-detail>
+
+    <ngx-datatable-column
+      [width]="50"
+      [resizeable]="false"
+      [sortable]="false"
+      [draggable]="false"
+      [canAutoResize]="false">
+      <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+        <a href="javascript:void(0)"
+          [class.datatable-icon-right]="!expanded"
+          [class.datatable-icon-down]="expanded"
+          title="Expand/Collapse Row"
+          (click)="toggleExpandRow(row)">
+        </a>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Template Key" prop="templateKey" [flexGrow]="1" >
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Author" prop="author"  [canAutoResize]="false" minWidth="300">
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Date/Time" prop="createdAt"   [canAutoResize]="false" minWidth="150">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        {{ value | date:'short' }}
+      </ng-template>
+    </ngx-datatable-column>
+
+  </ngx-datatable>
+</form>

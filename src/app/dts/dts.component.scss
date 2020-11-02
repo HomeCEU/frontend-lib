@@ -1,11 +1,15 @@
-.user-list {
-  .nav-link, .nav-link:hover {
-    .is-active-icon {
-      color: green;
-    }
-  }
+.filterby-form-field {
+  width: 30em;
+}
 
-  .is-active-icon {
-    color: green;
-  }
+td:first-child {
+  width: 10em;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
 }

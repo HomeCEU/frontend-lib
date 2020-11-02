@@ -6,6 +6,8 @@ import {of} from 'rxjs';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {templatesAll, templatesEnrollment} from '../../test/templates';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {FormBuilder} from '@angular/forms';
 
 describe('DtsComponent', () => {
   let component: DtsComponent;
@@ -24,7 +26,8 @@ describe('DtsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        NgxDatatableModule
+        NgxDatatableModule,
+        MatDialogModule
       ],
       declarations: [
         DtsComponent
@@ -32,7 +35,9 @@ describe('DtsComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         HttpClient,
-        HttpHandler
+        HttpHandler,
+        MatDialog,
+        FormBuilder
       ]
     })
     .compileComponents();
@@ -51,9 +56,8 @@ describe('DtsComponent', () => {
     createComponent();
 
     const gridData = fixture.debugElement.nativeElement.querySelectorAll('.datatable-body');
-    expect(gridData[0].textContent).toEqual('Robert MartinNutritionTemplate3fa85f64-5717-4562-b3fc-2c963f66afa62020-03-05T23:' +
-      '35:12.876ZSteve GilesPhysicalTherapyTemplate1fa85f64-5717-4562-b3fc-2c963f66afa62020-04-05T23:35:12.876ZSue AndersonNursingTem' +
-      'plate2fa85f64-5717-4562-b3fc-2c963f66afa62020-01-05T23:35:12.876Z');
+    expect(gridData[0].textContent).toEqual('NursingTemplateSue Anderson 1/5/20, 6:35 PM NutritionTemplateRobert Martin ' +
+      '3/5/20, 6:35 PM ');
   });
 
   it('should display a list of templates by document type', ()  => {
@@ -61,8 +65,8 @@ describe('DtsComponent', () => {
     createComponent();
 
     const gridData = fixture.debugElement.nativeElement.querySelectorAll('.datatable-body');
-    expect(gridData[0].textContent).toEqual('Robert MartinNutritionTemplate3fa85f64-5717-4562-b3fc-2c963f66afa62020-03-05T23:' +
-      '35:12.876ZSteve GilesPhysicalTherapyTemplate1fa85f64-5717-4562-b3fc-2c963f66afa62020-04-05T23:35:12.876Z');
+    expect(gridData[0].textContent).toEqual('NutritionTemplateRobert Martin 3/5/20, 6:35 PM PhysicalTherapyTemplateSteve Giles ' +
+      '4/5/20, 7:35 PM ');
   });
 
 });

@@ -5,7 +5,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { createCustomElement } from '@angular/elements';
 import {CKEditorModule} from 'ckeditor4-angular';
 import { DtsComponent } from './dts/dts.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -15,8 +15,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
-
 import {TemplateEditorComponent} from './dts/template-editor/template-editor.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -37,13 +37,15 @@ import {TemplateEditorComponent} from './dts/template-editor/template-editor.com
     MatButtonModule,
     MatInputModule,
     MatSelectModule,
-    MatTabsModule
+    MatTabsModule,
+    MatDialogModule,
+    FormsModule
   ],
   providers: [
     HttpClient
   ],
   bootstrap: [],
-  entryComponents:[
+  entryComponents: [
     DtsComponent
   ]
 })
