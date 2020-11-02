@@ -87,9 +87,7 @@ export class TemplateEditorComponent implements OnInit {
    */
   ngOnInit(): void {
     if (this.templateObject.docType && this.templateObject.templateKey) {
-      this.templateEditor.controls.templateKey.setValue(this.templateObject.templateKey);
-      this.templateEditor.controls.templateId.setValue(this.templateObject.templateId);
-      this.templateEditor.controls.author.setValue(this.templateObject.author);
+      this.templateEditor.patchValue(this.templateObject)
 
       // retrieve template content for existing template
       this.dtsService.getTemplateByKey(this.templateObject.docType, this.templateObject.templateKey).subscribe(data => {
