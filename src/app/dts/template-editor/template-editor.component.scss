@@ -1,3 +1,20 @@
-.full-width {
+.flex-row {
+  display: flex;
+}
+
+.push {
+  margin-left: auto;
+}
+
+.templateKey {
   width: 400px;
+}
+
+.dataKey {
+  width: 300px;
+}
+
+.statusMessage {
+  margin-top:10px;
+  padding-left: 5em;
 }

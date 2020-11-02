@@ -1,11 +1,42 @@
-.user-list {
-  .nav-link, .nav-link:hover {
-    .is-active-icon {
-      color: green;
-    }
-  }
-
-  .is-active-icon {
-    color: green;
-  }
+.filterby-form-field {
+  width: 30em;
 }
+
+td:first-child {
+  width: 10em;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+table {
+  padding-left: 5em;
+  width: 100%;
+}
+
+.arrow-right {
+  border: solid black;
+  border-width: 0 1px 1px 0;
+  display: inline-block;
+  margin-top: 6px;
+  padding: 3px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.arrow-down {
+  border: solid black;
+  border-width: 0 1px 1px 0;
+  display: inline-block;
+  margin-top: 6px;
+  padding: 3px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+

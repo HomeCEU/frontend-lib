@@ -53,6 +53,8 @@ export class DtsService {
    * @param templateKey unique template identifier
    */
   public getTemplateByKey(documentType: string, templateKey: string): Observable<string> {
+    templateKey = encodeURI(templateKey);
+
     const url =  `${this.url}template/${documentType}/${templateKey}`;
 
     return this.http.get(url, {responseType: 'text'});
@@ -65,6 +67,8 @@ export class DtsService {
    * @param dataKey unique data identifier
    */
   public renderTemplate(documentType: string, templateKey: string, dataKey: string): Observable<string> {
+    templateKey = encodeURI(templateKey);
+
     const url =  `${this.url}render/${documentType}/${templateKey}/${dataKey}`;
 
     return this.http.get(url, {responseType: 'text'});

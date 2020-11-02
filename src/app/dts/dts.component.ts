@@ -1,7 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs';
 import {DtsService} from './dts.service';
 import {Template} from './template.types';
+import {MatDialog} from '@angular/material/dialog';
+import {TemplateEditorComponent} from './template-editor/template-editor.component';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-dts',
@@ -15,27 +18,23 @@ export class DtsComponent {
   rows: Observable<Template[]>;
 
   /**
-   * Prevent CKEditor error when editor tab is not active and no instance of the editor exists
-   */
-  showEditor = false;
-
-  /**
    * Selected template passed to the editor component
    */
   selectedTemplate: Template = null;
 
-  /**
-   * Columns in the data grid.
-   */
-  columns = [
-    { prop: 'author', name: 'Author'},
-    { prop: 'templateKey', name: 'Template Key'},
-    { prop: 'templateId', name: 'Template Id'},
-    { prop: 'createdAt', name: 'Created'}
-  ];
+  dtsForm: FormGroup;
+  dialogWidth = 1000;
+  @ViewChild('templateTable') table: any;
 
-  constructor(private dtsService: DtsService) {
+  constructor(private dtsService: DtsService,
+              private dialog: MatDialog,
+              private formBuilder: FormBuilder) {
+
     this.rows = this.dtsService.getTemplates('enrollment');
+
+    this.dtsForm = this.formBuilder.group({
+      templateFilter: '',
+    });
   }
 
   /**
@@ -43,20 +42,45 @@ export class DtsComponent {
    * @param rowEvent event data for the activated row
    */
   rowClick(rowEvent): void {
-    if (rowEvent.type === 'click') {
+    if (rowEvent.type === 'click' && rowEvent.column.name) {
       this.selectedTemplate = {... rowEvent.row} as Template;
+
+      this.dialog.open(TemplateEditorComponent, {
+        data: {
+          templateId: this.selectedTemplate.templateId,
+          docType: this.selectedTemplate.docType,
+          templateKey: this.selectedTemplate.templateKey,
+          author: this.selectedTemplate.author,
+          createdAt: this.selectedTemplate.createdAt,
+          bodyUri: this.selectedTemplate.bodyUri
+        },
+        minWidth: this.dialogWidth
+      });
     }
   }
 
   /**
-   * Handles selections of a tab
-   * @param tab selected
+   * Launches dialog to create a new template
    */
-  tabClick(tab): void {
-    // initialize and show the editor when the edit tab is selected
-    this.showEditor = false;
-    if (tab.index === 1) {
-      this.showEditor = true;
-    }
+  newTemplate(): void {
+    this.dialog.open(TemplateEditorComponent, {
+      data: {
+        templateId: '',
+        docType: 'enrollment',
+        templateKey: '',
+        author: '',
+        createdAt: '',
+        bodyUri: ''
+      },
+      minWidth: this.dialogWidth
+    });
+  }
+
+  /**
+   * Expand the row to dislay template details
+   * @param row containing all fields
+   */
+  toggleExpandRow(row): void {
+    this.table.rowDetail.toggleExpandRow(row);
   }
 }

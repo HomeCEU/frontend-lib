@@ -15,8 +15,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
-
 import {TemplateEditorComponent} from './dts/template-editor/template-editor.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -37,15 +37,13 @@ import {TemplateEditorComponent} from './dts/template-editor/template-editor.com
     MatButtonModule,
     MatInputModule,
     MatSelectModule,
-    MatTabsModule
+    MatTabsModule,
+    MatDialogModule
   ],
   providers: [
     HttpClient
   ],
-  bootstrap: [],
-  entryComponents:[
-    DtsComponent
-  ]
+  bootstrap: []
 })
 export class AppModule {
   constructor(private injector: Injector) {}
