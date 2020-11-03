@@ -53,18 +53,6 @@ describe('TemplateEditorComponent', () => {
 
     spyOn(window, 'confirm').and.returnValue(true);
 
-    component.editorConfig = {
-      toolbar: [
-        { name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
-        { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
-        { name: 'document', items: ['Source'] }
-      ],
-      allowedContent: true,
-      fullPage: true,
-      startupMode: 'source',
-      height: '700px'
-    };
-
     component.templateObject = {} as Template;
 
     fixture.detectChanges();
