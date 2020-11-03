@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DtsService} from '../dts.service';
 import {Template} from '../template.types';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {CKEditor4} from 'ckeditor4-angular';
 
 @Component({
   selector: 'app-template-editor',
@@ -26,6 +27,11 @@ export class TemplateEditorComponent implements OnInit {
   dirty = false;
 
   /**
+   * Provides access to properties and methods of the CkEditor
+   */
+  editorControl: CKEditor4.Editor;
+
+  /**
    * CKEditor configuration
    */
   editorConfig = {
@@ -37,22 +43,7 @@ export class TemplateEditorComponent implements OnInit {
     allowedContent: true,
     fullPage: true,
     startupMode: 'source',
-    height: '700px',
-    on: {
-      // Fired after setting the editing mode. Cannot bind to the event in the template.
-      mode(event): void {
-        const disableSaveButtonCss = ' mat-button-disabled';
-        const saveButton = document.getElementById('saveButton') as HTMLInputElement;
-        if (event.editor.mode === 'source') {
-          saveButton.disabled = true;
-          saveButton.className += disableSaveButtonCss;
-        }
-        else {
-          saveButton.disabled = false;
-          saveButton.className = saveButton.className.replace(disableSaveButtonCss, '');
-        }
-      }
-    }
+    height: '700px'
   };
 
   templateEditor: FormGroup;
@@ -164,7 +155,7 @@ export class TemplateEditorComponent implements OnInit {
 
   /**
    * Fires when the content of the editor has changed - used to indicate when user has made changes
-   * @param event
+   * @param event information
    */
   editorChanged(event): void {
     this.dirty = true;
@@ -184,5 +175,13 @@ export class TemplateEditorComponent implements OnInit {
     else {
       this.dialogRef.close();
     }
+  }
+
+  /**
+   * CkEditor is loaded and ready
+   * @param event information
+   */
+  editorReady(event): void {
+    this.editorControl = event.editor;
   }
 }

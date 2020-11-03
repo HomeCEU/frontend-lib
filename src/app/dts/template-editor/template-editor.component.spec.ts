@@ -62,11 +62,7 @@ describe('TemplateEditorComponent', () => {
       allowedContent: true,
       fullPage: true,
       startupMode: 'source',
-      height: '700px',
-      on: {
-        mode(event): void {
-        }
-      }
+      height: '700px'
     };
 
     component.templateObject = {} as Template;
