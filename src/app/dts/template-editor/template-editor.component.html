@@ -24,12 +24,12 @@
     <div class="statusMessage" *ngIf="statusMessage != ''">
       {{ statusMessage }}
     </div>
-    <button id="saveButton" type="submit" [disabled]="!dirty || templateEditor.invalid" class="push" mat-button>
+    <button id="saveButton" type="submit" [disabled]="!dirty || templateEditor.invalid || editorControl.mode == 'source'" class="push" mat-button>
       Save
     </button>
   </div>
 
-  <ckeditor formControlName="templateData" (change)="editorChanged($event)"
+  <ckeditor formControlName="templateData" (change)="editorChanged($event)" (ready)="editorReady($event)"
     [config]="editorConfig">
   </ckeditor>
 </form>
