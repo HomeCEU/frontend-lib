@@ -4,7 +4,6 @@ jobs:
   unit-test:
     docker:
       - image: cypress/base:10
-    working_directory: ~/cems-frontend
     steps:
       - checkout
       - run: echo "Checkout successful"
