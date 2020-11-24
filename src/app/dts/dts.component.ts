@@ -1,10 +1,11 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {DtsService} from './dts.service';
 import {Template} from './template.types';
 import {MatDialog} from '@angular/material/dialog';
 import {TemplateEditorComponent} from './template-editor/template-editor.component';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {debounceTime, switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-dts',
@@ -56,6 +57,19 @@ export class DtsComponent {
 
     this.dtsForm = this.formBuilder.group({
       templateFilter: '',
+    });
+
+    // filter grid of templates by template name and author
+    this.dtsForm.get('templateFilter').valueChanges.pipe(
+      debounceTime(1000),
+      switchMap(() => this.dtsService.getTemplates('enrollment'))
+    ).subscribe( templates => {
+      const searchTerm = this.dtsForm.controls.templateFilter.value;
+      if (searchTerm) {
+        templates = templates.filter(data => data.templateKey.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          data.author.toLowerCase().includes(searchTerm.toLowerCase()));
+      }
+      this.rows = of(templates);
     });
   }
 

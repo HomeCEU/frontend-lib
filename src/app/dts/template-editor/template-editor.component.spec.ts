@@ -81,7 +81,7 @@ describe('TemplateEditorComponent', () => {
       expect(content.body.innerHTML).toEqual(expectedBody);
 
       done();
-    }, 500);
+    }, 1000);
   });
 
   it('should get a template by template key on initialization and allow edit', (done) => {
@@ -109,7 +109,7 @@ describe('TemplateEditorComponent', () => {
       expect(component.dirty).toBeFalse();
 
       done();
-    }, 500);
+    }, 1000);
   });
 
   it('should save a template', (done) => {
@@ -137,7 +137,7 @@ describe('TemplateEditorComponent', () => {
       expect(component.statusMessage).toEqual('Template saved');
 
       done();
-    }, 500);
+    }, 1000);
   });
 
   it('should handle an error when saving a template', (done) => {
@@ -169,7 +169,7 @@ describe('TemplateEditorComponent', () => {
       expect(component.templateEditor.errors?.saveFailed).toBeTrue();
 
       done();
-    }, 500);
+    }, 1000);
   });
 
   it('should copy a template', (done) => {
@@ -199,7 +199,7 @@ describe('TemplateEditorComponent', () => {
       expect(editorDataCopied[0].contentDocument.body.innerHTML).toEqual(expectedBodyTemplate);
 
       done();
-    }, 500);
+    }, 1000);
   });
 
   it('should render a template', (done) => {
@@ -232,7 +232,7 @@ describe('TemplateEditorComponent', () => {
       expect(doc.close).toHaveBeenCalled();
 
       done();
-    }, 500);
+    }, 1000);
   });
 
 });
