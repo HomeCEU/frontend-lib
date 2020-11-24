@@ -65,7 +65,8 @@ describe('DtsService', () => {
       });
     })));
 
-  it('should throw an error searching for a template given a document type and template key which does not exist', waitForAsync(inject([DtsService, HttpClient],
+  it('should throw an error searching for a template given a document type and template key which does not exist',
+    waitForAsync(inject([DtsService, HttpClient],
     (dtsService: DtsService, http: HttpClient) => {
       const serviceSpy = spyOn(http, 'get').and.returnValue(throwError({
         error: {
@@ -120,7 +121,8 @@ describe('DtsService', () => {
       });
     })));
 
-  it('should handle an error when saving a template given a document type, template key, and author', waitForAsync(inject([DtsService, HttpClient],
+  it('should handle an error when saving a template given a document type, template key, and author',
+    waitForAsync(inject([DtsService, HttpClient],
     (dtsService: DtsService, http: HttpClient) => {
       const url =  `${dtsService.url}template`;
 
