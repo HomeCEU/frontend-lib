@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {Observable, of, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {Template} from './template.types';
 
@@ -57,7 +57,9 @@ export class DtsService {
 
     const url =  `${this.url}template/${documentType}/${templateKey}`;
 
-    return this.http.get(url, {responseType: 'text'});
+    return this.http.get(url, {responseType: 'text'}).pipe(catchError( () => {
+      return of(null);
+    }));
   }
 
   /**
@@ -90,6 +92,8 @@ export class DtsService {
       body: bodyValue
     };
 
-    return this.http.post<Template>(url, postData);
+    return this.http.post<Template>(url, postData).pipe(catchError( error => {
+      return throwError(error);
+    }));
   }
 }
