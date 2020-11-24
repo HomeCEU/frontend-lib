@@ -1,0 +1,16 @@
+version: 2
+
+jobs:
+  unit-test:
+    docker:
+      - image: cypress/base:10
+    working_directory: ~/cems-frontend
+    steps:
+      - checkout
+      - run: echo "Checkout successful"
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - unit-test
