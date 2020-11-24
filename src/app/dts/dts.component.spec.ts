@@ -7,11 +7,12 @@ import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {templatesAll, templatesEnrollment} from '../../test/templates';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';;
 
 describe('DtsComponent', () => {
   let component: DtsComponent;
   let fixture: ComponentFixture<DtsComponent>;
+  let dialog: MatDialog;
 
   /**
    * Create the component which calls the constructor to populate the data grid
@@ -20,6 +21,14 @@ describe('DtsComponent', () => {
     fixture = TestBed.createComponent(DtsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  }
+
+  class MatDialogMock {
+    open(): any {
+      return {
+        afterClosed: () => of()
+      };
+    }
   }
 
   beforeEach(async () => {
@@ -36,11 +45,12 @@ describe('DtsComponent', () => {
       providers: [
         HttpClient,
         HttpHandler,
-        MatDialog,
+        { provide: MatDialog, useClass: MatDialogMock },
         FormBuilder
       ]
-    })
-    .compileComponents();
+    }).compileComponents().then(() => {
+      dialog = TestBed.get(MatDialog);
+    });
   });
 
   it('should create', inject([DtsService], (dtsService: DtsService) => {
@@ -67,4 +77,42 @@ describe('DtsComponent', () => {
       '4/5/20, 7:35 PM ');
   }));
 
+  it('should launch a modal dialog to create a template', inject([DtsService], (dtsService: DtsService) => {
+    dtsService.getTemplates = jasmine.createSpy().and.returnValue(of(templatesAll.items));
+    spyOn(dialog, 'open').and.callThrough();
+    createComponent();
+    component.newTemplate();
+    expect(dialog.open).toHaveBeenCalled();
+  }));
+
+  it('should select a template and launch a modal to edit a template', inject([DtsService], (dtsService: DtsService) => {
+    const mockEvent = {
+      event: MouseEvent,
+      column: {
+        minWidth: '300',
+        name: 'Author',
+        prop: 'author'
+      },
+      type: 'click',
+      row: {
+        author: 'Bill Anderson',
+        bodyUri: '/template/2fa85f64-5717-4562-b3fc-2c963f32afa1',
+        createdAt: '2020-01-05T23:35:12.876Z',
+        docType: 'enrollment',
+        templateId: '2fa85f64-5717-4562-b3fc-2c963f32afa1',
+        templateKey: 'Nursing Template F'
+      }
+    };
+
+    dtsService.getTemplates = jasmine.createSpy().and.returnValue(of(templatesAll.items));
+    spyOn(dialog, 'open').and.callThrough();
+    createComponent();
+    component.userName = 'test user';
+    component.rowClick(mockEvent);
+    fixture.detectChanges();
+
+    expect(dialog.open).toHaveBeenCalled();
+  }));
+
 });
+
