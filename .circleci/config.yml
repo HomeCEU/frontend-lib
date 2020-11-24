@@ -4,7 +4,7 @@ jobs:
   unit-test:
     working_directory: ~/frontend-lib
     docker:
-      - image: cypress/base:10
+      - image: circleci/node:10-browsers
     steps:
       # Checkout the code from the branch into the working_directory
       - checkout
@@ -33,7 +33,7 @@ jobs:
       # Test the source code
       - run:
           name: Testing
-          command: npm run test -- --no-watch --no-progress
+          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
 workflows:
   version: 2
