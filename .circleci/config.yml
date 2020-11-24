@@ -6,7 +6,14 @@ jobs:
       - image: cypress/base:10
     steps:
       - checkout
-      - run: echo "Checkout successful"
+      - run:
+          name: install
+          command: |
+            npm i
+      - run:
+          name: run unit tests
+          command: |
+            npm run unit-test:ci
 
 workflows:
   version: 2
