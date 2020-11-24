@@ -1,10 +1,10 @@
 <form [formGroup]="templateEditor" (ngSubmit)="onSubmit()">
   <div class="flex-row">
     <mat-form-field class="templateKey">
-      <mat-label>Template Key</mat-label>
+      <mat-label>Template Name</mat-label>
       <input matInput type="text" formControlName="templateKey" [readonly]="existingTemplate">
     </mat-form-field>
-    <div class="push" >
+    <div class="push">
       <mat-form-field class="dataKey">
         <mat-label>Data Key</mat-label>
         <input matInput type="text" formControlName="dataKey">
@@ -21,8 +21,16 @@
     <button type="button" (click)="discardChangesAndClose()" mat-button>
       Close
     </button>
-    <div class="statusMessage" *ngIf="statusMessage != ''">
-      {{ statusMessage }}
+    <div class="statusMessage">
+      <span class="errorMessage" *ngIf="templateEditor.controls.templateKey.errors?.inUse">
+        Template name is in use. Please choose another name.
+      </span>
+      <span class="errorMessage" *ngIf="templateEditor.errors?.saveFailed">
+        Save failed. Please try again.
+      </span>
+      <span class="statusMessage" *ngIf="statusMessage != ''">
+        {{ statusMessage }}
+      </span>
     </div>
     <button id="saveButton" type="submit" [disabled]="!dirty || templateEditor.invalid || editorControl.mode == 'source'" class="push" mat-button>
       Save

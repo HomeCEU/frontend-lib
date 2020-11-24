@@ -1,7 +1,7 @@
 import {inject, TestBed, waitForAsync} from '@angular/core/testing';
 import {DtsService} from './dts.service';
 import {HttpClient, HttpHandler} from '@angular/common/http';
-import {of} from 'rxjs';
+import {of, throwError} from 'rxjs';
 import {templatesAll, templatesEnrollment} from '../../test/templates';
 import {certificate, template} from '../../test/template';
 
@@ -59,8 +59,22 @@ describe('DtsService', () => {
     (dtsService: DtsService, http: HttpClient) => {
       const serviceSpy = spyOn(http, 'get').and.returnValue(of(template));
 
-      dtsService.getStatus().subscribe(result => {
+      dtsService.getTemplateByKey('', '').subscribe(result => {
         expect(result).toEqual(template);
+        expect(serviceSpy).toHaveBeenCalled();
+      });
+    })));
+
+  it('should throw an error searching for a template given a document type and template key which does not exist', waitForAsync(inject([DtsService, HttpClient],
+    (dtsService: DtsService, http: HttpClient) => {
+      const serviceSpy = spyOn(http, 'get').and.returnValue(throwError({
+        error: {
+          code: '404',
+        }
+      }));
+
+      dtsService.getTemplateByKey('', '').subscribe(result => {
+        expect(result).toEqual(null);
         expect(serviceSpy).toHaveBeenCalled();
       });
     })));
@@ -70,7 +84,7 @@ describe('DtsService', () => {
     (dtsService: DtsService, http: HttpClient) => {
       const serviceSpy = spyOn(http, 'get').and.returnValue(of(certificate));
 
-      dtsService.getStatus().subscribe(result => {
+      dtsService.renderTemplate('', '', '').subscribe(result => {
         expect(result).toEqual(certificate);
         expect(serviceSpy).toHaveBeenCalled();
       });
@@ -104,5 +118,34 @@ describe('DtsService', () => {
         expect(result).toEqual(postResponse);
         expect(serviceSpy).toHaveBeenCalled();
       });
+    })));
+
+  it('should handle an error when saving a template given a document type, template key, and author', waitForAsync(inject([DtsService, HttpClient],
+    (dtsService: DtsService, http: HttpClient) => {
+      const url =  `${dtsService.url}template`;
+
+      const postData = {
+        docType: 'enrollment',
+        templateKey: 'default-ce',
+        author: 'Robert Martin',
+        body: template
+      };
+
+      spyOn(http, 'post')
+        .withArgs(url, postData)
+        .and.returnValue(throwError({
+          error: {
+            code: 400,
+          }
+        }));
+
+      let saveError = null;
+      dtsService.saveTemplate(postData.templateKey, postData.author, template).subscribe(
+        () => { },
+        err => {
+          saveError = err;
+        });
+
+      expect(saveError.error.code).toEqual(400);
     })));
 });

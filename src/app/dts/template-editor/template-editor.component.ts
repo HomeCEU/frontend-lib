@@ -4,6 +4,7 @@ import {DtsService} from '../dts.service';
 import {Template} from '../template.types';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CKEditor4} from 'ckeditor4-angular';
+import {debounceTime, switchMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-template-editor',
@@ -82,15 +83,12 @@ export class TemplateEditorComponent implements OnInit {
 
       // retrieve template content for existing template
       this.dtsService.getTemplateByKey(this.templateObject.docType, this.templateObject.templateKey).subscribe(data => {
-        this.templateEditor.controls.templateData.setValue(data, { emitEvent: false });
+        this.templateEditor.controls.templateData.setValue(data, {emitEvent: false});
         this.dirty = false;
         this.existingTemplate = true;
       });
-    }
-    else {
-      // creating a new template
-      this.dirty = true;
-      this.existingTemplate = false;
+    } else {
+      this.initializeNewTemplate();
     }
 
     // require user to confirm closing the dialog with unsaved changes
@@ -98,25 +96,41 @@ export class TemplateEditorComponent implements OnInit {
     this.dialogRef.backdropClick().subscribe(() => {
       this.discardChangesAndClose();
     });
+
+    this.validateTemplateName();
+  }
+
+  /**
+   * Ensures new template name (key) is unique for saving
+   */
+  validateTemplateName(): void {
+    this.templateEditor.get('templateKey').valueChanges.pipe(
+      debounceTime(500),
+      switchMap(term => this.dtsService.getTemplateByKey('enrollment', term)))
+      .subscribe(data => {
+        if (data) {
+          this.templateEditor.controls.templateKey.setErrors({inUse: true});
+        }
+      });
   }
 
   /**
    * Saves the template
    */
   onSubmit(): void {
-    // todo - when creating a new template need to verify the template key entered by the user does not currently exist in the db
-    //  otherwise would overwrite existing template
-
     this.dtsService.saveTemplate(
       this.templateEditor.value.templateKey,
       this.templateEditor.value.author,
       this.templateEditor.value.templateData
-    ).subscribe( data => {
-      // TODO - notify if save failed
-      this.dirty = false;
-      this.existingTemplate = true;
-      this.statusMessage = 'Template saved';
-    });
+    ).subscribe(
+      () => {
+        this.dirty = false;
+        this.existingTemplate = true;
+        this.statusMessage = 'Template saved';
+      },
+      () => {
+        this.templateEditor.setErrors({ saveFailed: true });
+      });
   }
 
   /**
@@ -138,7 +152,7 @@ export class TemplateEditorComponent implements OnInit {
    * Creates a new template from the existing template
    */
   copyTemplate(): void {
-    // get the template prior to resetting the form
+    // get the current template prior to resetting the form
     const templateData = this.templateEditor.controls.templateData.value;
 
     this.templateEditor.reset();
@@ -146,11 +160,13 @@ export class TemplateEditorComponent implements OnInit {
     // copy the previous template into the form
     this.templateEditor.controls.templateData.setValue(templateData);
 
-    // todo - need a way to get the user name for the currently logged in user
-    this.templateEditor.controls.author.setValue('Unknown User');
+    this.initializeNewTemplate();
+  }
 
+  private initializeNewTemplate(): void {
     this.existingTemplate = false;  // creating a new template
     this.dirty = true;              // needs saving
+    this.statusMessage = '';
   }
 
   /**

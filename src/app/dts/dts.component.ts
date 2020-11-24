@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {Observable} from 'rxjs';
 import {DtsService} from './dts.service';
 import {Template} from './template.types';
@@ -22,14 +22,36 @@ export class DtsComponent {
    */
   selectedTemplate: Template = null;
 
+  /**
+   * Unique user identifier for saving
+   */
+  userName: string;
+
+  /**
+   * Angular reactive form group control
+   */
   dtsForm: FormGroup;
+
   dialogWidth = 1000;
+
+  /**
+   * Id of data table
+   */
   @ViewChild('templateTable') table: any;
 
-  constructor(private dtsService: DtsService,
+  /**
+   * Constructor
+   * @param elm attributes from the root component
+   * @param dtsService api for communicating with the backend
+   * @param dialog modal for creating/editing templates
+   * @param formBuilder controls
+   */
+  constructor(private elm: ElementRef,
+              private dtsService: DtsService,
               private dialog: MatDialog,
               private formBuilder: FormBuilder) {
 
+    this.userName = elm.nativeElement.getAttribute('userName');
     this.rows = this.dtsService.getTemplates('enrollment');
 
     this.dtsForm = this.formBuilder.group({
@@ -50,7 +72,7 @@ export class DtsComponent {
           templateId: this.selectedTemplate.templateId,
           docType: this.selectedTemplate.docType,
           templateKey: this.selectedTemplate.templateKey,
-          author: this.selectedTemplate.author,
+          author: this.userName,
           createdAt: this.selectedTemplate.createdAt,
           bodyUri: this.selectedTemplate.bodyUri
         },
@@ -68,7 +90,7 @@ export class DtsComponent {
         templateId: '',
         docType: 'enrollment',
         templateKey: '',
-        author: '',
+        author: this.userName,
         createdAt: '',
         bodyUri: ''
       },
