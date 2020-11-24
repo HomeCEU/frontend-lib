@@ -7,7 +7,7 @@ import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {templatesAll, templatesEnrollment} from '../../test/templates';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';;
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 
 describe('DtsComponent', () => {
   let component: DtsComponent;
@@ -49,7 +49,7 @@ describe('DtsComponent', () => {
         FormBuilder
       ]
     }).compileComponents().then(() => {
-      dialog = TestBed.get(MatDialog);
+      dialog = TestBed.inject(MatDialog);
     });
   });
 
@@ -64,8 +64,8 @@ describe('DtsComponent', () => {
     createComponent();
 
     const gridData = fixture.debugElement.nativeElement.querySelectorAll('.datatable-body');
-    expect(gridData[0].textContent).toEqual('NursingTemplateSue Anderson 1/5/20, 6:35 PM NutritionTemplateRobert Martin 3/5/20,' +
-      ' 6:35 PM PhysicalTherapyTemplateSteve Giles 4/5/20, 7:35 PM ');
+    expect(gridData[0].textContent).toEqual('NursingTemplateSue Anderson 1/5/20, 11:35 PM NutritionTemplateRobert Martin 3/5/20,' +
+      ' 11:35 PM PhysicalTherapyTemplateSteve Giles 4/5/20, 11:35 PM ');
   }));
 
   it('should display a list of templates by document type', inject([DtsService], (dtsService: DtsService) => {
@@ -73,8 +73,8 @@ describe('DtsComponent', () => {
     createComponent();
 
     const gridData = fixture.debugElement.nativeElement.querySelectorAll('.datatable-body');
-    expect(gridData[0].textContent).toEqual('NutritionTemplateRobert Martin 3/5/20, 6:35 PM PhysicalTherapyTemplateSteve Giles ' +
-      '4/5/20, 7:35 PM ');
+    expect(gridData[0].textContent).toEqual('NutritionTemplateRobert Martin 3/5/20, 11:35 PM PhysicalTherapyTemplateSteve Giles ' +
+      '4/5/20, 11:35 PM ');
   }));
 
   it('should launch a modal dialog to create a template', inject([DtsService], (dtsService: DtsService) => {

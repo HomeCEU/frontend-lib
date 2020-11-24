@@ -15,6 +15,7 @@ describe('TemplateEditorComponent', () => {
   let component: TemplateEditorComponent;
   let fixture: ComponentFixture<TemplateEditorComponent>;
   let dtsService: DtsService;
+  const expectedBodyTemplate = `<div id="container" class="page"><p style="text-align:center;">Enrollment #: <span class="char-style-override-6">{{ enrollmentId }}</span></p><p><span class="char-style-override-2" style="line-height: 1.2;">Course Certificate</span></p><p><span class="char-style-override-3">This is to certify</span></p><p><span class="char-style-override-1">{{ student.firstName }} {{ student.lastName }}&nbsp;-&nbsp;{{~#each student.licenses as |license|~}}{{license.state}} {{license.type}} {{license.number}}{{#unless @last}}; {{/unless}}{{~/each~}}</span></p><p><span>has successfully completed </span><span class="char-style-override-1">{{ course.hours }} contact hours</span><span>{{#if (eq course.format 'live')}}Live Continuing Education{{else}}continuing education online training{{/if}} on the topic of:</span></p><p><span class="char-style-override-4">{{ course.name }}</span><br>{{#if course.authors}}{{#with course.authors as |authors|}}Course Speakers:{{#each authors~}}{{this}}{{#unless @last}} | {{/unless}}{{~/each}}{{/with}}{{/if}}</p><p><span>Presented by HomeCEUConnection.com, 5048 Tennyson Pkwy, Suite 200 Plano TX 75024</span></p><p><span>Course completed on {{ completionDate }}</span></p></div>`;
 
   const dialogMock = {
     disableClose: true,
@@ -45,7 +46,7 @@ describe('TemplateEditorComponent', () => {
     })
     .compileComponents();
 
-    dtsService = TestBed.get(DtsService);
+    dtsService = TestBed.inject(DtsService);
   });
 
   beforeEach(() => {
@@ -67,7 +68,7 @@ describe('TemplateEditorComponent', () => {
     const expectedBody = `<p><br></p>`;
 
     // wait for editor to display the default template
-    setTimeout(($element) => {
+    setTimeout(() => {
       // switch display mode from code to wysiwyg
       const sourceButton = fixture.debugElement.nativeElement.querySelector('.cke_button__source');
       sourceButton.click();
@@ -84,7 +85,6 @@ describe('TemplateEditorComponent', () => {
   });
 
   it('should get a template by template key on initialization and allow edit', (done) => {
-    const expectedBody = `<div id="container" class="page"><p style="text-align:center;">Enrollment #: <span class="char-style-override-6">{{ enrollmentId }}</span></p><p><span class="char-style-override-2" style="line-height: 1.2;">Course Certificate</span></p><p><span class="char-style-override-3">This is to certify</span></p><p><span class="char-style-override-1">{{ student.firstName }} {{ student.lastName }}&nbsp;-&nbsp;{{~#each student.licenses as |license|~}}{{license.state}} {{license.type}} {{license.number}}{{#unless @last}}; {{/unless}}{{~/each~}}</span></p><p><span>has successfully completed </span><span class="char-style-override-1">{{ course.hours }} contact hours</span><span>{{#if (eq course.format 'live')}}Live Continuing Education{{else}}continuing education online training{{/if}} on the topic of:</span></p><p><span class="char-style-override-4">{{ course.name }}</span><br>{{#if course.authors}}{{#with course.authors as |authors|}}Course Speakers:{{#each authors~}}{{this}}{{#unless @last}} | {{/unless}}{{~/each}}{{/with}}{{/if}}</p><p><span>Presented by HomeCEUConnection.com, 5048 Tennyson Pkwy, Suite 200 Plano TX 75024</span></p><p><span>Course completed on {{ completionDate }}</span></p></div>`;
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
 
     component.templateObject.docType = 'enrollment';
@@ -105,7 +105,7 @@ describe('TemplateEditorComponent', () => {
       const content = editorData[0].contentDocument;
 
       // verify the CK Editor control has received and displayed the template data
-      expect(content.body.innerHTML).toEqual(expectedBody);
+      expect(content.body.innerHTML).toEqual(expectedBodyTemplate);
       expect(component.dirty).toBeFalse();
 
       done();
@@ -173,7 +173,6 @@ describe('TemplateEditorComponent', () => {
   });
 
   it('should copy a template', (done) => {
-    const expectedBody = `<div id="container" class="page"><p style="text-align:center;">Enrollment #: <span class="char-style-override-6">{{ enrollmentId }}</span></p><p><span class="char-style-override-2" style="line-height: 1.2;">Course Certificate</span></p><p><span class="char-style-override-3">This is to certify</span></p><p><span class="char-style-override-1">{{ student.firstName }} {{ student.lastName }}&nbsp;-&nbsp;{{~#each student.licenses as |license|~}}{{license.state}} {{license.type}} {{license.number}}{{#unless @last}}; {{/unless}}{{~/each~}}</span></p><p><span>has successfully completed </span><span class="char-style-override-1">{{ course.hours }} contact hours</span><span>{{#if (eq course.format 'live')}}Live Continuing Education{{else}}continuing education online training{{/if}} on the topic of:</span></p><p><span class="char-style-override-4">{{ course.name }}</span><br>{{#if course.authors}}{{#with course.authors as |authors|}}Course Speakers:{{#each authors~}}{{this}}{{#unless @last}} | {{/unless}}{{~/each}}{{/with}}{{/if}}</p><p><span>Presented by HomeCEUConnection.com, 5048 Tennyson Pkwy, Suite 200 Plano TX 75024</span></p><p><span>Course completed on {{ completionDate }}</span></p></div>`;
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
 
     component.templateObject.docType = 'enrollment';
@@ -191,13 +190,13 @@ describe('TemplateEditorComponent', () => {
 
       expect(component.dirty).toBeFalse();
       const editorData = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
-      expect(editorData[0].contentDocument.body.innerHTML).toEqual(expectedBody);
+      expect(editorData[0].contentDocument.body.innerHTML).toEqual(expectedBodyTemplate);
 
       component.copyTemplate();
 
       expect(component.dirty).toBeTrue();
       const editorDataCopied = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
-      expect(editorDataCopied[0].contentDocument.body.innerHTML).toEqual(expectedBody);
+      expect(editorDataCopied[0].contentDocument.body.innerHTML).toEqual(expectedBodyTemplate);
 
       done();
     }, 500);
