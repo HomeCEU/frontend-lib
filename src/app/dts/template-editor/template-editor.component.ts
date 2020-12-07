@@ -5,13 +5,14 @@ import {Template} from '../template.types';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CKEditor4} from 'ckeditor4-angular';
 import {debounceTime, switchMap} from 'rxjs/operators';
+import {UnsubscribeOnDestroyAdapter} from '../unsubscribe-on-destroy-adapter';
 
 @Component({
   selector: 'app-template-editor',
   templateUrl: './template-editor.component.html',
   styleUrls: ['./template-editor.component.scss']
 })
-export class TemplateEditorComponent implements OnInit {
+export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter implements OnInit {
   /**
    * Either creating or editing a template
    */
@@ -65,6 +66,8 @@ export class TemplateEditorComponent implements OnInit {
               public dialogRef: MatDialogRef<TemplateEditorComponent>,
               private formBuilder: FormBuilder) {
 
+    super();
+
     this.templateEditor = this.formBuilder.group({
       templateData: '',
       templateKey: ['', [Validators.required, Validators.maxLength(40)]], // VARCHAR(255) in the database
@@ -82,7 +85,7 @@ export class TemplateEditorComponent implements OnInit {
       this.templateEditor.patchValue(this.templateObject);
 
       // retrieve template content for existing template
-      this.dtsService.getTemplateByKey(this.templateObject.docType, this.templateObject.templateKey).subscribe(data => {
+      this.subs.sink = this.dtsService.getTemplateByKey(this.templateObject.docType, this.templateObject.templateKey).subscribe(data => {
         this.templateEditor.controls.templateData.setValue(data, {emitEvent: false});
         this.dirty = false;
         this.existingTemplate = true;
@@ -93,7 +96,7 @@ export class TemplateEditorComponent implements OnInit {
 
     // require user to confirm closing the dialog with unsaved changes
     this.dialogRef.disableClose = true;
-    this.dialogRef.backdropClick().subscribe(() => {
+    this.subs.sink = this.dialogRef.backdropClick().subscribe(() => {
       this.discardChangesAndClose();
     });
 
@@ -104,7 +107,7 @@ export class TemplateEditorComponent implements OnInit {
    * Ensures new template name (key) is unique for saving
    */
   validateTemplateName(): void {
-    this.templateEditor.get('templateKey').valueChanges.pipe(
+    this.subs.sink = this.templateEditor.get('templateKey').valueChanges.pipe(
       debounceTime(500),
       switchMap(term => this.dtsService.getTemplateByKey('enrollment', term)))
       .subscribe(data => {
@@ -118,7 +121,7 @@ export class TemplateEditorComponent implements OnInit {
    * Saves the template
    */
   onSubmit(): void {
-    this.dtsService.saveTemplate(
+    this.subs.sink = this.dtsService.saveTemplate(
       this.templateEditor.value.templateKey,
       this.templateEditor.value.author,
       this.templateEditor.value.templateData
@@ -138,7 +141,8 @@ export class TemplateEditorComponent implements OnInit {
    */
   renderTemplate(): void {
     if (this.templateObject.docType && this.templateObject.templateKey && this.templateEditor.value.dataKey) {
-      this.dtsService.renderTemplate(this.templateObject.docType, this.templateObject.templateKey, this.templateEditor.value.dataKey)
+      this.subs.sink = this.dtsService.renderTemplate(this.templateObject.docType, this.templateObject.templateKey,
+        this.templateEditor.value.dataKey)
         .subscribe(certificate => {
           const modal = window.open('', 'certificate', 'scrollbars=1,resizable=1');
           modal.document.open();
