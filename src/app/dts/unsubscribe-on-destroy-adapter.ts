@@ -6,6 +6,7 @@ import {Subject} from 'rxjs';
  * A class that automatically unsubscribes all observables when the object gets destroyed
  */
 @Component({template: ''})
+// tslint:disable-next-line:component-class-suffix
 export class UnsubscribeOnDestroyAdapter implements OnDestroy {
   /** The subscription sink object that stores all subscriptions */
   protected subs = new SubSink();
