@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {DtsService} from './dts.service';
 import {Template} from './template.types';
@@ -6,13 +6,15 @@ import {MatDialog} from '@angular/material/dialog';
 import {TemplateEditorComponent} from './template-editor/template-editor.component';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {debounceTime, switchMap} from 'rxjs/operators';
+import {environment} from '../../environments/environment';
+import {UnsubscribeOnDestroyAdapter} from './unsubscribe-on-destroy-adapter';
 
 @Component({
   selector: 'app-dts',
   templateUrl: './dts.component.html',
   styleUrls: ['./dts.component.scss']
 })
-export class DtsComponent {
+export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit {
   /**
    * List of templates as an observable
    */
@@ -51,8 +53,20 @@ export class DtsComponent {
               private dtsService: DtsService,
               private dialog: MatDialog,
               private formBuilder: FormBuilder) {
+    super();
+  }
 
-    this.userName = elm.nativeElement.getAttribute('userName');
+  ngOnInit(): void {
+    this.userName = this.elm.nativeElement.getAttribute('userName');
+
+    this.subs.sink = this.dtsService.getStatus().subscribe(
+      status => {
+        console.log(`User ${this.userName}  Status: ${status}  Endpoint: ${environment.dtsUrl}`);
+      },
+      error => {
+        console.log(`Failed to connect to ${environment.dtsUrl} - ${error.message}`);
+      });
+
     this.rows = this.dtsService.getTemplates('enrollment');
 
     this.dtsForm = this.formBuilder.group({
@@ -60,8 +74,8 @@ export class DtsComponent {
     });
 
     // filter grid of templates by template name and author
-    this.dtsForm.get('templateFilter').valueChanges.pipe(
-      debounceTime(1000),
+    this.subs.sink = this.dtsForm.get('templateFilter').valueChanges.pipe(
+      debounceTime(500),
       switchMap(() => this.dtsService.getTemplates('enrollment'))
     ).subscribe( templates => {
       const searchTerm = this.dtsForm.controls.templateFilter.value;

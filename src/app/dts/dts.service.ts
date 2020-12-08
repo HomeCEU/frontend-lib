@@ -11,7 +11,7 @@ import {Template} from './template.types';
 export class DtsService {
 
   /**
-   * URL to the DTS Service.  TODO: Currently using a local instance of the service as the service is in development and not live.
+   * URL to the DTS Service.
    */
   url = environment.dtsUrl;
 
@@ -25,7 +25,9 @@ export class DtsService {
    * Retrieves and indication is the backend DTS service is healthy.
    */
   public getStatus(): Observable<string> {
-    return this.http.get(this.url + 'status', {responseType: 'text'});
+    return this.http.get(this.url + 'status', {responseType: 'text'}).pipe(catchError( error => {
+      return throwError(error);
+    }));
   }
 
   /**

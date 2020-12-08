@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:elements": "ng build --prod --output-hashing none && node build-script.js"
+    "build:dts": "ng build --configuration=production --output-hashing none && node build-script.js"
   },
   "private": true,
   "dependencies": {
@@ -27,6 +27,7 @@
     "@webcomponents/custom-elements": "^1.4.2",
     "ckeditor4-angular": "^2.0.0",
     "rxjs": "~6.6.0",
+    "subsink": "^1.0.2",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
   },
