@@ -33,22 +33,6 @@
             "scripts": []
           },
           "configurations": {
-            "staging": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.stage.ts"
-                }
-              ],
-              "optimization": false,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": false
-            },
             "production": {
               "fileReplacements": [
                 {
@@ -85,9 +69,6 @@
             "browserTarget": "frontend-lib:build"
           },
           "configurations": {
-            "staging": {
-              "browserTarget": "frontend-lib:build:staging"
-            },
             "production": {
               "browserTarget": "frontend-lib:build:production"
             }
@@ -137,9 +118,6 @@
             "devServerTarget": "frontend-lib:serve"
           },
           "configurations": {
-            "staging": {
-              "devServerTarget": "frontend-lib:serve:staging"
-            },
             "production": {
               "devServerTarget": "frontend-lib:serve:production"
             }

@@ -8,8 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:elements:staging": "ng build --configuration=staging --output-hashing none && node build-script.js",
-    "build:elements:production": "ng build --configuration=production --output-hashing none && node build-script.js"
+    "build:dts": "ng build --configuration=production --output-hashing none && node build-script.js"
   },
   "private": true,
   "dependencies": {

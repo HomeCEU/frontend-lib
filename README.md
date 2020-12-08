@@ -12,7 +12,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-- Run `run npm build:elements`
+- Run `run npm build:dts`
 - Copy `\elements\frontend-lib.js` and `\dist\frontend-lib\styles.css` to the Server where the element is exposed.
 
 ## Running unit tests
