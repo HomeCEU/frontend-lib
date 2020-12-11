@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {environment} from '../../environments/environment';
 import {Template} from './template.types';
 
 @Injectable({
@@ -13,7 +12,7 @@ export class DtsService {
   /**
    * URL to the DTS Service.
    */
-  url = environment.dtsUrl;
+  url: string;
 
   /**
    * Creates an instance of the service.
@@ -25,7 +24,7 @@ export class DtsService {
    * Retrieves and indication is the backend DTS service is healthy.
    */
   public getStatus(): Observable<string> {
-    return this.http.get(this.url + 'status', {responseType: 'text'}).pipe(catchError( error => {
+    return this.http.get(this.url + '/status', {responseType: 'text'}).pipe(catchError( error => {
       return throwError(error);
     }));
   }
@@ -35,7 +34,7 @@ export class DtsService {
    * @param documentType indicates the type of document
    */
   public getTemplates(documentType?: string): Observable<Template[]> {
-    let url = this.url + 'template';
+    let url = this.url + '/template';
 
     // Query by the document type
     if (documentType) {
@@ -57,7 +56,7 @@ export class DtsService {
   public getTemplateByKey(documentType: string, templateKey: string): Observable<string> {
     templateKey = encodeURI(templateKey);
 
-    const url =  `${this.url}template/${documentType}/${templateKey}`;
+    const url =  `${this.url}/template/${documentType}/${templateKey}`;
 
     return this.http.get(url, {responseType: 'text'}).pipe(catchError( () => {
       return of(null);
@@ -73,7 +72,7 @@ export class DtsService {
   public renderTemplate(documentType: string, templateKey: string, dataKey: string): Observable<string> {
     templateKey = encodeURI(templateKey);
 
-    const url =  `${this.url}render/${documentType}/${templateKey}/${dataKey}`;
+    const url =  `${this.url}/render/${documentType}/${templateKey}/${dataKey}`;
 
     return this.http.get(url, {responseType: 'text'});
   }
@@ -85,7 +84,7 @@ export class DtsService {
    * @param bodyValue html certificate template content
    */
   public saveTemplate(templateKeyValue: string, authorValue: string, bodyValue: string): Observable<Template> {
-    const url =  `${this.url}template`;
+    const url =  `${this.url}/template`;
 
     const postData = {
       docType: 'enrollment',
