@@ -93,7 +93,7 @@ describe('DtsService', () => {
 
   it('should save a template given a document type, template key, and author', waitForAsync(inject([DtsService, HttpClient],
     (dtsService: DtsService, http: HttpClient) => {
-      const url =  `${dtsService.url}template`;
+      const url =  `${dtsService.url}/template`;
 
       const postData = {
         docType: 'enrollment',
@@ -124,7 +124,7 @@ describe('DtsService', () => {
   it('should handle an error when saving a template given a document type, template key, and author',
     waitForAsync(inject([DtsService, HttpClient],
     (dtsService: DtsService, http: HttpClient) => {
-      const url =  `${dtsService.url}template`;
+      const url =  `${dtsService.url}/template`;
 
       const postData = {
         docType: 'enrollment',

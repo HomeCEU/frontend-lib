@@ -6,7 +6,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {TemplateEditorComponent} from './template-editor/template-editor.component';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {debounceTime, switchMap} from 'rxjs/operators';
-import {environment} from '../../environments/environment';
 import {UnsubscribeOnDestroyAdapter} from './unsubscribe-on-destroy-adapter';
 
 @Component({
@@ -58,13 +57,14 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
 
   ngOnInit(): void {
     this.userName = this.elm.nativeElement.getAttribute('userName');
+    this.dtsService.url = this.elm.nativeElement.getAttribute('dtsUrl');
 
     this.subs.sink = this.dtsService.getStatus().subscribe(
       status => {
-        console.log(`User ${this.userName}  Status: ${status}  Endpoint: ${environment.dtsUrl}`);
+        console.log(`User: ${this.userName}  Status: ${status}  Endpoint: ${this.dtsService.url}`);
       },
       error => {
-        console.log(`Failed to connect to ${environment.dtsUrl} - ${error.message}`);
+        console.log(`Failed to connect to ${this.dtsService.url} - ${error.message}`);
       });
 
     this.rows = this.dtsService.getTemplates('enrollment');
