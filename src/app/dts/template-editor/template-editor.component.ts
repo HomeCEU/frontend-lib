@@ -26,6 +26,16 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
 
   templateEditor: FormGroup;
 
+  DATAFIELDS = [{
+      name: '{{ student.fistName }}',
+      avatar: 'student'
+    },
+    {
+      name: '{{ course.name }}',
+      avatar: 'course'
+    }
+  ];
+
   /**
    * Check for changes when closing modal via 'esc'
    */
@@ -56,9 +66,11 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    * Retrieves template and loads template data into the editor
    */
   ngOnInit(): void {
-
     // configure the template editor
     this.configTemplateEditor();
+
+    // registers the drag and drop custom plugin
+    this.registerEditorPlugin();
 
     if (this.templateObject.docType && this.templateObject.templateKey) {
       this.templateEditor.patchValue(this.templateObject);
@@ -86,7 +98,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    */
   configTemplateEditor(): void {
     CKEDITOR.replace('editor1', {
-      extraPlugins: 'sourcedialog',
+      extraPlugins: 'hcard, sourcedialog',
       toolbar: [
         { name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
         { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
@@ -98,9 +110,87 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       height: '500px'
     });
 
+    CKEDITOR.on('instanceReady', (event) => {
+      // When an item in the data field list is dragged, copy its data into the drag and drop data transfer.
+      // This data is later read by the editor#paste listener in the hcard plugin.
+      CKEDITOR.document.getById('dataFieldList').on('dragstart', (evt) => {
+        // The target may be some element inside the draggable div (e.g. the image), so get the div.data-field.
+        const target = evt.data.getTarget().getAscendant('div', true);
+
+        // Initialization of the CKEditor 4 data transfer facade is a necessary step to extend and unify native
+        // browser capabilities. For instance, Internet Explorer does not support any other data type than 'text' and 'URL'.
+        // Note: evt is an instance of CKEDITOR.dom.event, not a native event.
+        CKEDITOR.plugins.clipboard.initDragDataTransfer(evt);
+
+        const dataTransfer = evt.data.dataTransfer;
+
+        // Pass an object with data field details. Based on it, the editor#paste listener in the hcard plugin
+        // will create the HTML code to be inserted into the editor. You could set 'text/html' here as well, but:
+        // * It is a more elegant and logical solution that this logic is kept in the hcard plugin.
+        // * We do not know now where the content will be dropped and the HTML to be inserted
+        // might vary depending on the drop target.
+        dataTransfer.setData('contact', this.DATAFIELDS[target.data('contact')]);
+
+        // We need to set some normal data types to backup values for two reasons:
+        // * In some browsers this is necessary to enable drag and drop into text in the editor.
+        // * The content may be dropped in another place than the editor.
+        dataTransfer.setData('text/html', target.getText());
+
+        // We can still access and use the native dataTransfer - e.g. to set the drag image.
+        // Note: IEs do not support this method... :(.
+        if (dataTransfer.$.setDragImage) {
+          dataTransfer.$.setDragImage(target.findOne('img').$, 0, 0);
+        }
+      });
+    });
+
     CKEDITOR.instances.editor1.on('focus', (event) => {
       this.statusMessage = '';
     });
+  }
+
+  /**
+   * Custom plugin allows moving data fields within the template editor when in wysiwyg mode
+   */
+  registerEditorPlugin(): void {
+    const plugins = CKEDITOR.instances.editor1.plugins;
+    try {
+      CKEDITOR.plugins.add('hcard', {
+        requires: 'widget',
+
+        init(editor): void {
+          editor.widgets.add('hcard', {
+            allowedContent: 'span(!data-field); a[href](!p-name);',
+            requiredContent: 'span(data-field)',
+            pathName: 'hcard',
+
+            upcast: (el) => {
+              return el.name === 'span' && el.hasClass('data-field');
+            }
+          });
+
+          // This feature does not have a button, so it needs to be registered manually.
+          editor.addFeature(editor.widgets.registered.hcard);
+
+          // Handle dropping a data field by transforming the data field object into HTML.
+          // Note: All pasted and dropped content is handled in one event - editor#paste.
+          editor.on('paste', (evt) => {
+            const dataField = evt.data.dataTransfer.getData('contact');
+            if (!dataField) {
+              return;
+            }
+
+            evt.data.dataValue =
+              '<span class="data-field">' + dataField.name +
+              ' ' +
+              '</span>';
+          });
+        }
+      });
+    }
+    catch (error) {
+      // todo - ignore error for now - need to find out and fix why this errors on second load of an editor
+    }
   }
 
   /**
@@ -177,15 +267,20 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     }
   }
 
+  /**
+   * Checks if the user can create a new template by copying the existing template.
+   */
   canCopy(): boolean {
     return !this.existingTemplate || CKEDITOR.instances.editor1.checkDirty();
   }
 
+  /**
+   * Checks if the user can save the current template.  Must be dirty, a valid form, and in source mode.
+   */
   canSave(): boolean {
     const isDirty = CKEDITOR.instances.editor1.checkDirty();
-    const mode = CKEDITOR.instances.editor1.mode;
-    const canSave = isDirty && (mode === 'source') && !this.templateEditor.invalid;
-    //console.log(`isDirty: ${isDirty}   mode: ${mode}   !invalid: ${!this.templateEditor.invalid}`);
+    const sourceMode = CKEDITOR.instances.editor1.mode === 'source';
+    const canSave = isDirty && sourceMode && !this.templateEditor.invalid;
     return canSave;
   }
 }
