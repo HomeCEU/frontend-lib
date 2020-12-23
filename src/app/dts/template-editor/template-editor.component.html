@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="flex-row">
-    <button type="button" (click)="copyTemplate()" [disabled]="dirty" mat-button>
+    <button type="button" (click)="copyTemplate()" [disabled]="canCopy()" mat-button>
       Copy
     </button>
     <button type="button" (click)="discardChangesAndClose()" mat-button>
@@ -32,12 +32,23 @@
         {{ statusMessage }}
       </span>
     </div>
-    <button id="saveButton" type="submit" [disabled]="!dirty || templateEditor.invalid || editorControl.mode == 'source'" class="push" mat-button>
+    <button id="saveButton" type="submit" [disabled]="!canSave()" class="push" mat-button>
       Save
     </button>
   </div>
 
-  <ckeditor formControlName="templateData" (change)="editorChanged($event)" (ready)="editorReady($event)"
-    [config]="editorConfig">
-  </ckeditor>
+  <!-- CKEditor control -->
+  <div id="editor1" name="editor1">
+  </div>
 </form>
+<!-- todo - add all fields and don't hard-code values in template -->
+<ul id="dataFieldList">
+  <li>
+    <div class="contact h-card" data-contact="0" draggable="true">
+      <img src="assets/student.jpg" alt="avatar" class="u-photo">Student first name</div>
+  </li>
+  <li>
+    <div class="contact h-card" data-contact="1" draggable="true">
+      <img src="assets/course.jpg" alt="avatar" class="u-photo">Course name</div>
+  </li>
+</ul>

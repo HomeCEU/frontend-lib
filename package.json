@@ -31,7 +31,6 @@
     "@angular/router": "~10.1.5",
     "@swimlane/ngx-datatable": "^18.0.0",
     "@webcomponents/custom-elements": "^1.4.2",
-    "ckeditor4-angular": "^2.0.0",
     "rxjs": "~6.6.0",
     "subsink": "^1.0.2",
     "tslib": "^2.0.0",

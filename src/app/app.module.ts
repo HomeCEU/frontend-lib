@@ -3,7 +3,6 @@ import { Injector, NgModule } from '@angular/core';
 
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { createCustomElement } from '@angular/elements';
-import {CKEditorModule} from 'ckeditor4-angular';
 import { DtsComponent } from './dts/dts.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
@@ -25,7 +24,6 @@ import {MatDialogModule} from '@angular/material/dialog';
   ],
   imports: [
     BrowserModule,
-    CKEditorModule,
     NoopAnimationsModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
