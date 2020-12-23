@@ -10,7 +10,9 @@ import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {templatesAll} from '../../../test/templates';
 
-xdescribe('TemplateEditorComponent', () => {
+import { CKEDITOR } from './template-editor.component';
+
+describe('TemplateEditorComponent', () => {
   let component: TemplateEditorComponent;
   let fixture: ComponentFixture<TemplateEditorComponent>;
   let dtsService: DtsService;
@@ -58,7 +60,8 @@ xdescribe('TemplateEditorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create',  () => {
+  fit('should create',  () => {
+    // const temp = CKEDITOR;
     expect(component).toBeTruthy();
   });
 
@@ -126,7 +129,7 @@ xdescribe('TemplateEditorComponent', () => {
       // switch display mode from code to wysiwyg
       const sourceButton = fixture.debugElement.nativeElement.querySelector('.cke_button__source');
       sourceButton.click();
-      //component.editorChanged(null);
+      // component.editorChanged(null);
 
       expect(component.statusMessage).toEqual('');
 
@@ -158,7 +161,7 @@ xdescribe('TemplateEditorComponent', () => {
       // switch display mode from code to wysiwyg
       const sourceButton = fixture.debugElement.nativeElement.querySelector('.cke_button__source');
       sourceButton.click();
-      //component.editorChanged(null);
+      // component.editorChanged(null);
 
       expect(component.templateEditor.errors?.saveFailed).toBeUndefined();
 
@@ -186,7 +189,7 @@ xdescribe('TemplateEditorComponent', () => {
       const sourceButton = fixture.debugElement.nativeElement.querySelector('.cke_button__source');
       sourceButton.click();
 
-      //expect(component.dirty).toBeFalse();
+      // expect(component.dirty).toBeFalse();
       const editorData = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
       expect(editorData[0].contentDocument.body.innerHTML).toEqual(expectedBodyTemplate);
 

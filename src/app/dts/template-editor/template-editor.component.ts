@@ -6,7 +6,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {UnsubscribeOnDestroyAdapter} from '../unsubscribe-on-destroy-adapter';
 
-declare var CKEDITOR: any;
+export declare var CKEDITOR: any;
 
 @Component({
   selector: 'app-template-editor',
