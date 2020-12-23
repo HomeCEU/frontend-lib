@@ -60,7 +60,7 @@ xdescribe('TemplateEditorComponent', () => {
     fixture.detectChanges();
   });
 
-  fit('should create',  () => {
+  it('should create',  () => {
     // const temp = CKEDITOR;
     expect(component).toBeTruthy();
   });
