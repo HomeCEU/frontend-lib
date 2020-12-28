@@ -10,9 +10,7 @@ import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {templatesAll} from '../../../test/templates';
 
-import { CKEDITOR } from './template-editor.component';
-
-xdescribe('TemplateEditorComponent', () => {
+describe('TemplateEditorComponent', () => {
   let component: TemplateEditorComponent;
   let fixture: ComponentFixture<TemplateEditorComponent>;
   let dtsService: DtsService;
@@ -61,11 +59,10 @@ xdescribe('TemplateEditorComponent', () => {
   });
 
   it('should create',  () => {
-    // const temp = CKEDITOR;
     expect(component).toBeTruthy();
   });
 
-  it('should initialize and allow creating a new template', (done) => {
+  xit('should initialize and allow creating a new template', (done) => {
     const expectedBody = `<p><br></p>`;
 
     // wait for editor to display the default template
@@ -85,7 +82,7 @@ xdescribe('TemplateEditorComponent', () => {
     }, 1000);
   });
 
-  it('should get a template by template key on initialization and allow edit', (done) => {
+  xit('should get a template by template key on initialization and allow edit', (done) => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
 
     component.templateObject.docType = 'enrollment';
@@ -113,7 +110,7 @@ xdescribe('TemplateEditorComponent', () => {
     }, 1000);
   });
 
-  it('should save a template', (done) => {
+  xit('should save a template', (done) => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
     spyOn(dtsService, 'saveTemplate').and.returnValue(of(templatesAll.items[0]));
 
@@ -141,7 +138,7 @@ xdescribe('TemplateEditorComponent', () => {
     }, 1000);
   });
 
-  it('should handle an error when saving a template', (done) => {
+  xit('should handle an error when saving a template', (done) => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
     spyOn(dtsService, 'saveTemplate').and.returnValue(throwError({
       error: {
@@ -173,7 +170,7 @@ xdescribe('TemplateEditorComponent', () => {
     }, 1000);
   });
 
-  it('should copy a template', (done) => {
+  xit('should copy a template', (done) => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
 
     component.templateObject.docType = 'enrollment';
@@ -203,7 +200,7 @@ xdescribe('TemplateEditorComponent', () => {
     }, 1000);
   });
 
-  it('should render a template', (done) => {
+  xit('should render a template', (done) => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
     spyOn(dtsService, 'renderTemplate').and.returnValue(of(certificate));
 

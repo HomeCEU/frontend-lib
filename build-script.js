@@ -13,6 +13,10 @@ const concat = require('concat');
   await concat(files, 'elements/frontend-lib.js')
   await fs.copyFile('./dist/frontend-lib/styles.css', 'elements/styles.css')
   await fs.copyFile('./dist/frontend-lib/data-table.woff', 'elements/data-table.woff')
+
+  // deploy CKEditor code
+  await fs.copy('./dist/frontend-lib/assets/', 'elements/assets/');
+
   console.info('Frontend-lib Elements created successfully!')
 
 })()

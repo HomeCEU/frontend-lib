@@ -6,7 +6,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {UnsubscribeOnDestroyAdapter} from '../unsubscribe-on-destroy-adapter';
 
-export declare var CKEDITOR: any;
+declare var CKEDITOR: any;
 
 @Component({
   selector: 'app-template-editor',
@@ -69,9 +69,6 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     // configure the template editor
     this.configTemplateEditor();
 
-    // registers the drag and drop custom plugin
-    this.registerEditorPlugin();
-
     if (this.templateObject.docType && this.templateObject.templateKey) {
       this.templateEditor.patchValue(this.templateObject);
 
@@ -97,18 +94,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    * Configures the template editor
    */
   configTemplateEditor(): void {
-    CKEDITOR.replace('editor1', {
-      extraPlugins: 'hcard, sourcedialog',
-      toolbar: [
-        { name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
-        { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
-        { name: 'document', items: ['Source'] }
-      ],
-      startupMode: 'source',
-      allowedContent: true,
-      fullPage: true,
-      height: '500px'
-    });
+    CKEDITOR.replace('editor1');
 
     CKEDITOR.on('instanceReady', (event) => {
       // When an item in the data field list is dragged, copy its data into the drag and drop data transfer.
@@ -147,50 +133,6 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     CKEDITOR.instances.editor1.on('focus', (event) => {
       this.statusMessage = '';
     });
-  }
-
-  /**
-   * Custom plugin allows moving data fields within the template editor when in wysiwyg mode
-   */
-  registerEditorPlugin(): void {
-    const plugins = CKEDITOR.instances.editor1.plugins;
-    try {
-      CKEDITOR.plugins.add('hcard', {
-        requires: 'widget',
-
-        init(editor): void {
-          editor.widgets.add('hcard', {
-            allowedContent: 'span(!data-field); a[href](!p-name);',
-            requiredContent: 'span(data-field)',
-            pathName: 'hcard',
-
-            upcast: (el) => {
-              return el.name === 'span' && el.hasClass('data-field');
-            }
-          });
-
-          // This feature does not have a button, so it needs to be registered manually.
-          editor.addFeature(editor.widgets.registered.hcard);
-
-          // Handle dropping a data field by transforming the data field object into HTML.
-          // Note: All pasted and dropped content is handled in one event - editor#paste.
-          editor.on('paste', (evt) => {
-            const dataField = evt.data.dataTransfer.getData('contact');
-            if (!dataField) {
-              return;
-            }
-
-            evt.data.dataValue =
-              '<span class="data-field">' + dataField.name +
-              ' ' +
-              '</span>';
-          });
-        }
-      });
-    }
-    catch (error) {
-      // todo - ignore error for now - need to find out and fix why this errors on second load of an editor
-    }
   }
 
   /**
