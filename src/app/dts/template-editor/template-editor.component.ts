@@ -1,4 +1,4 @@
-import {Component, HostListener, Inject, OnInit} from '@angular/core';
+import {Component, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DtsService} from '../dts.service';
 import {Template} from '../template.types';
@@ -13,7 +13,7 @@ declare var CKEDITOR: any;
   templateUrl: './template-editor.component.html',
   styleUrls: ['./template-editor.component.scss']
 })
-export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter implements OnInit {
+export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter implements OnInit, OnDestroy {
   /**
    * Either creating or editing a template used to prevent changing the Template Name for an existing template
    */
@@ -88,6 +88,18 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     });
 
     this.validateTemplateName();
+  }
+
+  /**
+   * Destroys the component
+   */
+  ngOnDestroy(): void {
+    // Destroy the previously registered editor
+    if (CKEDITOR.instances.editor1) {
+      CKEDITOR.instances.editor1.destroy();
+    }
+
+    super.ngOnDestroy();
   }
 
   /**
