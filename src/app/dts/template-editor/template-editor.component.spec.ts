@@ -10,9 +10,21 @@ import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {templatesAll} from '../../../test/templates';
 
-import { CKEDITOR } from './template-editor.component';
+/**
+ * Initializes the editor with a template
+ * @param component to display
+ */
+function loadEditor(component: TemplateEditorComponent): void {
+  // specify the doc type and template to load
+  component.templateObject.docType = 'enrollment';
+  component.templateObject.templateKey = 'dummyTemplateKey';
 
-xdescribe('TemplateEditorComponent', () => {
+  // for testing we need to recreate the component with the template noted above
+  component.ngOnDestroy();
+  component.ngOnInit();
+}
+
+describe('TemplateEditorComponent', () => {
   let component: TemplateEditorComponent;
   let fixture: ComponentFixture<TemplateEditorComponent>;
   let dtsService: DtsService;
@@ -60,8 +72,11 @@ xdescribe('TemplateEditorComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    component.ngOnDestroy();
+  });
+
   it('should create',  () => {
-    // const temp = CKEDITOR;
     expect(component).toBeTruthy();
   });
 
@@ -88,12 +103,7 @@ xdescribe('TemplateEditorComponent', () => {
   it('should get a template by template key on initialization and allow edit', (done) => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
 
-    component.templateObject.docType = 'enrollment';
-    component.templateObject.templateKey = 'dummyTemplateKey';
-    component.ngOnInit();
-
-    // verify the form control has received the template data
-    expect(component.templateEditor.controls.templateData.value).toEqual(template);
+    loadEditor(component);
 
     // wait for editor to display the template
     setTimeout(() => {
@@ -117,12 +127,7 @@ xdescribe('TemplateEditorComponent', () => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
     spyOn(dtsService, 'saveTemplate').and.returnValue(of(templatesAll.items[0]));
 
-    component.templateObject.docType = 'enrollment';
-    component.templateObject.templateKey = 'dummyTemplateKey';
-    component.ngOnInit();
-
-    // verify the form control has received the template data
-    expect(component.templateEditor.controls.templateData.value).toEqual(template);
+    loadEditor(component);
 
     // wait for editor to display the template
     setTimeout(() => {
@@ -149,12 +154,7 @@ xdescribe('TemplateEditorComponent', () => {
       }
     }));
 
-    component.templateObject.docType = 'enrollment';
-    component.templateObject.templateKey = 'dummyTemplateKey';
-    component.ngOnInit();
-
-    // verify the form control has received the template data
-    expect(component.templateEditor.controls.templateData.value).toEqual(template);
+    loadEditor(component);
 
     // wait for editor to display the template
     setTimeout(() => {
@@ -176,12 +176,7 @@ xdescribe('TemplateEditorComponent', () => {
   it('should copy a template', (done) => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
 
-    component.templateObject.docType = 'enrollment';
-    component.templateObject.templateKey = 'dummyTemplateKey';
-    component.ngOnInit();
-
-    // verify the form control has received the template data
-    expect(component.templateEditor.controls.templateData.value).toEqual(template);
+    loadEditor(component);
 
     // wait for editor to display the template
     setTimeout(() => {
@@ -189,13 +184,11 @@ xdescribe('TemplateEditorComponent', () => {
       const sourceButton = fixture.debugElement.nativeElement.querySelector('.cke_button__source');
       sourceButton.click();
 
-      // expect(component.dirty).toBeFalse();
       const editorData = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
       expect(editorData[0].contentDocument.body.innerHTML).toEqual(expectedBodyTemplate);
 
       component.copyTemplate();
 
-     // expect(component.dirty).toBeTrue();
       const editorDataCopied = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
       expect(editorDataCopied[0].contentDocument.body.innerHTML).toEqual(expectedBodyTemplate);
 
@@ -212,13 +205,8 @@ xdescribe('TemplateEditorComponent', () => {
     windowDialog.document = doc;
     spyOn(window, 'open').and.returnValue(windowDialog);
 
-    component.templateObject.docType = 'enrollment';
-    component.templateObject.templateKey = 'dummyTemplateKey';
     component.templateEditor.controls.dataKey.setValue('123456');
-    component.ngOnInit();
-
-    // verify the form control has received the template data
-    expect(component.templateEditor.controls.templateData.value).toEqual(template);
+    loadEditor(component);
 
     // wait for editor to display the template
     setTimeout(() => {

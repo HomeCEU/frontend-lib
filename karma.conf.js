@@ -33,6 +33,10 @@ module.exports = function (config) {
       }
     },
     singleRun: false,
-    restartOnFileChange: true
+    restartOnFileChange: true,
+    files: [
+      "src/ckeditor.js",
+      'src/assets/ckeditor/ckeditor.js'
+    ]
   });
 };
