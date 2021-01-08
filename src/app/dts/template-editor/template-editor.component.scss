@@ -20,43 +20,50 @@
   color: #B00020;
 }
 
-
-
-
-#dataFieldList {
+.dataFieldList {
   list-style-type: none;
   margin: 0 !important;
   padding: 0;
 }
 
-#dataFieldList li {
+.dataFieldList li {
   background: #FAFAFA;
   margin-bottom: 1px;
-  height: 56px;
-  line-height: 56px;
+  height: 38px;
+  line-height: 38px;
   cursor: pointer;
+  font-size: 13px;
+  padding-left: 5px;
 }
 
-#dataFieldList li:nth-child(2n) {
+.dataFieldList li:nth-child(2n) {
   background: #F3F3F3;
 }
 
-#dataFieldList li:hover {
-  background: #FFFDE3;
-  border-left: 5px solid #DCDAC1;
-  margin-left: -5px;
+.dataFieldList li:hover {
+  background: #eee;
 }
 
-#editor1 .data-field {
-  background: #FFFDE3;
-  padding: 3px 6px;
-  border-bottom: 1px dashed #ccc;
+.dataFieldContainer {
+  border: 1px solid #d1d1d1;
+  border-left-style: none;
+  width: 200px;
+  background: #f8f8f8;
 }
 
-#editor1 {
-  border: 1px solid #E7E7E7;
-  padding: 0 20px;
-  background: #fff;
-  position: relative;
+.dataFieldHeaderContainer {
+  width: 200px;
+  background: #f8f8f8;
+  height: 40px;
 }
+
+.mat-expansion-panel-header {
+  padding: 0 14px;
+  font-size: 14px;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+  height: 48px;
+}
+
 

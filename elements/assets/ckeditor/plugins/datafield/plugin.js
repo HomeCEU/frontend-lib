@@ -1,11 +1,11 @@
-CKEDITOR.plugins.add('hcard', {
+CKEDITOR.plugins.add('datafield', {
   requires: 'widget',
 
   init(editor) {
-    editor.widgets.add('hcard', {
-      allowedContent: 'span(!data-field); a[href](!p-name);',
+    editor.widgets.add('datafield', {
+      allowedContent: 'span(!data-field); (!p-name);',
       requiredContent: 'span(data-field)',
-      pathName: 'hcard',
+      pathName: 'datafield',
 
       upcast: (el) => {
         return el.name === 'span' && el.hasClass('data-field');
@@ -13,12 +13,12 @@ CKEDITOR.plugins.add('hcard', {
     });
 
     // This feature does not have a button, so it needs to be registered manually.
-    editor.addFeature(editor.widgets.registered.hcard);
+    editor.addFeature(editor.widgets.registered.datafield);
 
-    // Handle dropping a contact by transforming the contact object into HTML.
+    // Handle dropping a data field by transforming the data field object into HTML.
     // Note: All pasted and dropped content is handled in one event - editor#paste.
     editor.on('paste', (evt) => {
-      const dataField = evt.data.dataTransfer.getData('contact');
+      const dataField = evt.data.dataTransfer.getData('dataFieldElement');
       if (!dataField) {
         return;
       }

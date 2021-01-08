@@ -34,7 +34,7 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
    */
   dtsForm: FormGroup;
 
-  dialogWidth = 1000;
+  dialogWidth = 1200;
 
   /**
    * Id of data table
@@ -104,6 +104,7 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
           createdAt: this.selectedTemplate.createdAt,
           bodyUri: this.selectedTemplate.bodyUri
         },
+        height : 'auto',
         minWidth: this.dialogWidth
       });
     }
