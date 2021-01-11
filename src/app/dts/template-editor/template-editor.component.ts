@@ -10,6 +10,7 @@ import * as dataFieldsStudent from './data_fields_student.json';
 import * as dataFieldsCourse from './data_fields_course.json';
 import * as dataFieldsStandardAcc from './data_fields_standard_acc.json';
 import * as dataFieldsNursingAcc from './data_fields_nursing_acc.json';
+import {DataField} from './data-field.types';
 
 declare var CKEDITOR: any;
 
@@ -36,10 +37,10 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
 
   templateEditor: FormGroup;
 
-  DATAFIELDSSTUDENT: any = (dataFieldsStudent as any).default;
-  DATAFIELDSCOURSE: any = (dataFieldsCourse as any).default;
-  DATAFIELDSSTANDARD: any = (dataFieldsStandardAcc as any).default;
-  DATAFIELDSNURSING: any = (dataFieldsNursingAcc as any).default;
+  DATAFIELDSSTUDENT = (dataFieldsStudent as any).default;
+  DATAFIELDSCOURSE = (dataFieldsCourse as any).default;
+  DATAFIELDSSTANDARD = (dataFieldsStandardAcc as any).default;
+  DATAFIELDSNURSING = (dataFieldsNursingAcc as any).default;
 
   /**
    * Check for changes when closing modal via 'esc'
@@ -151,8 +152,9 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
 
     // Pass an object with data field details. Based on it, the editor#paste listener in the datafield plugin
     // will create the HTML code to be inserted into the editor.
-    let dataField = '';
+    let dataField: DataField;
     const dataFieldElement = target.data('dataFieldElement');
+
     switch (target.data('dataFieldType')) {
       case 'student': {
         dataField = this.DATAFIELDSSTUDENT[dataFieldElement];
