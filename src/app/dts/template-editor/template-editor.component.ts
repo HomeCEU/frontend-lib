@@ -6,7 +6,10 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {UnsubscribeOnDestroyAdapter} from '../unsubscribe-on-destroy-adapter';
 
-import * as dataFields from './template_data_fields.json';
+import * as dataFieldsStudent from './data_fields_student.json';
+import * as dataFieldsCourse from './data_fields_course.json';
+import * as dataFieldsStandardAcc from './data_fields_standard_acc.json';
+import * as dataFieldsNursingAcc from './data_fields_nursing_acc.json';
 
 declare var CKEDITOR: any;
 
@@ -33,7 +36,10 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
 
   templateEditor: FormGroup;
 
-  DATAFIELDS: any = (dataFields as any).default;
+  DATAFIELDSSTUDENT: any = (dataFieldsStudent as any).default;
+  DATAFIELDSCOURSE: any = (dataFieldsCourse as any).default;
+  DATAFIELDSSTANDARD: any = (dataFieldsStandardAcc as any).default;
+  DATAFIELDSNURSING: any = (dataFieldsNursingAcc as any).default;
 
   /**
    * Check for changes when closing modal via 'esc'
@@ -129,6 +135,10 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     });
   }
 
+  /**
+   * Handles dragging and dropping a data field into the template
+   * @param evt element being dragged
+   */
   dragDataFieldElement(evt): void {
     const target = evt.data.getTarget().getAscendant('li', true);
 
@@ -141,20 +151,32 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
 
     // Pass an object with data field details. Based on it, the editor#paste listener in the datafield plugin
     // will create the HTML code to be inserted into the editor.
-    dataTransfer.setData('dataFieldElement', this.DATAFIELDS[target.data('dataFieldElement')]);
+    let dataField = '';
+    const dataFieldElement = target.data('dataFieldElement');
+    switch (target.data('dataFieldType')) {
+      case 'student': {
+        dataField = this.DATAFIELDSSTUDENT[dataFieldElement];
+        break;
+      }
+      case 'course': {
+        dataField = this.DATAFIELDSCOURSE[dataFieldElement];
+        break;
+      }
+      case 'standardAcc': {
+        dataField = this.DATAFIELDSSTANDARD[dataFieldElement];
+        break;
+      }
+      case 'NursingAcc': {
+        dataField = this.DATAFIELDSNURSING[dataFieldElement];
+        break;
+      }
+    }
+    dataTransfer.setData('dataFieldElement', dataField);
 
     // We need to set some normal data types to backup values for two reasons:
     // * In some browsers this is necessary to enable drag and drop into text in the editor.
     // * The content may be dropped in another place than the editor.
     dataTransfer.setData('text/html', target.getText());
-  }
-
-  /**
-   * Gets a list of drag and drop fields by type
-   * @param filterType indicates the type of data
-   */
-  filterDataFields(filterType: string): any {
-    return this.DATAFIELDS.filter(field => field.type === filterType);
   }
 
   /**

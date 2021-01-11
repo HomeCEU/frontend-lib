@@ -1,0 +1,18 @@
+[
+  {
+    "description": "Name",
+    "name": "{{ course.name }}"
+  },
+  {
+    "description": "Hours",
+    "name": "{{ course.hours }}"
+  },
+  {
+    "description": "Format",
+    "name": "{{ course.format }}"
+  },
+  {
+    "description": "ATC Code",
+    "name": "{{ course.atcCode }}"
+  }
+]

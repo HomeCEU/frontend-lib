@@ -1,0 +1,18 @@
+[
+  {
+    "description": "RN",
+    "name": "{{> rn}}"
+  },
+  {
+    "description": "LVN/LPN",
+    "name": "{{> lvn-lpn}}"
+  },
+  {
+    "description": "RT",
+    "name": "{{> rt}}"
+  },
+  {
+    "description": "NP",
+    "name": "{{> np}}"
+  }
+]

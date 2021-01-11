@@ -1,0 +1,50 @@
+[
+  {
+    "description": "OT/COTA",
+    "name": "{{> ot-cota}}"
+  },
+  {
+    "description": "MT/LMT",
+    "name": "{{> mt-lmt}}"
+  },
+  {
+    "description": " ATC/LAT",
+    "name": "{{> atc-lat}}"
+  },
+  {
+    "description": "SLP",
+    "name": "{{> slp}}"
+  },
+  {
+    "description": "Audiology",
+    "name": "{{> audiology}}"
+  },
+  {
+    "description": "CSCS/NSCA-CPT",
+    "name": "{{> cscs}}"
+  },
+  {
+    "description": "PT/PTA",
+    "name": "{{> pt-pta}}"
+  },
+  {
+    "description": "Dietitian/Nutritionist",
+    "name": "{{> dietitian-nutritionist}}"
+  },
+  {
+    "description": "NHA",
+    "name": "{{> nha}}"
+  },
+  {
+    "description": "Rec / Activities Director",
+    "name": "{{> rs}}"
+  },
+  {
+    "description": "CDM",
+    "name": "{{> cdm}}"
+  },
+  {
+    "description": "SW",
+    "name": "{{> sw }}"
+  }
+]
