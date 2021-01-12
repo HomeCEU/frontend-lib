@@ -12,7 +12,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-- Run `run npm build:dts`
+- Run `npm run build:dts`
 - Copy `\elements\frontend-lib.js` and `\dist\frontend-lib\styles.css` to the Server where the element is exposed.
 
 ## Running unit tests
@@ -21,7 +21,7 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Run `npm run cypress` to execute the end-to-end tests via [Cucumber with Cypress](https://www.npmjs.com/package/cypress-cucumber-preprocessor).
 
 ## Further help
 
