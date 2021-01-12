@@ -54,7 +54,7 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <ul id="dataFieldListStudent" class="dataFieldList">
-          <li *ngFor = "let dataField of DATAFIELDSSTUDENT index as i" data-dataFieldType="student" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
+          <li *ngFor = "let dataField of dragAndDropDataFieldStudent index as i" data-dataFieldType="student" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
             {{dataField.description}}
           </li>
         </ul>
@@ -66,7 +66,7 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <ul id="dataFieldListCourse" class="dataFieldList">
-          <li *ngFor = "let dataField of DATAFIELDSCOURSE index as i" data-dataFieldType="course" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
+          <li *ngFor = "let dataField of dragAndDropDataFieldCourse index as i" data-dataFieldType="course" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
             {{dataField.description}}
           </li>
         </ul>
@@ -78,7 +78,7 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <ul id="dataFieldListStandardAcc" class="dataFieldList">
-          <li *ngFor = "let dataField of DATAFIELDSSTANDARD index as i" data-dataFieldType="standardAcc" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
+          <li *ngFor = "let dataField of dragAndDropDataFieldStandard index as i" data-dataFieldType="standardAcc" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
             {{dataField.description}}
           </li>
         </ul>
@@ -91,7 +91,7 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <ul id="dataFieldListNursingAcc" class="dataFieldList">
-          <li *ngFor = "let dataField of DATAFIELDSNURSING index as i" data-dataFieldType="NursingAcc" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
+          <li *ngFor = "let dataField of dragAndDropDataFieldNursing index as i" data-dataFieldType="NursingAcc" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
             {{dataField.description}}
           </li>
         </ul>

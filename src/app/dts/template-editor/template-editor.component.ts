@@ -5,12 +5,13 @@ import {Template} from '../template.types';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {UnsubscribeOnDestroyAdapter} from '../unsubscribe-on-destroy-adapter';
-
-import * as dataFieldsStudent from './data_fields_student.json';
-import * as dataFieldsCourse from './data_fields_course.json';
-import * as dataFieldsStandardAcc from './data_fields_standard_acc.json';
-import * as dataFieldsNursingAcc from './data_fields_nursing_acc.json';
 import {DataField} from './data-field.types';
+import {
+  DATA_FIELD_STUDENT,
+  DATA_FIELD_COURSE,
+  DATA_FIELD_NURSING,
+  DATA_FIELD_STANDARD
+} from './data-fields';
 
 declare var CKEDITOR: any;
 
@@ -37,10 +38,13 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
 
   templateEditor: FormGroup;
 
-  DATAFIELDSSTUDENT = (dataFieldsStudent as any).default;
-  DATAFIELDSCOURSE = (dataFieldsCourse as any).default;
-  DATAFIELDSSTANDARD = (dataFieldsStandardAcc as any).default;
-  DATAFIELDSNURSING = (dataFieldsNursingAcc as any).default;
+  /**
+   * Array of drag and drop data fields
+   */
+  dragAndDropDataFieldStudent: DataField[] = DATA_FIELD_STUDENT;
+  dragAndDropDataFieldCourse: DataField[] = DATA_FIELD_COURSE;
+  dragAndDropDataFieldNursing: DataField[] = DATA_FIELD_NURSING;
+  dragAndDropDataFieldStandard: DataField[] = DATA_FIELD_STANDARD;
 
   /**
    * Check for changes when closing modal via 'esc'
@@ -157,19 +161,19 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
 
     switch (target.data('dataFieldType')) {
       case 'student': {
-        dataField = this.DATAFIELDSSTUDENT[dataFieldElement];
+        dataField = this.dragAndDropDataFieldStudent[dataFieldElement];
         break;
       }
       case 'course': {
-        dataField = this.DATAFIELDSCOURSE[dataFieldElement];
+        dataField = this.dragAndDropDataFieldCourse[dataFieldElement];
         break;
       }
       case 'standardAcc': {
-        dataField = this.DATAFIELDSSTANDARD[dataFieldElement];
+        dataField = this.dragAndDropDataFieldStandard[dataFieldElement];
         break;
       }
       case 'NursingAcc': {
-        dataField = this.DATAFIELDSNURSING[dataFieldElement];
+        dataField = this.dragAndDropDataFieldNursing[dataFieldElement];
         break;
       }
     }
