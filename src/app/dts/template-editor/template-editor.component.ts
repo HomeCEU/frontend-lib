@@ -5,6 +5,13 @@ import {Template} from '../template.types';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {UnsubscribeOnDestroyAdapter} from '../unsubscribe-on-destroy-adapter';
+import {DataField} from './data-field.types';
+import {
+  DATA_FIELD_STUDENT,
+  DATA_FIELD_COURSE,
+  DATA_FIELD_NURSING,
+  DATA_FIELD_STANDARD
+} from './data-fields';
 
 declare var CKEDITOR: any;
 
@@ -20,21 +27,24 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
   existingTemplate = false;
 
   /**
+   * User setting to show/hide drag and drop data fields
+   */
+  dataFieldsVisible = localStorage.getItem('dataFieldsVisible') === null;
+
+  /**
    * Used to display status messages
    */
   statusMessage = '';
 
   templateEditor: FormGroup;
 
-  DATAFIELDS = [{
-      name: '{{ student.fistName }}',
-      avatar: 'student'
-    },
-    {
-      name: '{{ course.name }}',
-      avatar: 'course'
-    }
-  ];
+  /**
+   * Array of drag and drop data fields
+   */
+  dragAndDropDataFieldStudent: DataField[] = DATA_FIELD_STUDENT;
+  dragAndDropDataFieldCourse: DataField[] = DATA_FIELD_COURSE;
+  dragAndDropDataFieldNursing: DataField[] = DATA_FIELD_NURSING;
+  dragAndDropDataFieldStandard: DataField[] = DATA_FIELD_STANDARD;
 
   /**
    * Check for changes when closing modal via 'esc'
@@ -110,41 +120,69 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
 
     CKEDITOR.on('instanceReady', (event) => {
       // When an item in the data field list is dragged, copy its data into the drag and drop data transfer.
-      // This data is later read by the editor#paste listener in the hcard plugin.
-      CKEDITOR.document.getById('dataFieldList').on('dragstart', (evt) => {
-        // The target may be some element inside the draggable div (e.g. the image), so get the div.data-field.
-        const target = evt.data.getTarget().getAscendant('div', true);
-
-        // Initialization of the CKEditor 4 data transfer facade is a necessary step to extend and unify native
-        // browser capabilities. For instance, Internet Explorer does not support any other data type than 'text' and 'URL'.
-        // Note: evt is an instance of CKEDITOR.dom.event, not a native event.
-        CKEDITOR.plugins.clipboard.initDragDataTransfer(evt);
-
-        const dataTransfer = evt.data.dataTransfer;
-
-        // Pass an object with data field details. Based on it, the editor#paste listener in the hcard plugin
-        // will create the HTML code to be inserted into the editor. You could set 'text/html' here as well, but:
-        // * It is a more elegant and logical solution that this logic is kept in the hcard plugin.
-        // * We do not know now where the content will be dropped and the HTML to be inserted
-        // might vary depending on the drop target.
-        dataTransfer.setData('contact', this.DATAFIELDS[target.data('contact')]);
-
-        // We need to set some normal data types to backup values for two reasons:
-        // * In some browsers this is necessary to enable drag and drop into text in the editor.
-        // * The content may be dropped in another place than the editor.
-        dataTransfer.setData('text/html', target.getText());
-
-        // We can still access and use the native dataTransfer - e.g. to set the drag image.
-        // Note: IEs do not support this method... :(.
-        if (dataTransfer.$.setDragImage) {
-          dataTransfer.$.setDragImage(target.findOne('img').$, 0, 0);
-        }
+      // This data is later read by the editor#paste listener in the datafield plugin.
+      CKEDITOR.document.getById('dataFieldListStudent').on('dragstart', (evt) => {
+        this.dragDataFieldElement(evt);
+      });
+      CKEDITOR.document.getById('dataFieldListCourse').on('dragstart', (evt) => {
+        this.dragDataFieldElement(evt);
+      });
+      CKEDITOR.document.getById('dataFieldListStandardAcc').on('dragstart', (evt) => {
+        this.dragDataFieldElement(evt);
+      });
+      CKEDITOR.document.getById('dataFieldListNursingAcc').on('dragstart', (evt) => {
+        this.dragDataFieldElement(evt);
       });
     });
 
     CKEDITOR.instances.editor1.on('focus', (event) => {
       this.statusMessage = '';
     });
+  }
+
+  /**
+   * Handles dragging and dropping a data field into the template
+   * @param evt element being dragged
+   */
+  dragDataFieldElement(evt): void {
+    const target = evt.data.getTarget().getAscendant('li', true);
+
+    // Initialization of the CKEditor 4 data transfer facade is a necessary step to extend and unify native
+    // browser capabilities. For instance, Internet Explorer does not support any other data type than 'text' and 'URL'.
+    // Note: evt is an instance of CKEDITOR.dom.event, not a native event.
+    CKEDITOR.plugins.clipboard.initDragDataTransfer(evt);
+
+    const dataTransfer = evt.data.dataTransfer;
+
+    // Pass an object with data field details. Based on it, the editor#paste listener in the datafield plugin
+    // will create the HTML code to be inserted into the editor.
+    let dataField: DataField;
+    const dataFieldElement = target.data('dataFieldElement');
+
+    switch (target.data('dataFieldType')) {
+      case 'student': {
+        dataField = this.dragAndDropDataFieldStudent[dataFieldElement];
+        break;
+      }
+      case 'course': {
+        dataField = this.dragAndDropDataFieldCourse[dataFieldElement];
+        break;
+      }
+      case 'standardAcc': {
+        dataField = this.dragAndDropDataFieldStandard[dataFieldElement];
+        break;
+      }
+      case 'NursingAcc': {
+        dataField = this.dragAndDropDataFieldNursing[dataFieldElement];
+        break;
+      }
+    }
+    dataTransfer.setData('dataFieldElement', dataField);
+
+    // We need to set some normal data types to backup values for two reasons:
+    // * In some browsers this is necessary to enable drag and drop into text in the editor.
+    // * The content may be dropped in another place than the editor.
+    dataTransfer.setData('text/html', target.getText());
   }
 
   /**
@@ -236,5 +274,13 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     const sourceMode = CKEDITOR.instances.editor1.mode === 'source';
     const canSave = isDirty && sourceMode && !this.templateEditor.invalid;
     return canSave;
+  }
+
+  /**
+   * Shows/hides the list of drag and drop data fields
+   */
+  toggleDataFields(): void {
+    this.dataFieldsVisible = !this.dataFieldsVisible;
+    this.dataFieldsVisible ? localStorage.removeItem('dataFieldsVisible') : localStorage.setItem('dataFieldsVisible', '');
   }
 }

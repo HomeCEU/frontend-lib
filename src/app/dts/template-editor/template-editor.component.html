@@ -32,23 +32,71 @@
         {{ statusMessage }}
       </span>
     </div>
-    <button id="saveButton" type="submit" [disabled]="!canSave()" class="push" mat-button>
+    <button id="saveButton" type="submit" [disabled]="!canSave()" mat-button>
       Save
     </button>
+    <button type="button" (click)="toggleDataFields()" class="push" mat-button>
+      Fields
+    </button>
   </div>
+  <div class="flex-row">
+    <div style="flex: 1">
+      <!-- CKEditor control -->
+      <div id="editor1" name="editor1">
+      </div>
+    </div>
+    <div class="dataFieldContainer" [hidden]="dataFieldsVisible">
+      <div class="dataFieldHeaderContainer"></div>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Student
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ul id="dataFieldListStudent" class="dataFieldList">
+          <li *ngFor = "let dataField of dragAndDropDataFieldStudent index as i" data-dataFieldType="student" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
+            {{dataField.description}}
+          </li>
+        </ul>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Course
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ul id="dataFieldListCourse" class="dataFieldList">
+          <li *ngFor = "let dataField of dragAndDropDataFieldCourse index as i" data-dataFieldType="course" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
+            {{dataField.description}}
+          </li>
+        </ul>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Standard Accreditation
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ul id="dataFieldListStandardAcc" class="dataFieldList">
+          <li *ngFor = "let dataField of dragAndDropDataFieldStandard index as i" data-dataFieldType="standardAcc" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
+            {{dataField.description}}
+          </li>
+        </ul>
+      </mat-expansion-panel>
 
-  <!-- CKEditor control -->
-  <div id="editor1" name="editor1">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Nursing Accreditation
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ul id="dataFieldListNursingAcc" class="dataFieldList">
+          <li *ngFor = "let dataField of dragAndDropDataFieldNursing index as i" data-dataFieldType="NursingAcc" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
+            {{dataField.description}}
+          </li>
+        </ul>
+      </mat-expansion-panel>
+    </div>
   </div>
 </form>
-<!-- todo - add all fields and don't hard-code values in template -->
-<ul id="dataFieldList">
-  <li>
-    <div class="contact h-card" data-contact="0" draggable="true">
-      <img src="assets/student.jpg" alt="avatar" class="u-photo">Student first name</div>
-  </li>
-  <li>
-    <div class="contact h-card" data-contact="1" draggable="true">
-      <img src="assets/course.jpg" alt="avatar" class="u-photo">Course name</div>
-  </li>
-</ul>
+

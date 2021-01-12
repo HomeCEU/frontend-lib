@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { Injector, NgModule } from '@angular/core';
-
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { createCustomElement } from '@angular/elements';
 import { DtsComponent } from './dts/dts.component';
@@ -16,6 +15,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
 import {TemplateEditorComponent} from './dts/template-editor/template-editor.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,8 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatInputModule,
     MatSelectModule,
     MatTabsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatExpansionModule
   ],
   providers: [
     HttpClient

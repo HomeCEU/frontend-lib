@@ -3,7 +3,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// For complete reference see:
 	// https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html
 
-  config.extraPlugins = 'hcard, sourcedialog';
+  config.extraPlugins = 'datafield, sourcedialog';
 
   config.toolbar = [
     { name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
@@ -13,5 +13,5 @@ CKEDITOR.editorConfig = function( config ) {
   config.startupMode = 'source';
   config.allowedContent = true;
   config.fullPage = true;
-  config.height = '500px';
+  config.height = '800px';
 };
