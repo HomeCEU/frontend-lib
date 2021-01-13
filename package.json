@@ -8,11 +8,15 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@homeceu"
   },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test --code-coverage",
+    "cypress": "npx cypress run",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:dts": "ng build --configuration=production --output-hashing none && node build-script.js"
@@ -45,6 +49,8 @@
     "@types/node": "^12.12.67",
     "codelyzer": "^6.0.0",
     "concat": "^1.0.3",
+    "cypress": "^6.2.1",
+    "cypress-cucumber-preprocessor": "^4.0.0",
     "fs-extra": "^9.0.1",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
