@@ -1,6 +1,5 @@
 import { Given } from "cypress-cucumber-preprocessor/steps";
 
-//http://dts-staging.us-west-2.elasticbeanstalk.com/status
 const url = 'http://localhost:4200/'
 
 Given('A list of templates', () => {

@@ -1,4 +1,5 @@
 {
   "testFiles": "**/*.{feature,features}",
-  "ignoreTestFiles": "*.js"
+  "ignoreTestFiles": "*.js",
+  "chromeWebSecurity": false
 }
