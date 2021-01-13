@@ -21,7 +21,10 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 ## Running end-to-end tests
 
-Run `npm run cypress` to execute the end-to-end tests via [Cucumber with Cypress](https://www.npmjs.com/package/cypress-cucumber-preprocessor).
+Regession tests make use of [Cucumber with Cypress](https://www.npmjs.com/package/cypress-cucumber-preprocessor).
+
+- `npm run test:cypress:ci` to run regression tests locally -  starts the application, waits for the URL, then runs regression tests; when the tests end, shuts down app
+- `npm run test:cypress:run` to run regression tests locally against the currently running application
 
 ## Further help
 

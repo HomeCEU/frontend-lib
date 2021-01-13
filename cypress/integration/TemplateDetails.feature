@@ -11,8 +11,8 @@ Feature: View existing template details
 
     Examples:
     | row | template_id                            | body_uri                                       | document_type |
-    | 1   | 2fa85f64-5717-4562-b3fc-2c963f66aaa2   | /template/2fa85f64-5717-4562-b3fc-2c963f66aaa2 | enrollment    |
-    | 2   | 2fa85f64-5717-4562-b3fc-2c963f33afa4   | /template/2fa85f64-5717-4562-b3fc-2c963f33afa4 | enrollment    |
+    | 1   | e854eedd-e0a3-4259-8fb2-4a126d52e715   | /template/e854eedd-e0a3-4259-8fb2-4a126d52e715 | enrollment    |
+    | 2   | 1ad8a97b-2cc9-484b-97b3-c227f02cf2cc   | /template/1ad8a97b-2cc9-484b-97b3-c227f02cf2cc | enrollment    |
 
 
 
