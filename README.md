@@ -26,7 +26,7 @@ Regression tests make use of [Cucumber with Cypress](https://www.npmjs.com/packa
 - `npm run test:cypress:ci` to run regression tests locally -  starts the application, waits for the URL, then runs regression tests; when the tests end, shuts down app
 - `npm run test:cypress:run` to run regression tests locally against the currently running application
 
-Regression test follow Behavioral Driven Development (BDD) and apply the following best practices:
+Regression tests follow Behavioral Driven Development (BDD) and apply the following best practices:
 - Tests are contained in “feature” files.
 - Feature files contain a title, a single User Story, and one or more scenarios to test the User Story.
   - The title communicate in one concise line what the behavior is.

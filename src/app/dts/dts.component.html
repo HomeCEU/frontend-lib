@@ -1,10 +1,10 @@
 <form [formGroup]="dtsForm">
-  <button type="button" (click)="newTemplate()" mat-button>
+  <button id="create" type="button" (click)="newTemplate()" mat-button>
     <b>&#43;</b>
   </button>
   <mat-form-field class="filterby-form-field">
     <input class="filterBy" matInput type="text" formControlName="templateFilter" placeholder="Type to filter by key or author...">
-    <button mat-button *ngIf="dtsForm.value.templateFilter" matSuffix mat-icon-button aria-label="Clear" (click)="dtsForm.reset()">
+    <button id="clear" mat-button *ngIf="dtsForm.value.templateFilter" matSuffix mat-icon-button aria-label="Clear" (click)="dtsForm.reset()">
       &#120;
     </button>
   </mat-form-field>
