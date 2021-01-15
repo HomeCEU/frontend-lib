@@ -13,6 +13,6 @@ Feature: Sort list of existing templates
     When I sort by author
     Then A list of templates are displayed sorted by author, descending
 
-  Scenario: Sort templates by date and time
-    When I sort by date and time
-    Then A list of templates are displayed sorted by date and time, descending
+#  Scenario: Sort templates by date and time
+#    When I sort by date and time
+#    Then A list of templates are displayed sorted by date and time, descending
