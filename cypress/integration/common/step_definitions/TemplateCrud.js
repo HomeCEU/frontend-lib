@@ -2,9 +2,9 @@ import {TemplateAdminApproved} from "../../../fixtures/templates";
 import {getTemplates, searchTemplates} from "../../../page-objects/template.po";
 import {Given} from "cypress-cucumber-preprocessor/steps";
 
-Given('A form displayed to manage a template', () => {
+Given('A form displayed to manage template {string}', (template_name) => {
   getTemplates();
-  searchTemplates('admin-approved');
+  searchTemplates(template_name);
   cy.get(`:nth-child(1) > .datatable-body-row`).click();
 })
 
@@ -54,6 +54,10 @@ When('I enter a template name {string}', (template_key) => {
   cy.get('input[formcontrolname*="templateKey"]').type(template_key)
 })
 
+When('I replace the text {string} with the new {string}', (current_text, new_text) => {
+  // todo
+})
+
 Then('A form is displayed to manage the template', () => {
   cy.get('.mat-dialog-container').should('exist');
   cy.get('.cke_source').should('have.value', TemplateAdminApproved);
@@ -87,5 +91,9 @@ Then('The editor contains additional markup for {string}', (template_text) => {
 })
 
 Then('The template is saved', () => {
+  // todo
+})
+
+Then('The template contains the text {string}', (template_text) => {
   // todo
 })

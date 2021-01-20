@@ -4,7 +4,7 @@ Feature: Copy an existing template
   new template and to use styles and data from an existing template
 
   Scenario: Copy an existing template
-    Given A form displayed to manage a template
+    Given A form displayed to manage template "admin-approved"
     When I request to copy the template
     Then The existing template is copied to a new template
 

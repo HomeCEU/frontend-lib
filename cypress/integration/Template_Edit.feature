@@ -9,18 +9,22 @@ Feature: Manage existing template
     Then A form is displayed to manage the template
 
   Scenario: Close editor without changes
-    Given A form displayed to manage a template
+    Given A form displayed to manage template "admin-approved"
     When I request to close the form
     Then The template editor form is closed
 
   Scenario: Preview a template
-    Given A form displayed to manage a template
+    Given A form displayed to manage template "admin-approved"
     When I request to change the view mode
     Then The template is rendered in WYSISYG mode
 
-  Scenario: Edit and save template (draft)
-    Given A form displayed to manage a template
-    #When I request to change the view mode
-    #And I enter "additonal text" into the editor
+  Scenario Outline: Edit and save template
+    Given A form displayed to manage template "benchmark"
+    When I replace the text "<current_text>" with the new "<new_text>"
     #And I request to save the template
-    #Then The template is saved
+    Then The template is saved
+    And The template contains the text "<new_text>"
+
+    Examples:
+      | current_text    | new_text      |
+      | test            | updated text  |
