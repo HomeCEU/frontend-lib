@@ -1,6 +1,7 @@
-Feature: View existing template details
+Feature: View details of an existing template
 
-  I want to display details of a template so that I can find out information about existing templates in the system.
+  As a system administrator I want to display details of an existing template so that I can view
+  additional properties of the template.
 
   Scenario Outline: View template details
     Given A list of templates

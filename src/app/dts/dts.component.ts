@@ -64,7 +64,7 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
         console.log(`User: ${this.userName}  Status: ${status}  Endpoint: ${this.dtsService.url}`);
       },
       error => {
-        console.log(`Failed to connect to ${this.dtsService.url} - ${error.message}`);
+        console.error(`Failed to connect to ${this.dtsService.url} - ${error.message}`);
       });
 
     this.rows = this.dtsService.getTemplates('enrollment');

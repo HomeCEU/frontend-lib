@@ -21,6 +21,8 @@ declare var CKEDITOR: any;
   styleUrls: ['./template-editor.component.scss']
 })
 export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter implements OnInit, OnDestroy {
+  // todo - need to fix a save bug which requires the user to cycle between modes before saving
+
   /**
    * Either creating or editing a template used to prevent changing the Template Name for an existing template
    */
@@ -79,9 +81,9 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     // configure the template editor
     this.configTemplateEditor();
 
-    if (this.templateObject.docType && this.templateObject.templateKey) {
-      this.templateEditor.patchValue(this.templateObject);
+    this.templateEditor.patchValue(this.templateObject);
 
+    if (this.templateObject.docType && this.templateObject.templateKey) {
       // retrieve template content for existing template
       this.subs.sink = this.dtsService.getTemplateByKey(this.templateObject.docType, this.templateObject.templateKey).subscribe(data => {
         CKEDITOR.instances.editor1.setData(data, () => {
@@ -215,7 +217,8 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
         this.existingTemplate = true;
         this.statusMessage = 'Template saved';
       },
-      () => {
+      (error) => {
+        console.log(`Save failed: $(error)`);
         this.templateEditor.setErrors({ saveFailed: true });
       });
   }
