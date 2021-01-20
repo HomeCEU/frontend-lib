@@ -1,15 +1,13 @@
 import { Given } from "cypress-cucumber-preprocessor/steps";
 import {
   dataTableExpandRow,
-  dataTableTemplateDetails
+  dataTableTemplateDetails, getTemplates
 } from "../../../page-objects/template.po";
 
 const url = 'http://localhost:4200/'
 
 Given('A list of templates', () => {
-  cy.intercept('GET', '**/template*').as('getTemplates')
-  cy.visit(url)
-  cy.wait('@getTemplates');
+  getTemplates();
 })
 
 When('I expand row {string} for a template', (row_number) => {

@@ -15,10 +15,10 @@
     </div>
   </div>
   <div class="flex-row">
-    <button type="button" (click)="copyTemplate()" [disabled]="canCopy()" mat-button>
+    <button id="copy" type="button" (click)="copyTemplate()" [disabled]="canCopy()" mat-button>
       Copy
     </button>
-    <button type="button" (click)="discardChangesAndClose()" mat-button>
+    <button id="close" type="button" (click)="discardChangesAndClose()" mat-button>
       Close
     </button>
     <div class="statusMessage">
@@ -32,7 +32,7 @@
         {{ statusMessage }}
       </span>
     </div>
-    <button id="saveButton" type="submit" [disabled]="!canSave()" mat-button>
+    <button id="save" type="submit" [disabled]="!canSave()" mat-button>
       Save
     </button>
     <button type="button" (click)="toggleDataFields()" class="push" mat-button>

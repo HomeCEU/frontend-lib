@@ -1,22 +1,19 @@
 import {Given} from "cypress-cucumber-preprocessor/steps";
 import {
   dataTableTemplateName,
-  dataTableAuthor
+  dataTableAuthor, searchTemplates, getTemplates
 } from "../../../page-objects/template.po";
-
-const url = 'http://localhost:4200/'
 
 const ITEMS_IN_PAGE = 10;
 
 Given(`Search results for {string} are shown`, (search_value) => {
-  cy.intercept('GET', '**/template*').as('getTemplates')
-  cy.visit(url)
-  cy.wait('@getTemplates');
-  cy.get('input').type(search_value)
+  getTemplates();
+
+  searchTemplates(search_value);
 })
 
 When('I search for templates containing {string}', (search_value) => {
-  cy.get('input').type(search_value)
+  searchTemplates(search_value);
 })
 
 When('I clear the search field', () => {
@@ -44,5 +41,5 @@ Then('{string} templates are displayed for author {string}', (num_of_templates, 
 })
 
 Then('An unfiltered list of templates is displayed', () => {
-  cy.get(".page-count").should("contain", "13");
+  cy.get(".page-count").should("contain", "15");
 })
