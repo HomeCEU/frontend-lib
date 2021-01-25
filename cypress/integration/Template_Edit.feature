@@ -18,13 +18,8 @@ Feature: Manage existing template
     When I request to change the view mode
     Then The template is rendered in WYSISYG mode
 
-  Scenario Outline: Edit and save template
+  Scenario: Edit and save template
     Given A form displayed to manage template "benchmark"
-    When I replace the text "<current_text>" with the new "<new_text>"
-    #And I request to save the template
+    When I enter "test" into the editor
+    And I request to save the template
     Then The template is saved
-    And The template contains the text "<new_text>"
-
-    Examples:
-      | current_text    | new_text      |
-      | test            | updated text  |

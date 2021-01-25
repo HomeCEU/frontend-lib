@@ -218,7 +218,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
         this.statusMessage = 'Template saved';
       },
       (error) => {
-        console.log(`Save failed: $(error)`);
+        console.error(`Save failed: ${error}`);
         this.templateEditor.setErrors({ saveFailed: true });
       });
   }
