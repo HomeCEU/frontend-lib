@@ -20,7 +20,6 @@
     "test:cypress:run": "npx cypress run",
     "test:cypress:ci": "start-server-and-test start:ci http://localhost:4200 test:cypress:run",
     "lint": "ng lint",
-    "e2e": "ng e2e",
     "build:dts": "ng build --configuration=production --output-hashing none && node build-script.js"
   },
   "dependencies": {
@@ -61,7 +60,6 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
-    "protractor": "~7.0.0",
     "start-server-and-test": "^1.11.7",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
