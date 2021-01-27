@@ -39,7 +39,12 @@ When('I request to close the form', () => {
 })
 
 When('I request to save the template', () => {
+  // mocks a backend call to save a template
+  cy.intercept('POST', '**/template*', { fixture: 'post_template_response.json' }).as('postTemplate');
+
   cy.get('#save').click()
+
+  cy.wait('@postTemplate');
 })
 
 When('I request to change the view mode', () => {
@@ -52,10 +57,6 @@ When('I enter {string} into the editor', (template_text) => {
 
 When('I enter a template name {string}', (template_key) => {
   cy.get('input[formcontrolname*="templateKey"]').type(template_key)
-})
-
-When('I replace the text {string} with the new {string}', (current_text, new_text) => {
-  // todo
 })
 
 Then('A form is displayed to manage the template', () => {
@@ -91,9 +92,8 @@ Then('The editor contains additional markup for {string}', (template_text) => {
 })
 
 Then('The template is saved', () => {
-  // todo
+  cy.get('.statusMessage').contains('Template saved')
+  cy.get('#save').should('have.class', 'mat-button-disabled');
+  cy.get('#copy').should('not.have.class', 'mat-button-disabled');
 })
 
-Then('The template contains the text {string}', (template_text) => {
-  // todo
-})
