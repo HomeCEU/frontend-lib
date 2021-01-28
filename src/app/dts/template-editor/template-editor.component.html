@@ -1,4 +1,4 @@
-<form [formGroup]="templateEditor" (ngSubmit)="onSubmit()">
+<form id="myForm" [formGroup]="templateEditor" (ngSubmit)="onSubmit()">
   <div class="flex-row">
     <mat-form-field class="templateKey">
       <mat-label>Template Name</mat-label>
@@ -21,6 +21,9 @@
     <button id="close" type="button" (click)="discardChangesAndClose()" mat-button>
       Close
     </button>
+    <button id="save" type="submit" mat-button>
+      Save
+    </button>
     <div class="statusMessage">
       <span class="errorMessage" *ngIf="templateEditor.controls.templateKey.errors?.inUse">
         Template name is in use. Please choose another name.
@@ -32,9 +35,7 @@
         {{ statusMessage }}
       </span>
     </div>
-    <button id="save" type="submit" [disabled]="!canSave()" mat-button>
-      Save
-    </button>
+
     <button type="button" (click)="toggleDataFields()" class="push" mat-button>
       Fields
     </button>

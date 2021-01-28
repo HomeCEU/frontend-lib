@@ -10,7 +10,7 @@ CKEDITOR.editorConfig = function( config ) {
     { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
     { name: 'document', items: ['Source'] }
   ];
-  config.startupMode = 'source';
+  config.startupMode = 'wysiwyg';
   config.allowedContent = true;
   config.fullPage = true;
   config.height = '800px';

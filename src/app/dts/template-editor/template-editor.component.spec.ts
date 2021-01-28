@@ -85,10 +85,6 @@ describe('TemplateEditorComponent', () => {
 
     // wait for editor to display the default template
     setTimeout(() => {
-      // switch display mode from code to wysiwyg
-      const sourceButton = fixture.debugElement.nativeElement.querySelector('.cke_button__source');
-      sourceButton.click();
-
       // get the template content from the CK Editor rendered in an iFrame
       const editorData = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
       const content = editorData[0].contentDocument;
@@ -107,10 +103,6 @@ describe('TemplateEditorComponent', () => {
 
     // wait for editor to display the template
     setTimeout(() => {
-      // switch display mode from code to wysiwyg
-      const sourceButton = fixture.debugElement.nativeElement.querySelector('.cke_button__source');
-      sourceButton.click();
-
       // get the template content from the CK Editor rendered in an iFrame
       const editorData = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
       const content = editorData[0].contentDocument;
@@ -131,16 +123,15 @@ describe('TemplateEditorComponent', () => {
 
     // wait for editor to display the template
     setTimeout(() => {
-      // switch display mode from code to wysiwyg
-      const sourceButton = fixture.debugElement.nativeElement.querySelector('.cke_button__source');
-      sourceButton.click();
-      // component.editorChanged(null);
-
       expect(component.statusMessage).toEqual('');
+
+      // trigger the CKEditor Dirty Flag
+      const editorData = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
+      editorData[0].contentDocument.body.innerHTML = '<p>New Template</p>';
 
       component.onSubmit();
 
-      expect(component.statusMessage).toEqual('Template saved');
+      expect(component.statusMessage).toEqual('Template saved.');
 
       done();
     }, 1000);
@@ -158,12 +149,11 @@ describe('TemplateEditorComponent', () => {
 
     // wait for editor to display the template
     setTimeout(() => {
-      // switch display mode from code to wysiwyg
-      const sourceButton = fixture.debugElement.nativeElement.querySelector('.cke_button__source');
-      sourceButton.click();
-      // component.editorChanged(null);
-
       expect(component.templateEditor.errors?.saveFailed).toBeUndefined();
+
+      // trigger the CKEditor Dirty Flag
+      const editorData = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
+      editorData[0].contentDocument.body.innerHTML = '<p>New Template</p>';
 
       component.onSubmit();
 
@@ -180,10 +170,6 @@ describe('TemplateEditorComponent', () => {
 
     // wait for editor to display the template
     setTimeout(() => {
-      // switch display mode from code to wysiwyg
-      const sourceButton = fixture.debugElement.nativeElement.querySelector('.cke_button__source');
-      sourceButton.click();
-
       const editorData = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
       expect(editorData[0].contentDocument.body.innerHTML).toEqual(expectedBodyTemplate);
 

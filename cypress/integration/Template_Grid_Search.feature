@@ -23,8 +23,8 @@ Feature: Search list of existing templates
     Examples:
       | search_value    | num_of_templates |
       | badvalue        | 0                |
-      | Dan             | 12               |
-      | Test User       | 3                |
+      | Dan             | 10               |
+      | Test User       | 5                |
 
   Scenario: Clearing search field displays original list of templates
     Given Search results for "encompass_care" are shown

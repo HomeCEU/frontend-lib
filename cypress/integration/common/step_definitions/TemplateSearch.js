@@ -41,5 +41,5 @@ Then('{string} templates are displayed for author {string}', (num_of_templates, 
 })
 
 Then('An unfiltered list of templates is displayed', () => {
-  cy.get(".page-count").should("contain", "15");
+  cy.get(".page-count").should("contain", "16");
 })

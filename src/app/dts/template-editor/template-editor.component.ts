@@ -21,8 +21,6 @@ declare var CKEDITOR: any;
   styleUrls: ['./template-editor.component.scss']
 })
 export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter implements OnInit, OnDestroy {
-  // todo - need to fix a save bug which requires the user to cycle between modes before saving
-
   /**
    * Either creating or editing a template used to prevent changing the Template Name for an existing template
    */
@@ -138,6 +136,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     });
 
     CKEDITOR.instances.editor1.on('focus', (event) => {
+      console.log('onFocus');
       this.statusMessage = '';
     });
   }
@@ -205,17 +204,29 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    * Saves the template
    */
   onSubmit(): void {
-    const templateData = CKEDITOR.instances.editor1.getData();
+    console.log('onSubmig');
+    if (CKEDITOR.instances.editor1.mode === 'source') {
+      console.log('source');
+      alert('Switch to wysiwyg mode to save. No changes saved');
+      return;
+    }
+    if (!CKEDITOR.instances.editor1.checkDirty()) {
+      console.log('not dirty');
+      alert('Template is not dirty. No changes saved');
+      return;
+    }
 
+    const templateData = CKEDITOR.instances.editor1.getData();
     this.subs.sink = this.dtsService.saveTemplate(
       this.templateEditor.value.templateKey,
       this.templateEditor.value.author,
       templateData
     ).subscribe(
       () => {
+        // the save response is not needed
         CKEDITOR.instances.editor1.resetDirty();
         this.existingTemplate = true;
-        this.statusMessage = 'Template saved';
+        this.statusMessage = 'Template saved.';
       },
       (error) => {
         console.error('Save failed: ', error);
@@ -267,16 +278,6 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    */
   canCopy(): boolean {
     return !this.existingTemplate || CKEDITOR.instances.editor1.checkDirty();
-  }
-
-  /**
-   * Checks if the user can save the current template.  Must be dirty, a valid form, and in source mode.
-   */
-  canSave(): boolean {
-    const isDirty = CKEDITOR.instances.editor1.checkDirty();
-    const sourceMode = CKEDITOR.instances.editor1.mode === 'source';
-    const canSave = isDirty && sourceMode && !this.templateEditor.invalid;
-    return canSave;
   }
 
   /**

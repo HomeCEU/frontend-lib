@@ -14,9 +14,12 @@
   width: 300px;
 }
 
+#save {
+  margin-left: 5em;
+}
+
 .statusMessage {
   margin-top:10px;
-  padding-left: 5em;
   color: #B00020;
 }
 
@@ -54,7 +57,7 @@
 .dataFieldHeaderContainer {
   width: 200px;
   background: #f8f8f8;
-  height: 40px;
+  height: 42px;
 }
 
 .mat-expansion-panel-header {
