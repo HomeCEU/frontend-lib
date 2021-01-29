@@ -1,7 +1,7 @@
 Feature: Copy an existing template
 
-  As a system administrator I want to copy an existing template so that I can reduce the time needed to create a
-  new template and to use styles and data from an existing template
+  As a system administrator I want to copy an existing template so that I can use that copied template to create a
+  new template
 
   Scenario: Copy an existing template
     Given A form displayed to manage template "admin-approved"

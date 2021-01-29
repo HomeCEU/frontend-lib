@@ -204,14 +204,11 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    * Saves the template
    */
   onSubmit(): void {
-    console.log('onSubmig');
     if (CKEDITOR.instances.editor1.mode === 'source') {
-      console.log('source');
       alert('Switch to wysiwyg mode to save. No changes saved');
       return;
     }
     if (!CKEDITOR.instances.editor1.checkDirty()) {
-      console.log('not dirty');
       alert('Template is not dirty. No changes saved');
       return;
     }
@@ -223,7 +220,6 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       templateData
     ).subscribe(
       () => {
-        // the save response is not needed
         CKEDITOR.instances.editor1.resetDirty();
         this.existingTemplate = true;
         this.statusMessage = 'Template saved.';

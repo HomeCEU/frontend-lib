@@ -7,8 +7,8 @@ Feature: View details of an existing template
     Given A list of templates
     When I expand row "<row>" for a template
     Then Template details should contain a Template ID "<template_id>"
-    And template details should contain a Body Uri "<body_uri>"
-    And template details should contain a Document Type "<document_type>"
+    And Template details should contain a Body Uri "<body_uri>"
+    And Template details should contain a Document Type "<document_type>"
 
     Examples:
     | row | template_id                            | body_uri                                       | document_type |

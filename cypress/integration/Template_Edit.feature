@@ -15,23 +15,23 @@ Feature: Manage existing template
   Scenario Outline: Close editor without changes
     Given A form displayed to manage template "<template_name>"
     When I request to close the form
-    Then The template editor form is closed
+    Then The form is closed
 
     Examples:
       | template_name   |
       | benchmark       |
       | admin-approved  |
 
-  Scenario: Preview a template
+  Scenario: View template source code
     Given A form displayed to manage template "admin-approved"
     When I request to change the view mode
     Then The template is rendered in source mode
 
   Scenario Outline: Edit and save template
     Given A form displayed to manage template "<template_name>"
-    And The editor is in source mode
+    And The editor is in "source" mode
     And The text "<template_text>" is entered into the editor
-    And The editor is in WYSIWYG mode
+    And The editor is in "WYSIWYG" mode
     When I request to save the template
     Then The template is saved
     And The template contains the text "<template_text>"
@@ -42,9 +42,9 @@ Feature: Manage existing template
 
   Scenario Outline: Error occurs when editing and saving a template
     Given A form displayed to manage template "<template_name>"
-    And The editor is in source mode
+    And The editor is in "source" mode
     And The text "<template_text>" is entered into the editor
-    And The editor is in WYSIWYG mode
+    And The editor is in "WYSIWYG" mode
     When I request to save an invalid template
     Then The template is not saved
 
