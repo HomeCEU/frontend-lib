@@ -136,7 +136,6 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     });
 
     CKEDITOR.instances.editor1.on('focus', (event) => {
-      console.log('onFocus');
       this.statusMessage = '';
     });
   }

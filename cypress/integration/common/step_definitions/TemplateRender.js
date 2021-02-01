@@ -5,7 +5,7 @@ When('I enter data key {string}', (data_key) => {
 })
 
 When('I request to render a certificate', () => {
-  // todo - stub the window to prevent it from opening
+  // todo - stub the popup window to prevent it from opening
   // cy.window().then((win) => {
   //   cy.stub(win, 'open', url => {
   //     return new window();
@@ -17,6 +17,6 @@ When('I request to render a certificate', () => {
   cy.wait('@renderTemplate');
 })
 
-Then('The emplate is rendered', () => {
-  // todo
+Then('The template is rendered', () => {
+  // todo - verify the popup displayed
 })

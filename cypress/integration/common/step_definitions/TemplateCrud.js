@@ -1,6 +1,5 @@
 import {getEditorIframeBody, getTemplates, searchTemplates} from "../../../page-objects/template.po";
 import {Given} from "cypress-cucumber-preprocessor/steps";
-import 'cypress-iframe'
 
 Given('A form displayed to manage template {string}', (template_name) => {
   getTemplates();

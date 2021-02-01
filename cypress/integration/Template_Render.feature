@@ -10,5 +10,5 @@ Feature: Render certificate
     Given A form displayed to manage template "benchmark"
     When I enter data key "1234567"
     And I request to render a certificate
-    Then The emplate is rendered
+    Then The template is rendered
 
