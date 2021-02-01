@@ -1,0 +1,22 @@
+import {dataTableTemplateName} from "../../../page-objects/template.po";
+
+When('I enter data key {string}', (data_key) => {
+  cy.get('input[formcontrolname*="dataKey"]').type(data_key)
+})
+
+When('I request to render a certificate', () => {
+  // todo - stub the window to prevent it from opening
+  // cy.window().then((win) => {
+  //   cy.stub(win, 'open', url => {
+  //     return new window();
+  //   });
+  // })
+
+  cy.intercept('GET', '**/render/**').as('renderTemplate');
+  cy.get('#preview').click();
+  cy.wait('@renderTemplate');
+})
+
+Then('The emplate is rendered', () => {
+  // todo
+})
