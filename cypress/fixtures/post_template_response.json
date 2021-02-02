@@ -1,7 +1,12 @@
 {
-  "dataId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "templateId": "72bf5192-5fd9-11eb-8a84-0242ac110003",
+  "templateKey": "myUniqueId",
   "docType": "enrollment",
-  "dataKey": "F8C412A9",
-  "createdAt": "2021-01-25T18:43:30.029Z",
-  "link": "/docdata/6da85f64-5717-4562-b3fc-2c963f66af4c"
+  "author": "bill smith",
+  "createdAt": {
+    "date": "2021-01-26 13:21:50.000000",
+    "timezone_type": 1,
+    "timezone": "+00:00"
+  },
+  "bodyUri": "/template/72bf5192-5fd9-11eb-8a84-0242ac110003"
 }

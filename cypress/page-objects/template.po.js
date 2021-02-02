@@ -33,6 +33,13 @@ export const dataTableExpandRow = rowNumber =>
     `:nth-child(${rowNumber}) > .datatable-body-row > .datatable-row-center > :nth-child(1) > .datatable-body-cell-label > a`
   );
 
+export const getEditorIframeBody = () => {
+  return cy
+    .get('.cke_wysiwyg_frame')
+    .its('0.contentDocument.body')
+    .then(cy.wrap)
+}
+
 export function getTemplates() {
   cy.viewport(1400, 1000);
   cy.intercept('GET', '**/template*').as('getTemplates');
