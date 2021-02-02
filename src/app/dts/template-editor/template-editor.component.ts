@@ -212,7 +212,10 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       return;
     }
 
-    const templateData = CKEDITOR.instances.editor1.getData();
+    // get the data to save and covert "partial data field" character code indicator
+    let templateData = CKEDITOR.instances.editor1.getData();
+    templateData = templateData.replaceAll('{{&gt;', '{{>');
+
     this.subs.sink = this.dtsService.saveTemplate(
       this.templateEditor.value.templateKey,
       this.templateEditor.value.author,

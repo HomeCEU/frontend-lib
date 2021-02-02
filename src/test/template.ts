@@ -97,17 +97,30 @@ img {
 <p style='text-align:center;'>Enrollment #: <span class='char-style-override-6'>{{ enrollmentId }}</span></p>
 <p><span class='char-style-override-2' style='line-height: 1.2;'>Course Certificate</span></p>
 <p><span class='char-style-override-3'>This is to certify</span></p>
-<p><span class='char-style-override-1'>{{ student.firstName }} {{ student.lastName }}&nbsp;-&nbsp;{{~#each student.licenses as |license|~}}{{license.state}} {{license.type}} {{license.number}}{{#unless @last}}; {{/unless}}{{~/each~}}</span>
+<p><span class='char-style-override-1'>{{> student_name}}&nbsp;-&nbsp;{{~#each student.licenses as |license|~}}{{license.state}} {{license.type}} {{license.number}}{{#unless @last}}; {{/unless}}{{~/each~}}</span>
 </p>
 <p><span>has successfully completed </span><span class='char-style-override-1'>{{ course.hours }} contact hours</span><span>{{#if (eq course.format 'live')}}Live Continuing Education{{else}}continuing education online training{{/if}} on the topic of:</span>
 </p>
-<p><span class='char-style-override-4'>{{ course.name }}</span><br/>{{#if course.authors}}{{#with course.authors as |authors|}}Course Speakers:{{#each authors~}}{{this}}{{#unless @last}} | {{/unless}}{{~/each}}{{/with}}{{/if}}</p>
+<p><span class='char-style-override-4'>{{ course.name }}</span><br>{{#if course.authors}}{{#with course.authors as |authors|}}Course Speakers:{{#each authors~}}{{this}}{{#unless @last}} | {{/unless}}{{~/each}}{{/with}}{{/if}}</p>
 <p><span>Presented by HomeCEUConnection.com, 5048 Tennyson Pkwy, Suite 200 Plano TX 75024</span></p>
 <p><span>Course completed on {{ completionDate }}</span></p>
 </div>
 </body>
 
 </html>`;
+
+export const editorBodyTemplate = `<div id="container" class="page">
+<p style="text-align:center;">Enrollment #: <span class="char-style-override-6">{{ enrollmentId }}</span></p>
+<p><span class="char-style-override-2" style="line-height: 1.2;">Course Certificate</span></p>
+<p><span class="char-style-override-3">This is to certify</span></p>
+<p><span class="char-style-override-1">{{&gt; student_name}}&nbsp;-&nbsp;{{~#each student.licenses as |license|~}}{{license.state}} {{license.type}} {{license.number}}{{#unless @last}}; {{/unless}}{{~/each~}}</span>
+</p>
+<p><span>has successfully completed </span><span class="char-style-override-1">{{ course.hours }} contact hours</span><span>{{#if (eq course.format 'live')}}Live Continuing Education{{else}}continuing education online training{{/if}} on the topic of:</span>
+</p>
+<p><span class="char-style-override-4">{{ course.name }}</span><br>{{#if course.authors}}{{#with course.authors as |authors|}}Course Speakers:{{#each authors~}}{{this}}{{#unless @last}} | {{/unless}}{{~/each}}{{/with}}{{/if}}</p>
+<p><span>Presented by HomeCEUConnection.com, 5048 Tennyson Pkwy, Suite 200 Plano TX 75024</span></p>
+<p><span>Course completed on {{ completionDate }}</span></p>
+</div>`;
 
 export const certificate = `
 <html>
@@ -211,7 +224,7 @@ img {
 <p><span class='char-style-override-1'>Wendy Sebastian&nbsp;-&nbsp;TX PT 1107381; TX MT/LMT MT027906</span></p>
 <p><span>has successfully completed </span><span class='char-style-override-1'>2 contact hours</span><span>continuing education online training on the topic of:</span>
 </p>
-<p><span class='char-style-override-4'>PTSD from a Trauma-Centered Perspective: Caring for Afflicted, and Addicted Clients</span><br/>Course Speakers:M.T. Webb, LMSW</p>
+<p><span class='char-style-override-4'>PTSD from a Trauma-Centered Perspective: Caring for Afflicted, and Addicted Clients</span><br>Course Speakers:M.T. Webb, LMSW</p>
 <p><span>Presented by HomeCEUConnection.com, 5048 Tennyson Pkwy, Suite 200 Plano TX 75024</span></p>
 <p><span>Course completed on 09-28-2019</span></p>
 </div>
