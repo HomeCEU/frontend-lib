@@ -147,15 +147,13 @@ describe('TemplateEditorComponent', () => {
 
     // wait for editor to display the template
     setTimeout(() => {
-      expect(component.templateEditor.errors?.saveFailed).toBeUndefined();
-
       // trigger the CKEditor Dirty Flag
       const editorData = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
       editorData[0].contentDocument.body.innerHTML = '<p>New Template</p>';
 
       component.onSubmit();
 
-      expect(component.templateEditor.errors?.saveFailed).toBeTrue();
+      expect(component.statusMessage).toEqual('Save failed. Please try again.');
 
       done();
     }, 1000);
