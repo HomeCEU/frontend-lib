@@ -194,7 +194,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       switchMap(term => this.dtsService.getTemplateByKey('enrollment', term)))
       .subscribe(data => {
         if (data) {
-          this.templateEditor.controls.templateKey.setErrors({inUse: true});
+          this.statusMessage = 'Template name is in use. Please choose another name.';
         }
       });
   }
@@ -212,7 +212,10 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       return;
     }
 
-    const templateData = CKEDITOR.instances.editor1.getData();
+    // prepare data for saving
+    let templateData = CKEDITOR.instances.editor1.getData();
+    templateData = this.translateForSaving(templateData);
+
     this.subs.sink = this.dtsService.saveTemplate(
       this.templateEditor.value.templateKey,
       this.templateEditor.value.author,
@@ -225,8 +228,22 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       },
       (error) => {
         console.error('Save failed: ', error);
-        this.templateEditor.setErrors({ saveFailed: true });
+        this.statusMessage = 'Save failed. Please try again.';
       });
+  }
+
+  /**
+   * Prepares data for saving to the backend by converting character codes
+   * @param templateText to convert
+   */
+  translateForSaving(templateText): string {
+    // translate partial data fields
+    templateText = templateText.replaceAll('{{&gt;', '{{>');
+
+    // translate single quotes
+    templateText = templateText.replaceAll('&#39;', '\'');
+
+    return templateText;
   }
 
   /**

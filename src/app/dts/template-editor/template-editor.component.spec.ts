@@ -5,7 +5,7 @@ import {HttpClient, HttpHandler} from '@angular/common/http';
 import {Template} from '../template.types';
 import {of, throwError} from 'rxjs';
 import {DtsService} from '../dts.service';
-import {certificate, template} from '../../../test/template';
+import {certificate, editorBodyTemplate, template} from '../../../test/template';
 import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {templatesAll} from '../../../test/templates';
@@ -28,7 +28,7 @@ describe('TemplateEditorComponent', () => {
   let component: TemplateEditorComponent;
   let fixture: ComponentFixture<TemplateEditorComponent>;
   let dtsService: DtsService;
-  const expectedBodyTemplate = `<div id="container" class="page"><p style="text-align:center;">Enrollment #: <span class="char-style-override-6">{{ enrollmentId }}</span></p><p><span class="char-style-override-2" style="line-height: 1.2;">Course Certificate</span></p><p><span class="char-style-override-3">This is to certify</span></p><p><span class="char-style-override-1">{{ student.firstName }} {{ student.lastName }}&nbsp;-&nbsp;{{~#each student.licenses as |license|~}}{{license.state}} {{license.type}} {{license.number}}{{#unless @last}}; {{/unless}}{{~/each~}}</span></p><p><span>has successfully completed </span><span class="char-style-override-1">{{ course.hours }} contact hours</span><span>{{#if (eq course.format 'live')}}Live Continuing Education{{else}}continuing education online training{{/if}} on the topic of:</span></p><p><span class="char-style-override-4">{{ course.name }}</span><br>{{#if course.authors}}{{#with course.authors as |authors|}}Course Speakers:{{#each authors~}}{{this}}{{#unless @last}} | {{/unless}}{{~/each}}{{/with}}{{/if}}</p><p><span>Presented by HomeCEUConnection.com, 5048 Tennyson Pkwy, Suite 200 Plano TX 75024</span></p><p><span>Course completed on {{ completionDate }}</span></p></div>`;
+  const expectedBodyTemplate = editorBodyTemplate.replace(/(\r\n|\n|\r)/gm, '');
 
   const dialogMock = {
     disableClose: true,
@@ -107,9 +107,7 @@ describe('TemplateEditorComponent', () => {
       const editorData = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
       const content = editorData[0].contentDocument;
 
-      // verify the CK Editor control has received and displayed the template data
       expect(content.body.innerHTML).toEqual(expectedBodyTemplate);
-     // expect(component.dirty).toBeFalse();
 
       done();
     }, 1000);
@@ -149,15 +147,13 @@ describe('TemplateEditorComponent', () => {
 
     // wait for editor to display the template
     setTimeout(() => {
-      expect(component.templateEditor.errors?.saveFailed).toBeUndefined();
-
       // trigger the CKEditor Dirty Flag
       const editorData = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
       editorData[0].contentDocument.body.innerHTML = '<p>New Template</p>';
 
       component.onSubmit();
 
-      expect(component.templateEditor.errors?.saveFailed).toBeTrue();
+      expect(component.statusMessage).toEqual('Save failed. Please try again.');
 
       done();
     }, 1000);

@@ -25,12 +25,6 @@
       Save
     </button>
     <div class="statusMessage">
-      <span class="errorMessage" *ngIf="templateEditor.controls.templateKey.errors?.inUse">
-        Template name is in use. Please choose another name.
-      </span>
-      <span class="errorMessage" *ngIf="templateEditor.errors?.saveFailed">
-        Save failed. Please try again.
-      </span>
       <span class="statusMessage" *ngIf="statusMessage != ''">
         {{ statusMessage }}
       </span>
