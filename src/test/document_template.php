@@ -9,8 +9,6 @@
  * - - styles.css and data-table.woff to \bundles\cemscore\frontend\css
  * - - frontend-lib.js to \bundles\cemscore\frontend\script
  * - Copy this file to any folder in your webroot
- * - - delete all the php code
- * - - replace line 39 with 40
  * - Open this file in your webrowser
  *
  */
