@@ -9,7 +9,7 @@
  *   - styles.css and data-table.woff to \bundles\cemscore\frontend\css
  *   - frontend-lib.js to \bundles\cemscore\frontend\script
  * - Copy this file to any folder in your webroot
- * - Open this file in your webrowser
+ * - Open this file in your browser
  *
  */
 
