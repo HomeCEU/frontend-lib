@@ -13,13 +13,28 @@ Run `ng generate component component-name` to generate a new component. You can 
 ## Build
 
 - Run `npm run build:dts`
-- Copy `\elements\frontend-lib.js` and `\dist\frontend-lib\styles.css` to the Server where the element is exposed.
 
-## Running unit tests
+## Deploy to CEMS
 
-Developing and running `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- assets to cems2/src/Cems/CoreBundle/Resources/public/frontend
+- styles.css and data-table.woff to cems2/src/Cems/CoreBundle/Resources/public/frontend/css
+- frontend-lib.js to cems2/src/Cems/CoreBundle/Resources/public/frontend/scripts
 
-## Developing and running end-to-end tests
+## Testing
+
+### Running unit tests
+
+- Run `npm run test`
+
+### Checking for lint errors 
+
+- Run `npm run lint`
+
+### Testing locally in a simulated environment
+
+- See src/test/document_template.php
+
+### Developing and running end-to-end tests
 
 Regression tests make use of [Cucumber with Cypress](https://www.npmjs.com/package/cypress-cucumber-preprocessor).
 
