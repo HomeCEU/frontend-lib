@@ -5,9 +5,9 @@
  * To manually test this code locally without CEMS:
  * - In your local webroot (i.e. Apache Tomcat), create the folder \bundles\cemscore\frontend
  * - From frontend-lib/elements copy
- * - - assets to \bundles\cemscore\frontend\assets
- * - - styles.css and data-table.woff to \bundles\cemscore\frontend\css
- * - - frontend-lib.js to \bundles\cemscore\frontend\script
+ *   - assets to \bundles\cemscore\frontend\assets
+ *   - styles.css and data-table.woff to \bundles\cemscore\frontend\css
+ *   - frontend-lib.js to \bundles\cemscore\frontend\script
  * - Copy this file to any folder in your webroot
  * - Open this file in your webrowser
  *
