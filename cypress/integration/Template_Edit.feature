@@ -6,6 +6,8 @@ Feature: Manage existing template
   Scenario Outline: Display an existing template
     Given A list of templates
     When I select template "<template_name>"
+    And The editor is in "source" mode
+    And The editor is in "WYSIWYG" mode
     Then A form containing the template text "<template_text>" is displayed to manage the template
 
     Examples:

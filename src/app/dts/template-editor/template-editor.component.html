@@ -21,7 +21,7 @@
     <button id="close" type="button" (click)="discardChangesAndClose()" mat-button>
       Close
     </button>
-    <button id="save" type="submit" mat-button>
+    <button id="save" type="submit" mat-button [disabled]="templateEditor.invalid">
       Save
     </button>
     <div class="statusMessage">

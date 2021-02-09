@@ -10,7 +10,7 @@ Feature: Search list of existing templates
     Examples:
       | search_value    | num_of_templates |
       | badvalue        | 0                |
-      | in              | 4                |
+      | template        | 2                |
       | encompass_care  | 1                |
       | admin-approved  | 1                |
       | infinity_rehab  | 1                |

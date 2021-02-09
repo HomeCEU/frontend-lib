@@ -63,41 +63,27 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
               private formBuilder: FormBuilder) {
 
     super();
-
-    this.templateEditor = this.formBuilder.group({
-      templateKey: ['', [Validators.required, Validators.maxLength(40)]], // VARCHAR(255) in the database
-      templateId: '',
-      author: '',
-      dataKey: ''
-    });
   }
 
   /**
    * Retrieves template and loads template data into the editor
    */
   ngOnInit(): void {
-    // configure the template editor
-    this.configTemplateEditor();
+    this.templateEditor = this.formBuilder.group({
+      templateKey: ['', [Validators.required, Validators.maxLength(40)]], // VARCHAR(255) in the database
+      templateId: '',
+      author: '',
+      dataKey: ''
+    });
 
-    this.templateEditor.patchValue(this.templateObject);
-
-    if (this.templateObject.docType && this.templateObject.templateKey) {
-      // retrieve template content for existing template
-      this.subs.sink = this.dtsService.getTemplateByKey(this.templateObject.docType, this.templateObject.templateKey).subscribe(data => {
-        CKEDITOR.instances.editor1.setData(data, () => {
-          CKEDITOR.instances.editor1.resetDirty();
-        });
-        this.existingTemplate = true;
-      });
-    }
+    // registers event listeners for the CKEditor Control
+    this.registerEditorEventListeners();
 
     // require user to confirm closing the dialog with unsaved changes
     this.dialogRef.disableClose = true;
     this.subs.sink = this.dialogRef.backdropClick().subscribe(() => {
       this.discardChangesAndClose();
     });
-
-    this.validateTemplateName();
   }
 
   /**
@@ -113,30 +99,55 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
   }
 
   /**
-   * Configures the template editor
+   * Registers for CKEditor events for interacting with template data
    */
-  configTemplateEditor(): void {
-    CKEDITOR.replace('editor1');
+  registerEditorEventListeners(): void {
+    CKEDITOR.replace('editor1', {
+      on: {
+        instanceReady: () => {
+          // Editor created, fully initialized, and ready - populate form fields, load editor, and register template name change listener
 
-    CKEDITOR.on('instanceReady', (event) => {
-      // When an item in the data field list is dragged, copy its data into the drag and drop data transfer.
-      // This data is later read by the editor#paste listener in the datafield plugin.
-      CKEDITOR.document.getById('dataFieldListStudent').on('dragstart', (evt) => {
-        this.dragDataFieldElement(evt);
-      });
-      CKEDITOR.document.getById('dataFieldListCourse').on('dragstart', (evt) => {
-        this.dragDataFieldElement(evt);
-      });
-      CKEDITOR.document.getById('dataFieldListStandardAcc').on('dragstart', (evt) => {
-        this.dragDataFieldElement(evt);
-      });
-      CKEDITOR.document.getById('dataFieldListNursingAcc').on('dragstart', (evt) => {
-        this.dragDataFieldElement(evt);
-      });
+          // When an item in the data field list is dragged, copy its data into the drag and drop data transfer.
+          // This data is later read by the editor#paste listener in the datafield plugin.
+          CKEDITOR.document.getById('dataFieldListStudent').on('dragstart', (evt) => {
+            this.dragDataFieldElement(evt);
+          });
+          CKEDITOR.document.getById('dataFieldListCourse').on('dragstart', (evt) => {
+            this.dragDataFieldElement(evt);
+          });
+          CKEDITOR.document.getById('dataFieldListStandardAcc').on('dragstart', (evt) => {
+            this.dragDataFieldElement(evt);
+          });
+          CKEDITOR.document.getById('dataFieldListNursingAcc').on('dragstart', (evt) => {
+            this.dragDataFieldElement(evt);
+          });
+
+          // update form fields with template data
+          this.templateEditor.patchValue(this.templateObject);
+
+          // load the editor with a template
+          if (this.templateObject.docType && this.templateObject.templateKey) {
+            this.loadEditorWithTemplate();
+          }
+
+          // register template name change listener
+          this.validateTemplateName();
+        },
+        focus: () => {
+          // Fired when the editor instance receives the input focus - clear any status messages
+          this.statusMessage = '';
+        }
+      }
     });
+  }
 
-    CKEDITOR.instances.editor1.on('focus', (event) => {
-      this.statusMessage = '';
+  loadEditorWithTemplate(): void {
+    // retrieve template content for existing template
+    this.subs.sink = this.dtsService.getTemplateByKey(this.templateObject.docType, this.templateObject.templateKey).subscribe(data => {
+      CKEDITOR.instances.editor1.setData(data, () => {
+        CKEDITOR.instances.editor1.resetDirty();
+      });
+      this.existingTemplate = true;
     });
   }
 
@@ -195,6 +206,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       .subscribe(data => {
         if (data) {
           this.statusMessage = 'Template name is in use. Please choose another name.';
+          this.templateEditor.get('templateKey').setErrors(({inuse: true}));
         }
       });
   }
@@ -204,11 +216,11 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    */
   onSubmit(): void {
     if (CKEDITOR.instances.editor1.mode === 'source') {
-      alert('Switch to wysiwyg mode to save. No changes saved');
+      alert('Switch to wysiwyg mode to save. No changes saved.');
       return;
     }
     if (!CKEDITOR.instances.editor1.checkDirty()) {
-      alert('Template is not dirty. No changes saved');
+      alert('Template is not dirty. No changes saved.');
       return;
     }
 
