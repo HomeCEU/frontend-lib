@@ -18,11 +18,11 @@ When('I sort by date and time', () => {
 })
 
 Then('A list of templates are displayed sorted by template name, descending', () => {
-  dataTableTemplateName(1).should('contain', 'vibrant-care');
+  dataTableTemplateName(1).should('contain', 'vibrant-care copied');
 })
 
 Then('A list of templates are displayed sorted by author, descending', () => {
-  dataTableAuthor(1).should('contain', 'Dan');
+  dataTableAuthor(1).should('contain', 'admin');
 })
 
 Then('A list of templates are displayed sorted by date and time, descending', () => {

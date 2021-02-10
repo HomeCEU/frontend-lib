@@ -208,6 +208,9 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
           this.statusMessage = 'Template name is in use. Please choose another name.';
           this.templateEditor.get('templateKey').setErrors(({inuse: true}));
         }
+        else {
+          this.statusMessage = '';
+        }
       });
   }
 
@@ -219,7 +222,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       alert('Switch to wysiwyg mode to save. No changes saved.');
       return;
     }
-    if (!CKEDITOR.instances.editor1.checkDirty()) {
+    if (!CKEDITOR.instances.editor1.checkDirty() && this.existingTemplate) {
       alert('Template is not dirty. No changes saved.');
       return;
     }

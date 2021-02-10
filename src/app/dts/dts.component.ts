@@ -95,7 +95,7 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
     if (rowEvent.type === 'click' && rowEvent.column.name) {
       this.selectedTemplate = {... rowEvent.row} as Template;
 
-      this.dialog.open(TemplateEditorComponent, {
+      const templateDialog = this.dialog.open(TemplateEditorComponent, {
         data: {
           templateId: this.selectedTemplate.templateId,
           docType: this.selectedTemplate.docType,
@@ -107,6 +107,10 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
         height : 'auto',
         minWidth: this.dialogWidth
       });
+
+      templateDialog.afterClosed().subscribe(() => {
+        this.rows = this.dtsService.getTemplates('enrollment');
+      });
     }
   }
 
@@ -114,7 +118,7 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
    * Launches dialog to create a new template
    */
   newTemplate(): void {
-    this.dialog.open(TemplateEditorComponent, {
+    const templateDialog = this.dialog.open(TemplateEditorComponent, {
       data: {
         templateId: '',
         docType: 'enrollment',
@@ -124,6 +128,10 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
         bodyUri: ''
       },
       minWidth: this.dialogWidth
+    });
+
+    templateDialog.afterClosed().subscribe(() => {
+      this.rows = this.dtsService.getTemplates('enrollment');
     });
   }
 

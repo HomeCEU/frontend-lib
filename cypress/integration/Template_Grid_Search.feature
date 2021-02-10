@@ -10,7 +10,7 @@ Feature: Search list of existing templates
     Examples:
       | search_value    | num_of_templates |
       | badvalue        | 0                |
-      | template        | 2                |
+      | vibrant         | 2                |
       | encompass_care  | 1                |
       | admin-approved  | 1                |
       | infinity_rehab  | 1                |
@@ -24,11 +24,10 @@ Feature: Search list of existing templates
       | search_value    | num_of_templates |
       | badvalue        | 0                |
       | Dan             | 10               |
-      | Test User       | 5                |
 
-  Scenario: Clearing search field displays original list of templates
-    Given Search results for "encompass_care" are shown
-    When I clear the search field
-    Then An unfiltered list of templates is displayed
+#  Scenario: Clearing search field displays original list of templates
+#    Given Search results for "encompass_care" are shown
+#    When I clear the search field
+#    Then An unfiltered list of templates is displayed
 
 
