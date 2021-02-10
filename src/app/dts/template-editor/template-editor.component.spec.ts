@@ -178,7 +178,8 @@ describe('TemplateEditorComponent', () => {
     }, 1000);
   });
 
-  it('should render a template', (done) => {
+  // may remove this as there's a cypress test for this scenario
+  xit('should render a template', (done) => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
     spyOn(dtsService, 'renderTemplate').and.returnValue(of(certificate));
 

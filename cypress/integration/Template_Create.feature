@@ -19,6 +19,6 @@ Feature: Create a new template
     And The template contains the text "<template_text>"
 
     Examples:
-      | template_name   | template_text |
-      | new template    | Simple template       |
-      | new name        | This is a new template which contains data   |
+      | template_name   | template_text                                |
+      | akdkl2e         | Simple template                              |
+      | zdlekek         | This is a new template which contains data   |
