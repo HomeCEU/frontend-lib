@@ -1,7 +1,6 @@
 Feature: Manage existing template
 
-  As a system administrator I want to view and edit an existing template so that I can manage my existing my
-  exiting templates.
+  As a system administrator I want to view and edit an existing template so that I can manage my existing templates.
 
   Scenario Outline: Display an existing template
     Given A list of templates

@@ -1,7 +1,7 @@
 export const dataTableFirstPage = 0;
 export const dataTablePreviousPage = 1;
-export const dataTableNextPage = 4;
-export const dataTableLastPage = 5;
+export const dataTableNextPage = 5;
+export const dataTableLastPage = 6;
 
 const url = 'http://localhost:4200/'
 

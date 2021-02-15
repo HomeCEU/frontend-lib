@@ -3,12 +3,16 @@ CKEDITOR.editorConfig = function( config ) {
 	// For complete reference see:
 	// https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html
 
-  config.extraPlugins = 'datafield, sourcedialog';
+  config.extraPlugins = 'datafield, sourcedialog, format';
 
   config.toolbar = [
     { name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
     { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
-    { name: 'document', items: ['Source'] }
+    { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
+    { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+    { name: 'document', items: ['Source'] },
+    '/',
+    { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
   ];
   config.startupMode = 'wysiwyg';
   config.allowedContent = true;
