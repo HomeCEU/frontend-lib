@@ -3,7 +3,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// For complete reference see:
 	// https://ckeditor.com/docs/ckeditor4/latest/api/CKEDITOR_config.html
 
-  config.extraPlugins = 'datafield, sourcedialog, format';
+  config.extraPlugins = 'datafield, sourcedialog';
 
   config.toolbar = [
     { name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
