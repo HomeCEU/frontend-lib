@@ -236,7 +236,11 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       this.templateEditor.value.author,
       templateData
     ).subscribe(
-      () => {
+      (result) => {
+        if (!this.templateObject.templateId) {
+          // populate new template object with data from the save result
+          Object.assign(this.templateObject, result);
+        }
         CKEDITOR.instances.editor1.resetDirty();
         this.existingTemplate = true;
         this.statusMessage = 'Template saved.';

@@ -130,6 +130,7 @@ describe('TemplateEditorComponent', () => {
       component.onSubmit();
 
       expect(component.statusMessage).toEqual('Template saved.');
+      expect(component.templateObject.templateId).toEqual('2fa85f64-5717-4562-b3fc-2c963f66afa6');
 
       done();
     }, 1000);
