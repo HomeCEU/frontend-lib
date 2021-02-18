@@ -5,6 +5,8 @@ CKEDITOR.editorConfig = function( config ) {
 
   config.extraPlugins = 'datafield, sourcedialog';
 
+  config.removePlugins = 'exportpdf';
+
   config.toolbar = [
     { name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
     { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
