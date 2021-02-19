@@ -276,7 +276,11 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       this.subs.sink = this.dtsService.renderTemplate(this.templateObject.docType, this.templateObject.templateKey,
         this.templateEditor.value.dataKey)
         .subscribe(certificate => {
-          const modal = window.open('', 'certificate', 'scrollbars=1,resizable=1');
+          const width = 1280;
+          const height = 1080;
+          const left = (screen.width / 2) - (height / 2);
+          const top = (screen.height / 2) - (width / 2);
+          const modal = window.open('', 'certificate', `resizable=1, width=${+width}, height=${+height}, left=${+left}, top=${+top}`);
           modal.document.open();
           modal.document.write(certificate);
           modal.document.close();
