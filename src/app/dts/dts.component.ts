@@ -7,6 +7,7 @@ import {TemplateEditorComponent} from './template-editor/template-editor.compone
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {UnsubscribeOnDestroyAdapter} from './unsubscribe-on-destroy-adapter';
+import {DocumentTypeEnum} from './models/documentType.enum';
 
 @Component({
   selector: 'app-dts',
@@ -33,6 +34,11 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
    * Angular reactive form group control
    */
   dtsForm: FormGroup;
+
+  /**
+   * Type of document
+   */
+  documentType = DocumentTypeEnum.Enrollment;
 
   dialogWidth = 1200;
 
@@ -61,22 +67,38 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
 
     this.subs.sink = this.dtsService.getStatus().subscribe(
       status => {
-        console.log(`v1.1 User: ${this.userName}  Status: ${status}  Endpoint: ${this.dtsService.url}`);
+        console.log(`v1.2 User: ${this.userName}  Status: ${status}  Endpoint: ${this.dtsService.url}`);
       },
       error => {
         console.error(`Failed to connect to ${this.dtsService.url} - ${error.message}`);
       });
 
-    this.rows = this.dtsService.getTemplates('enrollment');
+    // populate grid with template data
+    this.rows = this.dtsService.getTemplates(this.documentType);
 
     this.dtsForm = this.formBuilder.group({
       templateFilter: '',
+      searchOptions: ['enrollment']
+    });
+
+    this.registerReactiveFormFields();
+  }
+
+  /**
+   * Listents to form field changes
+   */
+  registerReactiveFormFields(): void {
+    // handle changing document type and refreshing the data grid
+    this.subs.sink = this.dtsForm.get('searchOptions').valueChanges.subscribe(val => {
+      this.documentType = val;
+      this.rows = this.dtsService.getTemplates(this.documentType);
+      this.table.offset = 0;
     });
 
     // filter grid of templates by template name and author
     this.subs.sink = this.dtsForm.get('templateFilter').valueChanges.pipe(
       debounceTime(500),
-      switchMap(() => this.dtsService.getTemplates('enrollment'))
+      switchMap(() => this.dtsService.getTemplates(this.documentType))
     ).subscribe( templates => {
       const searchTerm = this.dtsForm.controls.templateFilter.value;
       if (searchTerm) {
@@ -92,7 +114,8 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
    * @param rowEvent event data for the activated row
    */
   rowClick(rowEvent): void {
-    if (rowEvent.type === 'click' && rowEvent.column.name) {
+    // todo - temporary fix to disable editing partials and images, see CEMS-2255
+    if (rowEvent.type === 'click' && rowEvent.column.name && rowEvent.row.docType === 'enrollment') {
       this.selectedTemplate = {... rowEvent.row} as Template;
 
       const templateDialog = this.dialog.open(TemplateEditorComponent, {
@@ -104,12 +127,11 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
           createdAt: this.selectedTemplate.createdAt,
           bodyUri: this.selectedTemplate.bodyUri
         },
-        height : 'auto',
         minWidth: this.dialogWidth
       });
 
       templateDialog.afterClosed().subscribe(() => {
-        this.rows = this.dtsService.getTemplates('enrollment');
+        this.rows = this.dtsService.getTemplates(this.documentType);
       });
     }
   }
@@ -121,7 +143,7 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
     const templateDialog = this.dialog.open(TemplateEditorComponent, {
       data: {
         templateId: '',
-        docType: 'enrollment',
+        docType: this.documentType,
         templateKey: '',
         author: this.userName,
         createdAt: '',
@@ -131,7 +153,7 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
     });
 
     templateDialog.afterClosed().subscribe(() => {
-      this.rows = this.dtsService.getTemplates('enrollment');
+      this.rows = this.dtsService.getTemplates(this.documentType);
     });
   }
 

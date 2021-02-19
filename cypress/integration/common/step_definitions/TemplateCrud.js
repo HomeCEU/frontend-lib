@@ -16,7 +16,8 @@ Given('A template editor is displayed to create a template', () => {
 })
 
 Given('The editor is in {string} mode', (source_mode) => {
-  cy.wait(500);
+  // performance of the CKEditor is out of our control
+  cy.wait(1000);
   cy.get('.cke_button__source').click();
   if (source_mode === 'source') {
     cy.get('.cke_wysiwyg_frame').should('not.exist');

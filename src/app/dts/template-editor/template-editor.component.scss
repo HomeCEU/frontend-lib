@@ -11,7 +11,7 @@
 }
 
 .dataKey {
-  width: 300px;
+  width: 200px;
 }
 
 #save {
@@ -21,6 +21,11 @@
 .statusMessage {
   margin-top:10px;
   color: #f44336;
+}
+
+#dataFieldListPartial, #dataFieldListImage {
+  height: calc(100vh - 600px);;
+  overflow-y: auto;
 }
 
 .dataFieldList {
@@ -50,12 +55,7 @@
 .dataFieldContainer {
   border: 1px solid #d1d1d1;
   border-left-style: none;
-  width: 200px;
-  background: #f8f8f8;
-}
-
-.dataFieldHeaderContainer {
-  width: 200px;
+  width: 300px;
   background: #f8f8f8;
 }
 

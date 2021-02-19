@@ -4,10 +4,11 @@ import {HttpClient, HttpHandler} from '@angular/common/http';
 import {DtsService} from './dts.service';
 import {of} from 'rxjs';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
-import {templatesAll, templatesEnrollment} from '../../test/templates';
+import {templatesEnrollment} from '../../test/templates';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {MatRadioModule} from '@angular/material/radio';
 
 describe('DtsComponent', () => {
   let component: DtsComponent;
@@ -36,7 +37,8 @@ describe('DtsComponent', () => {
       imports: [
         NgxDatatableModule,
         MatDialogModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatRadioModule
       ],
       declarations: [
         DtsComponent
@@ -59,26 +61,17 @@ describe('DtsComponent', () => {
     expect(component).toBeTruthy();
   }));
 
-  it('should display a list of all available templates', inject([DtsService], (dtsService: DtsService) => {
-    dtsService.getTemplates = jasmine.createSpy().and.returnValue(of(templatesAll.items));
-    createComponent();
-
-    const gridData = fixture.debugElement.nativeElement.querySelectorAll('.datatable-body');
-    expect(gridData[0].textContent).toEqual('NursingTemplateSue Anderson 1/5/20, 11:35 PM NutritionTemplateRobert Martin 3/5/20,' +
-      ' 11:35 PM PhysicalTherapyTemplateSteve Giles 4/5/20, 11:35 PM ');
-  }));
-
-  it('should display a list of templates by document type', inject([DtsService], (dtsService: DtsService) => {
+  it('should display a list of templates', inject([DtsService], (dtsService: DtsService) => {
     dtsService.getTemplates = jasmine.createSpy().and.returnValue(of(templatesEnrollment.items));
     createComponent();
 
     const gridData = fixture.debugElement.nativeElement.querySelectorAll('.datatable-body');
-    expect(gridData[0].textContent).toEqual('NutritionTemplateRobert Martin 3/5/20, 11:35 PM PhysicalTherapyTemplateSteve Giles ' +
-      '4/5/20, 11:35 PM ');
+    expect(gridData[0].textContent).toEqual('NutritionTemplateRobert Martin 3/5/20, 11:35 PM enrollmentPhysicalTherapyTemplate' +
+      'Steve Giles 4/5/20, 11:35 PM enrollment');
   }));
 
   it('should launch a modal dialog to create a template', inject([DtsService], (dtsService: DtsService) => {
-    dtsService.getTemplates = jasmine.createSpy().and.returnValue(of(templatesAll.items));
+    dtsService.getTemplates = jasmine.createSpy().and.returnValue(of(templatesEnrollment.items));
     spyOn(dialog, 'open').and.callThrough();
     createComponent();
     component.newTemplate();
@@ -104,7 +97,7 @@ describe('DtsComponent', () => {
       }
     };
 
-    dtsService.getTemplates = jasmine.createSpy().and.returnValue(of(templatesAll.items));
+    dtsService.getTemplates = jasmine.createSpy().and.returnValue(of(templatesEnrollment.items));
     spyOn(dialog, 'open').and.callThrough();
     createComponent();
     component.userName = 'test user';

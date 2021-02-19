@@ -16,6 +16,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {TemplateEditorComponent} from './dts/template-editor/template-editor.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatRadioModule} from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatSelectModule,
     MatTabsModule,
     MatDialogModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatRadioModule
   ],
   providers: [
     HttpClient

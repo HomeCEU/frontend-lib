@@ -25,6 +25,11 @@ export const dataTableDateTime = rowNumber =>
     `:nth-child(${rowNumber}) > .datatable-body-row > .datatable-row-center > :nth-child(4) > .datatable-body-cell-label`
   );
 
+export const dataTableDocumentType = rowNumber =>
+  cy.get(
+    `:nth-child(${rowNumber}) > .datatable-body-row > .datatable-row-center > :nth-child(5) > .datatable-body-cell-label`
+  );
+
 export const dataTableTemplateDetails = id =>
   cy.get('.datatable-row-detail > table > tr').eq(id);
 
@@ -49,6 +54,6 @@ export function getTemplates() {
 
 export function searchTemplates(searchValue) {
   cy.intercept('GET', '**/template*').as('getTemplates')
-  cy.get('input').type(searchValue)
+  cy.get('.filterBy').type(searchValue)
   cy.wait('@getTemplates');
 }

@@ -8,7 +8,7 @@ import {DtsService} from '../dts.service';
 import {certificate, editorBodyTemplate, template} from '../../../test/template';
 import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {templatesAll} from '../../../test/templates';
+import {templatesEnrollment, templatesImage, templatesPartial} from '../../../test/templates';
 
 /**
  * Initializes the editor with a template
@@ -66,6 +66,9 @@ describe('TemplateEditorComponent', () => {
     component = fixture.componentInstance;
 
     spyOn(window, 'confirm').and.returnValue(true);
+    spyOn(dtsService, 'getTemplates')
+      .withArgs('enrollment/partial').and.returnValue(of(templatesPartial.items))
+      .withArgs('enrollment/image').and.returnValue(of(templatesImage.items));
 
     component.templateObject = {} as Template;
 
@@ -115,7 +118,7 @@ describe('TemplateEditorComponent', () => {
 
   it('should save a template', (done) => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
-    spyOn(dtsService, 'saveTemplate').and.returnValue(of(templatesAll.items[0]));
+    spyOn(dtsService, 'saveTemplate').and.returnValue(of(templatesEnrollment.items[0]));
 
     loadEditor(component);
 
@@ -130,7 +133,7 @@ describe('TemplateEditorComponent', () => {
       component.onSubmit();
 
       expect(component.statusMessage).toEqual('Template saved.');
-      expect(component.templateObject.templateId).toEqual('2fa85f64-5717-4562-b3fc-2c963f66afa6');
+      expect(component.templateObject.templateId).toEqual('3fa85f64-5717-4562-b3fc-2c963f66afa6');
 
       done();
     }, 1000);
