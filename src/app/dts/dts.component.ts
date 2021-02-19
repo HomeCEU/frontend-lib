@@ -81,13 +81,13 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
       searchOptions: ['enrollment']
     });
 
-    this.registerReachiveFormFields();
+    this.registerReactiveFormFields();
   }
 
   /**
    * Listents to form field changes
    */
-  registerReachiveFormFields(): void {
+  registerReactiveFormFields(): void {
     // handle changing document type and refreshing the data grid
     this.subs.sink = this.dtsForm.get('searchOptions').valueChanges.subscribe(val => {
       this.documentType = val;
