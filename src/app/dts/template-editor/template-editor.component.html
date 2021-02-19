@@ -1,4 +1,4 @@
-<form id="myForm" [formGroup]="templateEditor" (ngSubmit)="onSubmit()">
+<form [formGroup]="templateEditor" (ngSubmit)="onSubmit()">
   <div class="flex-row">
     <mat-form-field class="templateKey">
       <mat-label>Template Name</mat-label>
@@ -40,57 +40,57 @@
       <div id="editor1" name="editor1">
       </div>
     </div>
-    <div class="dataFieldContainer" [hidden]="dataFieldsVisible">
-      <div class="dataFieldHeaderContainer"></div>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Student
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <ul id="dataFieldListStudent" class="dataFieldList">
-          <li *ngFor = "let dataField of dragAndDropDataFieldStudent index as i" data-dataFieldType="student" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
-            {{dataField.description}}
-          </li>
-        </ul>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Course
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <ul id="dataFieldListCourse" class="dataFieldList">
-          <li *ngFor = "let dataField of dragAndDropDataFieldCourse index as i" data-dataFieldType="course" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
-            {{dataField.description}}
-          </li>
-        </ul>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Standard Accreditation
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <ul id="dataFieldListStandardAcc" class="dataFieldList">
-          <li *ngFor = "let dataField of dragAndDropDataFieldStandard index as i" data-dataFieldType="standardAcc" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
-            {{dataField.description}}
-          </li>
-        </ul>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Nursing Accreditation
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <ul id="dataFieldListNursingAcc" class="dataFieldList">
-          <li *ngFor = "let dataField of dragAndDropDataFieldNursing index as i" data-dataFieldType="NursingAcc" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
-            {{dataField.description}}
-          </li>
-        </ul>
-      </mat-expansion-panel>
+    <div class="dataFieldContainer" [hidden]="!dataFieldsVisible">
+      <mat-accordion multi="false">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Student
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul id="dataFieldListStudent" class="dataFieldList">
+            <li *ngFor = "let dataField of dragAndDropDataFieldStudent index as i" data-dataFieldType="student" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
+              {{dataField.description}}
+            </li>
+          </ul>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Course
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul id="dataFieldListCourse" class="dataFieldList">
+            <li *ngFor = "let dataField of dragAndDropDataFieldCourse index as i" data-dataFieldType="course" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
+              {{dataField.description}}
+            </li>
+          </ul>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Partials
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul id="dataFieldListPartial" class="dataFieldList" >
+            <li *ngFor = "let dataField of dragAndDropDataFieldPartial index as i" data-dataFieldType="partialFieldType" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
+              {{dataField.description}}
+            </li>
+          </ul>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Images
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul id="dataFieldListImage" class="dataFieldList">
+            <li *ngFor = "let dataField of dragAndDropDataFieldImage index as i" data-dataFieldType="imageFieldType" [attr.data-dataFieldElement]="i" class="dataFieldElement" draggable="true">
+              {{dataField.description}}
+            </li>
+          </ul>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
   </div>
 </form>

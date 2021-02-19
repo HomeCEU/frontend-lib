@@ -2,6 +2,21 @@
   width: 30em;
 }
 
+#headerContainer {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+mat-radio-group {
+  margin-top: 20px;
+}
+
+mat-radio-button {
+  padding-right: 40px;
+}
+
 td:first-child {
   width: 10em;
 }
@@ -17,6 +32,7 @@ a:visited {
 table {
   padding-left: 5em;
   width: 100%;
+  font-size: 0.9em;
 }
 
 .arrow-right {
@@ -38,5 +54,3 @@ table {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
 }
-
-

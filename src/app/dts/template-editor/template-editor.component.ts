@@ -5,13 +5,12 @@ import {Template} from '../template.types';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {UnsubscribeOnDestroyAdapter} from '../unsubscribe-on-destroy-adapter';
-import {DataField} from './data-field.types';
+import {DataField} from '../models/data-field.types';
 import {
   DATA_FIELD_STUDENT,
-  DATA_FIELD_COURSE,
-  DATA_FIELD_NURSING,
-  DATA_FIELD_STANDARD
+  DATA_FIELD_COURSE
 } from './data-fields';
+import {DocumentTypeEnum} from '../models/documentType.enum';
 
 declare var CKEDITOR: any;
 
@@ -43,8 +42,8 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    */
   dragAndDropDataFieldStudent: DataField[] = DATA_FIELD_STUDENT;
   dragAndDropDataFieldCourse: DataField[] = DATA_FIELD_COURSE;
-  dragAndDropDataFieldNursing: DataField[] = DATA_FIELD_NURSING;
-  dragAndDropDataFieldStandard: DataField[] = DATA_FIELD_STANDARD;
+  dragAndDropDataFieldPartial: DataField[] = [];
+  dragAndDropDataFieldImage: DataField[] = [];
 
   /**
    * Check for changes when closing modal via 'esc'
@@ -84,6 +83,10 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     this.subs.sink = this.dialogRef.backdropClick().subscribe(() => {
       this.discardChangesAndClose();
     });
+
+    if (this.dataFieldsVisible) {
+      this.registerDragAndDropFields();
+    }
   }
 
   /**
@@ -115,10 +118,10 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
           CKEDITOR.document.getById('dataFieldListCourse').on('dragstart', (evt) => {
             this.dragDataFieldElement(evt);
           });
-          CKEDITOR.document.getById('dataFieldListStandardAcc').on('dragstart', (evt) => {
+          CKEDITOR.document.getById('dataFieldListPartial').on('dragstart', (evt) => {
             this.dragDataFieldElement(evt);
           });
-          CKEDITOR.document.getById('dataFieldListNursingAcc').on('dragstart', (evt) => {
+          CKEDITOR.document.getById('dataFieldListImage').on('dragstart', (evt) => {
             this.dragDataFieldElement(evt);
           });
 
@@ -179,12 +182,12 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
         dataField = this.dragAndDropDataFieldCourse[dataFieldElement];
         break;
       }
-      case 'standardAcc': {
-        dataField = this.dragAndDropDataFieldStandard[dataFieldElement];
+      case 'partialFieldType': {
+        dataField = this.dragAndDropDataFieldPartial[dataFieldElement];
         break;
       }
-      case 'NursingAcc': {
-        dataField = this.dragAndDropDataFieldNursing[dataFieldElement];
+      case 'imageFieldType': {
+        dataField = this.dragAndDropDataFieldImage[dataFieldElement];
         break;
       }
     }
@@ -202,7 +205,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
   validateTemplateName(): void {
     this.subs.sink = this.templateEditor.get('templateKey').valueChanges.pipe(
       debounceTime(500),
-      switchMap(term => this.dtsService.getTemplateByKey('enrollment', term)))
+      switchMap(term => this.dtsService.getTemplateByKey(DocumentTypeEnum.Enrollment, term)))
       .subscribe(data => {
         if (data) {
           this.statusMessage = 'Template name is in use. Please choose another name.';
@@ -312,10 +315,39 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
   }
 
   /**
-   * Shows/hides the list of drag and drop data fields
+   * Retrieves all partial and image fields and makes them available for adding to templates
+   */
+  registerDragAndDropFields(): void {
+    console.log('registerDragAndDropFields');
+    this.subs.sink = this.dtsService.getTemplates(DocumentTypeEnum.EnrollmentPartial).subscribe(results => {
+      results.forEach(result => {
+        const dataField = {} as DataField;
+        dataField.description = result.templateKey;
+        dataField.name = `{{> ${result.templateKey} }}`;
+        this.dragAndDropDataFieldPartial.push(dataField);
+      });
+    });
+
+    this.subs.sink = this.dtsService.getTemplates(DocumentTypeEnum.EnrollmentImage).subscribe(results => {
+      results.forEach(result => {
+        const dataField = {} as DataField;
+        dataField.description = result.templateKey;
+        dataField.name = `{{> ${result.templateKey} }}`;
+        this.dragAndDropDataFieldImage.push(dataField);
+      });
+    });
+  }
+
+  /**
+   * Show/hide the list of drag and drop data fields
    */
   toggleDataFields(): void {
     this.dataFieldsVisible = !this.dataFieldsVisible;
     this.dataFieldsVisible ? localStorage.removeItem('dataFieldsVisible') : localStorage.setItem('dataFieldsVisible', '');
+
+    // first time opening the data field expansion panel - retrieve and load all partial and image fields
+    if (this.dataFieldsVisible && this.dragAndDropDataFieldImage.length === 0) {
+      this.registerDragAndDropFields();
+    }
   }
 }
