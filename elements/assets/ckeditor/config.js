@@ -8,13 +8,15 @@ CKEDITOR.editorConfig = function( config ) {
   config.removePlugins = 'exportpdf';
 
   config.toolbar = [
-    { name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
+    { name: 'document', items: ['Source'] },
     { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
     { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
+    { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', '-', 'CopyFormatting', 'RemoveFormat'  ] },
     { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
-    { name: 'document', items: ['Source'] },
+
     '/',
     { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+    { name: 'colors', items: [ 'TextColor', 'BGColor' ] }
   ];
   config.startupMode = 'wysiwyg';
   config.allowedContent = true;
