@@ -5,7 +5,7 @@ CKEDITOR.editorConfig = function( config ) {
 
   config.extraPlugins = 'datafield, sourcedialog';
 
-  config.removePlugins = 'exportpdf';
+  config.removePlugins = 'exportpdf, tableselection';
 
   config.toolbar = [
     { name: 'document', items: ['Source'] },
