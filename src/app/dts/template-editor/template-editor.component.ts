@@ -322,7 +322,6 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    * Retrieves all partial and image fields and makes them available for adding to templates
    */
   registerDragAndDropFields(): void {
-    console.log('registerDragAndDropFields');
     this.subs.sink = this.dtsService.getTemplates(DocumentTypeEnum.EnrollmentPartial).subscribe(results => {
       results.forEach(result => {
         const dataField = {} as DataField;

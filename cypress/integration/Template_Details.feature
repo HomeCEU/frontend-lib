@@ -11,6 +11,6 @@ Feature: View details of an existing template
 
     Examples:
     | row | template_id                            | body_uri                                       |
-    | 1   | 87f4d434-60b4-11eb-807d-0242ac110003   | /template/87f4d434-60b4-11eb-807d-0242ac110003 |
+    | 1   | 52602f9c-7547-11eb-b6f2-0242ac110003   | /template/52602f9c-7547-11eb-b6f2-0242ac110003 |
     | 2   | bba87dc0-6583-11eb-a368-0242ac110003   | /template/bba87dc0-6583-11eb-a368-0242ac110003 |
 
