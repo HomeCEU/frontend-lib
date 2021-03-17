@@ -30,7 +30,8 @@
 <html>
   <head>
     <title>Certificate Template</title>
-    <link rel="stylesheet" href="/bundles/cemscore/frontend/css/styles.css">
+    <link href="/bundles/cemscore/frontend/css/styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <script type="text/javascript" src="/bundles/cemscore/frontend/assets/ckeditor/ckeditor.js"></script>
     <meta charset="UTF-8">
   </head>
