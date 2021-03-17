@@ -39,7 +39,8 @@ import {MatRadioModule} from '@angular/material/radio';
     MatTabsModule,
     MatDialogModule,
     MatExpansionModule,
-    MatRadioModule
+    MatRadioModule,
+    MatIconModule
   ],
   providers: [
     HttpClient
