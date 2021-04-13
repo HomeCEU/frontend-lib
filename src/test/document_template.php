@@ -13,7 +13,7 @@
  *
  */
 
-  $dtsUrl = "http://dts-qa.us-west-2.elasticbeanstalk.com";
+  $dtsUrl = "http://dts-qa.us-west-2.elasticbeanstalk.com/api/v1";
   class User
   {
     var $userName;
