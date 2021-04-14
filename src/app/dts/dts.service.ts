@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {Template} from './template.types';
+import {RenderedTemplate, Template} from './template.types';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +64,16 @@ export class DtsService {
   }
 
   /**
+   * Retrieves document data for an associated data key
+   * @param dataKey unique data identifier
+   */
+  public getDocumentData(dataKey: string): Observable<string> {
+    const url =  `${this.url}/docdata/enrollment/${dataKey}`;
+
+    return this.http.get(url, {responseType: 'text'});
+  }
+
+  /**
    * Retrieves a rendered template as a certificate populated with data
    * @param documentType currently limited to 'enrollment'
    * @param templateKey unique template identifier
@@ -75,6 +85,28 @@ export class DtsService {
     const url =  `${this.url}/render/${documentType}/${templateKey}/${dataKey}`;
 
     return this.http.get(url, {responseType: 'text'});
+  }
+
+  /**
+   * Retrieves a url to launch a rendered template as a certificate populated with data given template content and its associated data
+   * @param templateContent source for template
+   * @param dataContent data for template
+   */
+  public hotRenderTemplate(templateContent: string, dataContent: string): Observable<RenderedTemplate> {
+    const url =  `${this.url}/hotrender`;
+    const partialFieldIndicator = /&gt;/gi;
+
+    templateContent = templateContent.replace(partialFieldIndicator, '>');
+    dataContent = JSON.parse(dataContent);
+
+    const postData = {
+      template: templateContent,
+      data: dataContent
+    };
+
+    return this.http.post<RenderedTemplate>(url, postData).pipe(catchError( error => {
+      return throwError(error);
+    }));
   }
 
   /**

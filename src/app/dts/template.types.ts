@@ -11,6 +11,19 @@ export interface Template {
 }
 
 /**
+ * Response to preview a certificate with data
+ */
+export interface RenderedTemplate {
+  requestId: string;
+  createdAt: {
+    date: string,
+    timezone_type: number,
+    timezone: string
+  };
+  location: string;
+}
+
+/**
  * Collection of templates
  */
 export interface TemplateList {

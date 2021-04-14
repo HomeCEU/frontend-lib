@@ -273,17 +273,15 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    */
   renderTemplate(): void {
     if (this.templateObject.docType && this.templateObject.templateKey && this.templateEditor.value.dataKey) {
-      this.subs.sink = this.dtsService.renderTemplate(this.templateObject.docType, this.templateObject.templateKey,
-        this.templateEditor.value.dataKey)
-        .subscribe(certificate => {
-          const width = 1280;
-          const height = 1080;
-          const left = (screen.width / 2) - (height / 2);
-          const top = (screen.height / 2) - (width / 2);
-          const modal = window.open('', 'certificate', `resizable=1, width=${+width}, height=${+height}, left=${+left}, top=${+top}`);
-          modal.document.open();
-          modal.document.write(certificate);
-          modal.document.close();
+      this.subs.sink = this.dtsService.getDocumentData(this.templateEditor.value.dataKey).pipe(
+        switchMap((dataContent) => this.dtsService.hotRenderTemplate(CKEDITOR.instances.editor1.getData(), dataContent))
+      ).subscribe(result => {
+        const urlToLaunch = `${this.dtsService.url}/hotrender/${result.requestId}`;
+        const width = 1280;
+        const height = 1080;
+        const left = (screen.width / 2) - (height / 2);
+        const top = (screen.height / 2) - (width / 2);
+        window.open(urlToLaunch, 'certificate', `resizable=1, width=${+width}, height=${+height}, left=${+left}, top=${+top}`);
       });
     }
   }
