@@ -2,7 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {RenderedTemplate, Template} from './template.types';
+import {RenderedTemplate, Template} from './models/template.types';
+import {DocData} from './models/docData.types';
 
 @Injectable({
   providedIn: 'root'
@@ -70,21 +71,10 @@ export class DtsService {
   public getDocumentData(dataKey: string): Observable<string> {
     const url =  `${this.url}/docdata/enrollment/${dataKey}`;
 
-    return this.http.get(url, {responseType: 'text'});
-  }
-
-  /**
-   * Retrieves a rendered template as a certificate populated with data
-   * @param documentType currently limited to 'enrollment'
-   * @param templateKey unique template identifier
-   * @param dataKey unique data identifier
-   */
-  public renderTemplate(documentType: string, templateKey: string, dataKey: string): Observable<string> {
-    templateKey = encodeURI(templateKey);
-
-    const url =  `${this.url}/render/${documentType}/${templateKey}/${dataKey}`;
-
-    return this.http.get(url, {responseType: 'text'});
+    return this.http.get(url).pipe(
+      map((result: DocData) => {
+      return result.data;
+    }));
   }
 
   /**
@@ -97,11 +87,11 @@ export class DtsService {
     const partialFieldIndicator = /&gt;/gi;
 
     templateContent = templateContent.replace(partialFieldIndicator, '>');
-    dataContent = JSON.parse(dataContent);
 
     const postData = {
       template: templateContent,
-      data: dataContent
+      data: dataContent,
+      docType: 'enrollment'
     };
 
     return this.http.post<RenderedTemplate>(url, postData).pipe(catchError( error => {
@@ -120,7 +110,7 @@ export class DtsService {
 
     const postData = {
       docType: 'enrollment',
-      templateKey: templateKeyValue,
+      key: templateKeyValue,
       author: authorValue,
       body: bodyValue
     };

@@ -66,8 +66,8 @@ describe('DtsComponent', () => {
     createComponent();
 
     const gridData = fixture.debugElement.nativeElement.querySelectorAll('.datatable-body');
-    expect(gridData[0].textContent).toEqual('NutritionTemplateRobert Martin 3/5/20, 11:35 PM enrollmentPhysicalTherapyTemplate' +
-      'Steve Giles 4/5/20, 11:35 PM enrollment');
+    expect(gridData[0].textContent).toEqual('NutritionTemplateRobert Martin 3/23/20, 3:40 PM enrollmentPhysicalTherapyTemplate' +
+      'Steve Giles 3/23/20, 3:40 PM enrollment');
   }));
 
   it('should launch a modal dialog to create a template', inject([DtsService], (dtsService: DtsService) => {
@@ -90,10 +90,14 @@ describe('DtsComponent', () => {
       row: {
         author: 'Bill Anderson',
         bodyUri: '/template/2fa85f64-5717-4562-b3fc-2c963f32afa1',
-        createdAt: '2020-01-05T23:35:12.876Z',
+        createdAt: {
+          date: '2020-03-23 15:40:06.000000',
+          timezone_type: 3,
+          timezone: 'UTC'
+        },
         docType: 'enrollment',
-        templateId: '2fa85f64-5717-4562-b3fc-2c963f32afa1',
-        templateKey: 'Nursing Template F'
+        id: '2fa85f64-5717-4562-b3fc-2c963f32afa1',
+        key: 'Nursing Template F'
       }
     };
 

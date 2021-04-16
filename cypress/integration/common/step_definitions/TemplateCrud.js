@@ -30,7 +30,7 @@ Given('The editor is in {string} mode', (source_mode) => {
 })
 
 Given('The template name {string} is entered', (template_name) => {
-  cy.get('input[formcontrolname*="templateKey"]').type(template_name)
+  cy.get('input[formcontrolname*="key"]').type(template_name)
 })
 
 Given('The text {string} is entered into the editor', (template_text) => {

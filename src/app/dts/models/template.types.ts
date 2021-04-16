@@ -2,11 +2,15 @@
  * Template interface
  */
 export interface Template {
-  templateId: string;
+  id: string;
   docType: string;
-  templateKey: string;
+  key: string;
   author: string;
-  createdAt: string;
+  createdAt: {
+    date: string,
+    timezone_type: number,
+    timezone: string
+  };
   bodyUri: string;
 }
 
@@ -14,7 +18,7 @@ export interface Template {
  * Response to preview a certificate with data
  */
 export interface RenderedTemplate {
-  requestId: string;
+  id: string;
   createdAt: {
     date: string,
     timezone_type: number,

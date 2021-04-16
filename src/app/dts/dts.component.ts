@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {DtsService} from './dts.service';
-import {Template} from './template.types';
+import {Template} from './models/template.types';
 import {MatDialog} from '@angular/material/dialog';
 import {TemplateEditorComponent} from './template-editor/template-editor.component';
 import {FormBuilder, FormGroup} from '@angular/forms';
@@ -102,7 +102,7 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
     ).subscribe( templates => {
       const searchTerm = this.dtsForm.controls.templateFilter.value;
       if (searchTerm) {
-        templates = templates.filter(data => data.templateKey.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        templates = templates.filter(data => data.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
           data.author.toLowerCase().includes(searchTerm.toLowerCase()));
       }
       this.rows = of(templates);
@@ -120,11 +120,11 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
 
       const templateDialog = this.dialog.open(TemplateEditorComponent, {
         data: {
-          templateId: this.selectedTemplate.templateId,
+          id: this.selectedTemplate.id,
           docType: this.selectedTemplate.docType,
-          templateKey: this.selectedTemplate.templateKey,
+          key: this.selectedTemplate.key,
           author: this.userName,
-          createdAt: this.selectedTemplate.createdAt,
+          createdAt: this.selectedTemplate.createdAt.date,
           bodyUri: this.selectedTemplate.bodyUri
         },
         minWidth: this.dialogWidth
@@ -142,9 +142,9 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
   newTemplate(): void {
     const templateDialog = this.dialog.open(TemplateEditorComponent, {
       data: {
-        templateId: '',
+        id: '',
         docType: this.documentType,
-        templateKey: '',
+        key: '',
         author: this.userName,
         createdAt: '',
         bodyUri: ''

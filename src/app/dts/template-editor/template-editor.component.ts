@@ -1,7 +1,7 @@
 import {Component, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DtsService} from '../dts.service';
-import {Template} from '../template.types';
+import {Template} from '../models/template.types';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {UnsubscribeOnDestroyAdapter} from '../unsubscribe-on-destroy-adapter';
@@ -69,8 +69,8 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    */
   ngOnInit(): void {
     this.templateEditor = this.formBuilder.group({
-      templateKey: ['', [Validators.required, Validators.maxLength(40)]], // VARCHAR(255) in the database
-      templateId: '',
+      key: ['', [Validators.required, Validators.maxLength(40)]], // VARCHAR(255) in the database
+      id: '',
       author: '',
       dataKey: ''
     });
@@ -129,7 +129,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
           this.templateEditor.patchValue(this.templateObject);
 
           // load the editor with a template
-          if (this.templateObject.docType && this.templateObject.templateKey) {
+          if (this.templateObject.docType && this.templateObject.key) {
             this.loadEditorWithTemplate();
           }
 
@@ -146,7 +146,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
 
   loadEditorWithTemplate(): void {
     // retrieve template content for existing template
-    this.subs.sink = this.dtsService.getTemplateByKey(this.templateObject.docType, this.templateObject.templateKey).subscribe(data => {
+    this.subs.sink = this.dtsService.getTemplateByKey(this.templateObject.docType, this.templateObject.key).subscribe(data => {
       CKEDITOR.instances.editor1.setData(data, () => {
         CKEDITOR.instances.editor1.resetDirty();
       });
@@ -203,13 +203,13 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    * Ensures new template name (key) is unique for saving
    */
   validateTemplateName(): void {
-    this.subs.sink = this.templateEditor.get('templateKey').valueChanges.pipe(
+    this.subs.sink = this.templateEditor.get('key').valueChanges.pipe(
       debounceTime(500),
       switchMap(term => this.dtsService.getTemplateByKey(DocumentTypeEnum.Enrollment, term)))
       .subscribe(data => {
         if (data) {
           this.statusMessage = 'Template name is in use. Please choose another name.';
-          this.templateEditor.get('templateKey').setErrors(({inuse: true}));
+          this.templateEditor.get('key').setErrors(({inuse: true}));
         }
         else {
           this.statusMessage = '';
@@ -235,12 +235,12 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     templateData = this.translateForSaving(templateData);
 
     this.subs.sink = this.dtsService.saveTemplate(
-      this.templateEditor.value.templateKey,
+      this.templateEditor.value.key,
       this.templateEditor.value.author,
       templateData
     ).subscribe(
       (result) => {
-        if (!this.templateObject.templateId) {
+        if (!this.templateObject.id) {
           // populate new template object with data from the save result
           Object.assign(this.templateObject, result);
         }
@@ -272,11 +272,11 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    * Displays a modal window containing a certificate populated with data
    */
   renderTemplate(): void {
-    if (this.templateObject.docType && this.templateObject.templateKey && this.templateEditor.value.dataKey) {
+    if (this.templateObject.docType && this.templateObject.key && this.templateEditor.value.dataKey) {
       this.subs.sink = this.dtsService.getDocumentData(this.templateEditor.value.dataKey).pipe(
         switchMap((dataContent) => this.dtsService.hotRenderTemplate(CKEDITOR.instances.editor1.getData(), dataContent))
       ).subscribe(result => {
-        const urlToLaunch = `${this.dtsService.url}/hotrender/${result.requestId}`;
+        const urlToLaunch = `${this.dtsService.url}/hotrender/${result.id}`;
         const width = 1280;
         const height = 1080;
         const left = (screen.width / 2) - (height / 2);
@@ -290,7 +290,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    * Creates a new template from the existing template
    */
   copyTemplate(): void {
-    this.templateEditor.controls.templateKey.setValue('');
+    this.templateEditor.controls.key.setValue('');
     this.existingTemplate = false;
   }
 
@@ -323,8 +323,8 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     this.subs.sink = this.dtsService.getTemplates(DocumentTypeEnum.EnrollmentPartial).subscribe(results => {
       results.forEach(result => {
         const dataField = {} as DataField;
-        dataField.description = result.templateKey;
-        dataField.name = `{{> ${result.templateKey} }}`;
+        dataField.description = result.key;
+        dataField.name = `{{> ${result.key} }}`;
         this.dragAndDropDataFieldPartial.push(dataField);
       });
     });
@@ -332,8 +332,8 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     this.subs.sink = this.dtsService.getTemplates(DocumentTypeEnum.EnrollmentImage).subscribe(results => {
       results.forEach(result => {
         const dataField = {} as DataField;
-        dataField.description = result.templateKey;
-        dataField.name = `{{> ${result.templateKey} }}`;
+        dataField.description = result.key;
+        dataField.name = `{{> ${result.key} }}`;
         this.dragAndDropDataFieldImage.push(dataField);
       });
     });
