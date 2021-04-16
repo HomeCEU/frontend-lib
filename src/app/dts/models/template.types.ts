@@ -6,11 +6,7 @@ export interface Template {
   docType: string;
   key: string;
   author: string;
-  createdAt: {
-    date: string,
-    timezone_type: number,
-    timezone: string
-  };
+  createdAt: DtsDate;
   bodyUri: string;
 }
 
@@ -19,18 +15,12 @@ export interface Template {
  */
 export interface RenderedTemplate {
   id: string;
-  createdAt: {
-    date: string,
-    timezone_type: number,
-    timezone: string
-  };
+  createdAt: DtsDate;
   location: string;
 }
 
-/**
- * Collection of templates
- */
-export interface TemplateList {
-  total: number;
-  items: Template[];
+interface DtsDate {
+  date: string;
+  timezone_type: number;
+  timezone: string;
 }
