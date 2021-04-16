@@ -2,10 +2,10 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {TemplateEditorComponent} from './template-editor.component';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpHandler} from '@angular/common/http';
-import {Template} from '../template.types';
+import {Template} from '../models/template.types';
 import {of, throwError} from 'rxjs';
 import {DtsService} from '../dts.service';
-import {certificate, editorBodyTemplate, template} from '../../../test/template';
+import {editorBodyTemplate, template} from '../../../test/template';
 import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {templatesEnrollment, templatesImage, templatesPartial} from '../../../test/templates';
@@ -17,7 +17,7 @@ import {templatesEnrollment, templatesImage, templatesPartial} from '../../../te
 function loadEditor(component: TemplateEditorComponent): void {
   // specify the doc type and template to load
   component.templateObject.docType = 'enrollment';
-  component.templateObject.templateKey = 'dummyTemplateKey';
+  component.templateObject.key = 'dummyTemplateKey';
 
   // for testing we need to recreate the component with the template noted above
   component.ngOnDestroy();
@@ -133,7 +133,7 @@ describe('TemplateEditorComponent', () => {
       component.onSubmit();
 
       expect(component.statusMessage).toEqual('Template saved.');
-      expect(component.templateObject.templateId).toEqual('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+      expect(component.templateObject.id).toEqual('3fa85f64-5717-4562-b3fc-2c963f66afa6');
 
       done();
     }, 1000);
@@ -185,7 +185,7 @@ describe('TemplateEditorComponent', () => {
   // may remove this as there's a cypress test for this scenario
   xit('should render a template', (done) => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
-    spyOn(dtsService, 'renderTemplate').and.returnValue(of(certificate));
+    // spyOn(dtsService, 'hotRenderTemplate').and.returnValue(of(certificate));
 
     const doc = jasmine.createSpyObj('document', ['open', 'write', 'close']);
     const windowDialog = jasmine.createSpyObj('modal', ['']);

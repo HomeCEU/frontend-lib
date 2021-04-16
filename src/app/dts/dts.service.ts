@@ -2,7 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {Template} from './template.types';
+import {RenderedTemplate, Template} from './models/template.types';
+import {DocData} from './models/docData.types';
 
 @Injectable({
   providedIn: 'root'
@@ -64,17 +65,38 @@ export class DtsService {
   }
 
   /**
-   * Retrieves a rendered template as a certificate populated with data
-   * @param documentType currently limited to 'enrollment'
-   * @param templateKey unique template identifier
+   * Retrieves document data for an associated data key
    * @param dataKey unique data identifier
    */
-  public renderTemplate(documentType: string, templateKey: string, dataKey: string): Observable<string> {
-    templateKey = encodeURI(templateKey);
+  public getDocumentData(dataKey: string): Observable<string> {
+    const url =  `${this.url}/docdata/enrollment/${dataKey}`;
 
-    const url =  `${this.url}/render/${documentType}/${templateKey}/${dataKey}`;
+    return this.http.get(url).pipe(
+      map((result: DocData) => {
+      return result.data;
+    }));
+  }
 
-    return this.http.get(url, {responseType: 'text'});
+  /**
+   * Retrieves a url to launch a rendered template as a certificate populated with data given template content and its associated data
+   * @param templateContent source for template
+   * @param dataContent data for template
+   */
+  public hotRenderTemplate(templateContent: string, dataContent: string): Observable<RenderedTemplate> {
+    const url =  `${this.url}/hotrender`;
+    const partialFieldIndicator = /&gt;/gi;
+
+    templateContent = templateContent.replace(partialFieldIndicator, '>');
+
+    const postData = {
+      template: templateContent,
+      data: dataContent,
+      docType: 'enrollment'
+    };
+
+    return this.http.post<RenderedTemplate>(url, postData).pipe(catchError( error => {
+      return throwError(error);
+    }));
   }
 
   /**
@@ -88,7 +110,7 @@ export class DtsService {
 
     const postData = {
       docType: 'enrollment',
-      templateKey: templateKeyValue,
+      key: templateKeyValue,
       author: authorValue,
       body: bodyValue
     };
