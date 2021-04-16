@@ -185,7 +185,7 @@ describe('TemplateEditorComponent', () => {
   // may remove this as there's a cypress test for this scenario
   xit('should render a template', (done) => {
     spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
-    //spyOn(dtsService, 'hotRenderTemplate').and.returnValue(of(certificate));
+    // spyOn(dtsService, 'hotRenderTemplate').and.returnValue(of(certificate));
 
     const doc = jasmine.createSpyObj('document', ['open', 'write', 'close']);
     const windowDialog = jasmine.createSpyObj('modal', ['']);
