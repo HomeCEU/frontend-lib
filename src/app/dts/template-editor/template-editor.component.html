@@ -5,14 +5,14 @@
       <input matInput type="text" formControlName="key" [readonly]="existingTemplate" (keydown.space)="$event.preventDefault()">
     </mat-form-field>
     <div class="push">
-      <mat-form-field class="dataKey" *ngIf="templateType === templateTypeEnum.template">
+      <mat-form-field class="dataKey">
         <mat-label>Data Key</mat-label>
         <input matInput type="text" formControlName="dataKey">
       </mat-form-field>
       <button id="close" mat-icon-button (click)="discardChangesAndClose()">
         <mat-icon>close</mat-icon>
       </button>
-      <button id="preview" [disabled]="!templateEditor.value.dataKey" *ngIf="templateType === templateTypeEnum.template" (click)="renderTemplate()" type="button" mat-button>
+      <button id="preview" [disabled]="!templateEditor.value.dataKey" (click)="renderTemplate()" type="button" mat-button>
         Preview
       </button>
     </div>
@@ -92,6 +92,9 @@
         </mat-expansion-panel>
       </mat-accordion>
     </div>
+  </div>
+  <div *ngIf="templateType === templateTypeEnum.image">
+    <input type="file" (change)="fileChangeEvent($event)">
   </div>
 </form>
 

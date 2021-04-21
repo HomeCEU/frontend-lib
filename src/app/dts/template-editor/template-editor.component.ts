@@ -283,7 +283,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    * Displays a modal window containing a certificate populated with data
    */
   renderTemplate(): void {
-    if (this.templateObject.docType && this.templateObject.key && this.templateEditor.value.dataKey) {
+    if (this.templateObject.docType && this.templateEditor.value.dataKey) {
       this.subs.sink = this.dtsService.getDocumentData(this.templateEditor.value.dataKey).pipe(
         switchMap((dataContent) => this.dtsService.hotRenderTemplate(CKEDITOR.instances.editor1.getData(), dataContent))
       ).subscribe(result => {
@@ -360,6 +360,29 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     // first time opening the data field expansion panel - retrieve and load all partial and image fields
     if (this.dataFieldsVisible && this.dragAndDropDataFieldImage.length === 0) {
       this.registerDragAndDropFields();
+    }
+  }
+
+  /**
+   * Loads a user selected image
+   * @param fileInput file input data
+   */
+  fileChangeEvent(fileInput: any): void {
+    if (fileInput.target.files && fileInput.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const image = new Image();
+        image.src = e.target.result;
+        image.onload = rs => {
+          const imgBase64Path = e.target.result;
+          const imageUrl = `<img src="${imgBase64Path}"/>`;
+          CKEDITOR.instances.editor1.setData(imageUrl, () => {
+            CKEDITOR.instances.editor1.resetDirty();
+          });
+        };
+      };
+
+      reader.readAsDataURL(fileInput.target.files[0]);
     }
   }
 }
