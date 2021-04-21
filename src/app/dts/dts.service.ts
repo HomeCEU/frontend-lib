@@ -2,8 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {RenderedTemplate, Template} from './models/template.types';
+import {MetaData, RenderedTemplate, Template} from './models/template.types';
 import {DocData} from './models/docData.types';
+import {TemplateTypeEnum} from './models/templateTypeEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +12,24 @@ import {DocData} from './models/docData.types';
 export class DtsService {
 
   /**
-   * URL to the DTS Service.
-   */
-  url: string;
-
-  /**
    * Creates an instance of the service.
    * @param http connection to the backend DTS service
    */
   constructor(private http: HttpClient) { }
+
+  /**
+   * URL to the DTS Service.
+   */
+  url: string;
+
+  private static containsTemplateType(item: Template, templateType: TemplateTypeEnum): boolean {
+    return item.hasOwnProperty('metadata') && item.metadata.hasOwnProperty('type') && item.metadata.type.includes(templateType);
+  }
+
+  private static getTemplateTypeFromObject(metaData: MetaData): string {
+    return (metaData && (metaData.type.includes(TemplateTypeEnum.partial) ||
+      metaData.type.includes(TemplateTypeEnum.image))) ? TemplateTypeEnum.partial : TemplateTypeEnum.template;
+  }
 
   /**
    * Retrieves and indication is the backend DTS service is healthy.
@@ -32,32 +42,47 @@ export class DtsService {
 
   /**
    * Retrieves a list of document templates
-   * @param documentType indicates the type of document
    */
-  public getTemplates(documentType?: string): Observable<Template[]> {
-    let url = this.url + '/template';
-
-    // Query by the document type
-    if (documentType) {
-      url = url + '?filter[type]=' + documentType;
-    }
+  public getTemplates(templateType: TemplateTypeEnum): Observable<Template[]> {
+    const searchType = (templateType === TemplateTypeEnum.template) ? TemplateTypeEnum.template : TemplateTypeEnum.partial;
+    const url = `${this.url}/${searchType}?docType=enrollment`;
 
     return this.http.get(url)
       .pipe(map((result: any) => {
-          return result.items;
-        })
-      );
+        if (templateType === TemplateTypeEnum.partial || templateType === TemplateTypeEnum.image) {
+          return result.items.filter(item => DtsService.containsTemplateType(item, templateType));
+        }
+        return result.items;
+      }));
   }
 
   /**
-   * Gets an HTML template body by document type and template key
-   * @param documentType currently limited to 'enrollment'
-   * @param templateKey unique template identifier
+   * Get templates by template type and key
+   * @param templateType type of template
+   * @param templateKey name of template
    */
-  public getTemplateByKey(documentType: string, templateKey: string): Observable<string> {
-    templateKey = encodeURI(templateKey);
+  public getTemplatesByKey(templateType: TemplateTypeEnum, templateKey: string): Observable<Template[]> {
+    const searchType = (templateType === TemplateTypeEnum.template) ? TemplateTypeEnum.template : TemplateTypeEnum.partial;
+    const url = `${this.url}/${searchType}?docType=enrollment`;
 
-    const url =  `${this.url}/template/${documentType}/${templateKey}`;
+    return this.http.get(url)
+      .pipe(map((result: any) => {
+        if (templateType === TemplateTypeEnum.partial || templateType === TemplateTypeEnum.image) {
+          return result.items.filter(item => DtsService.containsTemplateType(item, templateType) && item.key === templateKey);
+        }
+        else {
+          return result.items.filter(item => item.key === templateKey);
+        }
+      }));
+  }
+
+  /**
+   * Retrieves template content (i.e. html) by template id
+   * @param metaData data indicating template type
+   * @param templateId unique data identifier
+   */
+  public getTemplateContentById(metaData: MetaData, templateId: string): Observable<string> {
+    const url =  `${this.url}/${DtsService.getTemplateTypeFromObject(metaData)}/${templateId}`;
 
     return this.http.get(url, {responseType: 'text'}).pipe(catchError( () => {
       return of(null);
@@ -65,7 +90,7 @@ export class DtsService {
   }
 
   /**
-   * Retrieves document data for an associated data key
+   * Retrieves document data by an associated data key
    * @param dataKey unique data identifier
    */
   public getDocumentData(dataKey: string): Observable<string> {
@@ -101,18 +126,24 @@ export class DtsService {
 
   /**
    * Saves a template
+   * @param templateType type of template
    * @param templateKeyValue unique template identifier
    * @param authorValue person saving/modifying this template
    * @param bodyValue html certificate template content
    */
-  public saveTemplate(templateKeyValue: string, authorValue: string, bodyValue: string): Observable<Template> {
-    const url =  `${this.url}/template`;
+  public saveTemplate(templateType: TemplateTypeEnum, templateKeyValue: string, authorValue: string,
+                      bodyValue: string): Observable<Template> {
+    const searchType = (templateType === TemplateTypeEnum.template) ? TemplateTypeEnum.template : TemplateTypeEnum.partial;
+    const url = `${this.url}/${searchType}`;
 
     const postData = {
       docType: 'enrollment',
       key: templateKeyValue,
       author: authorValue,
-      body: bodyValue
+      body: bodyValue,
+      metadata: {
+        type: templateType
+      }
     };
 
     return this.http.post<Template>(url, postData).pipe(catchError( error => {

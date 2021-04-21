@@ -66,8 +66,8 @@ describe('DtsComponent', () => {
     createComponent();
 
     const gridData = fixture.debugElement.nativeElement.querySelectorAll('.datatable-body');
-    expect(gridData[0].textContent).toEqual('NutritionTemplateRobert Martin 3/23/20, 3:40 PM enrollmentPhysicalTherapyTemplate' +
-      'Steve Giles 3/23/20, 3:40 PM enrollment');
+    expect(gridData[0].textContent).toEqual('NutritionTemplateRobert Martin 3/23/20, 3:40 PM PhysicalTherapyTemplate' +
+      'Steve Giles 3/23/20, 3:40 PM ');
   }));
 
   it('should launch a modal dialog to create a template', inject([DtsService], (dtsService: DtsService) => {

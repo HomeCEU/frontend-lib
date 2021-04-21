@@ -6,11 +6,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {UnsubscribeOnDestroyAdapter} from '../unsubscribe-on-destroy-adapter';
 import {DataField} from '../models/data-field.types';
-import {
-  DATA_FIELD_STUDENT,
-  DATA_FIELD_COURSE
-} from './data-fields';
-import {DocumentTypeEnum} from '../models/documentType.enum';
+import {DATA_FIELD_COURSE, DATA_FIELD_STUDENT} from './data-fields';
+import {TemplateTypeEnum} from '../models/templateTypeEnum';
 
 declare var CKEDITOR: any;
 
@@ -25,6 +22,8 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    */
   existingTemplate = false;
 
+  templateTypeEnum: typeof  TemplateTypeEnum = TemplateTypeEnum;
+
   /**
    * User setting to show/hide drag and drop data fields
    */
@@ -36,6 +35,8 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
   statusMessage = '';
 
   templateEditor: FormGroup;
+
+  templateType: TemplateTypeEnum = TemplateTypeEnum.template;
 
   /**
    * Array of drag and drop data fields
@@ -75,6 +76,10 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       dataKey: ''
     });
 
+    if (this.templateObject.metadata) {
+      this.templateType = TemplateTypeEnum[this.templateObject.metadata.type];
+    }
+
     // registers event listeners for the CKEditor Control
     this.registerEditorEventListeners();
 
@@ -84,7 +89,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       this.discardChangesAndClose();
     });
 
-    if (this.dataFieldsVisible) {
+    if (this.dataFieldsVisible && this.templateType !== TemplateTypeEnum.image) {
       this.registerDragAndDropFields();
     }
   }
@@ -106,24 +111,28 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    */
   registerEditorEventListeners(): void {
     CKEDITOR.replace('editor1', {
+      fullPage: this.templateType === TemplateTypeEnum.template,
+      enterMode: this.templateType === TemplateTypeEnum.template ? CKEDITOR.ENTER_P : CKEDITOR.ENTER_BR,
       on: {
         instanceReady: () => {
           // Editor created, fully initialized, and ready - populate form fields, load editor, and register template name change listener
 
           // When an item in the data field list is dragged, copy its data into the drag and drop data transfer.
           // This data is later read by the editor#paste listener in the datafield plugin.
-          CKEDITOR.document.getById('dataFieldListStudent').on('dragstart', (evt) => {
-            this.dragDataFieldElement(evt);
-          });
-          CKEDITOR.document.getById('dataFieldListCourse').on('dragstart', (evt) => {
-            this.dragDataFieldElement(evt);
-          });
-          CKEDITOR.document.getById('dataFieldListPartial').on('dragstart', (evt) => {
-            this.dragDataFieldElement(evt);
-          });
-          CKEDITOR.document.getById('dataFieldListImage').on('dragstart', (evt) => {
-            this.dragDataFieldElement(evt);
-          });
+          if (this.templateType !== TemplateTypeEnum.image) {
+            CKEDITOR.document.getById('dataFieldListStudent').on('dragstart', (evt) => {
+              this.dragDataFieldElement(evt);
+            });
+            CKEDITOR.document.getById('dataFieldListCourse').on('dragstart', (evt) => {
+              this.dragDataFieldElement(evt);
+            });
+            CKEDITOR.document.getById('dataFieldListPartial').on('dragstart', (evt) => {
+              this.dragDataFieldElement(evt);
+            });
+            CKEDITOR.document.getById('dataFieldListImage').on('dragstart', (evt) => {
+              this.dragDataFieldElement(evt);
+            });
+          }
 
           // update form fields with template data
           this.templateEditor.patchValue(this.templateObject);
@@ -146,7 +155,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
 
   loadEditorWithTemplate(): void {
     // retrieve template content for existing template
-    this.subs.sink = this.dtsService.getTemplateByKey(this.templateObject.docType, this.templateObject.key).subscribe(data => {
+    this.subs.sink = this.dtsService.getTemplateContentById(this.templateObject.metadata, this.templateObject.id).subscribe(data => {
       CKEDITOR.instances.editor1.setData(data, () => {
         CKEDITOR.instances.editor1.resetDirty();
       });
@@ -205,9 +214,9 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
   validateTemplateName(): void {
     this.subs.sink = this.templateEditor.get('key').valueChanges.pipe(
       debounceTime(500),
-      switchMap(term => this.dtsService.getTemplateByKey(DocumentTypeEnum.Enrollment, term)))
+      switchMap(term => this.dtsService.getTemplatesByKey(this.templateType, term)))
       .subscribe(data => {
-        if (data) {
+        if (data.length) {
           this.statusMessage = 'Template name is in use. Please choose another name.';
           this.templateEditor.get('key').setErrors(({inuse: true}));
         }
@@ -235,6 +244,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
     templateData = this.translateForSaving(templateData);
 
     this.subs.sink = this.dtsService.saveTemplate(
+      this.templateType,
       this.templateEditor.value.key,
       this.templateEditor.value.author,
       templateData
@@ -251,6 +261,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       (error) => {
         console.error('Save failed: ', error);
         this.statusMessage = 'Save failed. Please try again.';
+        alert(error.error.message);
       });
   }
 
@@ -320,7 +331,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
    * Retrieves all partial and image fields and makes them available for adding to templates
    */
   registerDragAndDropFields(): void {
-    this.subs.sink = this.dtsService.getTemplates(DocumentTypeEnum.EnrollmentPartial).subscribe(results => {
+    this.subs.sink = this.dtsService.getTemplates(TemplateTypeEnum.partial).subscribe(results => {
       results.forEach(result => {
         const dataField = {} as DataField;
         dataField.description = result.key;
@@ -329,7 +340,7 @@ export class TemplateEditorComponent extends UnsubscribeOnDestroyAdapter impleme
       });
     });
 
-    this.subs.sink = this.dtsService.getTemplates(DocumentTypeEnum.EnrollmentImage).subscribe(results => {
+    this.subs.sink = this.dtsService.getTemplates(TemplateTypeEnum.image).subscribe(results => {
       results.forEach(result => {
         const dataField = {} as DataField;
         dataField.description = result.key;

@@ -1,10 +1,11 @@
 import {inject, TestBed, waitForAsync} from '@angular/core/testing';
 import {DtsService} from './dts.service';
-import {HttpClient, HttpHandler} from '@angular/common/http';
+import {HttpClient, HttpHandler, HttpHeaders, HttpParams} from '@angular/common/http';
 import {of, throwError} from 'rxjs';
-import {templatesAll, templatesEnrollment} from '../../test/templates';
+import {templatesAll, templatesEnrollment, templatesImage, templatesPartial} from '../../test/templates';
 import {template} from '../../test/template';
 import {documentData} from 'src/test/document-data';
+import {TemplateTypeEnum} from './models/templateTypeEnum';
 
 describe('DtsService', () => {
   let service: DtsService;
@@ -37,7 +38,7 @@ describe('DtsService', () => {
     (dtsService: DtsService, http: HttpClient) => {
       const serviceSpy = spyOn(http, 'get').and.returnValue(of(templatesAll));
 
-      dtsService.getTemplates().subscribe(result => {
+      dtsService.getTemplates(TemplateTypeEnum.template).subscribe(result => {
         expect(result[0].id).toBe('2fa85f64-5717-4562-b3fc-2c963f66afa6');
         expect(result[1].id).toBe('3fa85f64-5717-4562-b3fc-2c963f66afa6');
         expect(result[2].id).toBe('1fa85f64-5717-4562-b3fc-2c963f66afa6');
@@ -45,23 +46,46 @@ describe('DtsService', () => {
       });
     })));
 
-  it('should return a templates by document type', waitForAsync(inject([DtsService, HttpClient],
+  it('should return a templates by template type', waitForAsync(inject([DtsService, HttpClient],
     (dtsService: DtsService, http: HttpClient) => {
-      const serviceSpy = spyOn(http, 'get').and.returnValue(of(templatesEnrollment));
+      const serviceSpy = spyOn(http, 'get').and.returnValue(of(templatesPartial));
 
-      dtsService.getTemplates('enrollment').subscribe(result => {
-        expect(result[0].id).toBe('3fa85f64-5717-4562-b3fc-2c963f66afa6');
-        expect(result[1].id).toBe('1fa85f64-5717-4562-b3fc-2c963f66afa6');
+      dtsService.getTemplates(TemplateTypeEnum.partial).subscribe(result => {
+        expect(result[0].id).toBe('024a5bfc-4fd4-4193-a4ac-2eccd9911259');
+        expect(result[1].id).toBe('102fe464-8946-43a1-af5c-9101f22744c8');
+        expect(result[2].id).toBe('1e3269aa-a4a5-40d9-afba-3a01c222685e');
+        expect(result[3].id).toBe('23041b7b-0584-4546-9b5e-03b085d6b5b1');
         expect(serviceSpy).toHaveBeenCalled();
       });
     })));
 
-  it('should return a template given a document type and template key', waitForAsync(inject([DtsService, HttpClient],
+  it('should return a template given a template type and template key', waitForAsync(inject([DtsService, HttpClient],
     (dtsService: DtsService, http: HttpClient) => {
-      const serviceSpy = spyOn(http, 'get').and.returnValue(of(template));
+      const serviceSpy = spyOn(http, 'get').and.returnValue(of(templatesEnrollment));
 
-      dtsService.getTemplateByKey('', '').subscribe(result => {
-        expect(result).toEqual(template);
+
+      dtsService.getTemplatesByKey(TemplateTypeEnum.template, 'NutritionTemplate').subscribe(result => {
+        expect(result).toEqual([templatesEnrollment.items[0]]);
+        expect(serviceSpy).toHaveBeenCalled();
+      });
+    })));
+
+  it('should return a partial template given a template type and template key', waitForAsync(inject([DtsService, HttpClient],
+    (dtsService: DtsService, http: HttpClient) => {
+      const serviceSpy = spyOn(http, 'get').and.returnValue(of(templatesPartial));
+
+      dtsService.getTemplatesByKey(TemplateTypeEnum.partial, 'pt-pta').subscribe(result => {
+        expect(result).toEqual([templatesPartial.items[1]]);
+        expect(serviceSpy).toHaveBeenCalled();
+      });
+    })));
+
+  it('should return an image template given a template type and template key', waitForAsync(inject([DtsService, HttpClient],
+    (dtsService: DtsService, http: HttpClient) => {
+      const serviceSpy = spyOn(http, 'get').and.returnValue(of(templatesImage));
+
+      dtsService.getTemplatesByKey(TemplateTypeEnum.image, 'acp_john_tawfik_signature.png').subscribe(result => {
+        expect(result).toEqual([templatesImage.items[0]]);
         expect(serviceSpy).toHaveBeenCalled();
       });
     })));
@@ -72,6 +96,16 @@ describe('DtsService', () => {
 
       dtsService.getDocumentData('').subscribe((result: any) => {
         expect(result).toEqual(documentData.data);
+        expect(serviceSpy).toHaveBeenCalled();
+      });
+    })));
+
+  it('should return template content given a template id', waitForAsync(inject([DtsService, HttpClient],
+    (dtsService: DtsService, http: HttpClient) => {
+      const serviceSpy = spyOn(http, 'get').and.returnValue(of(template));
+
+      dtsService.getTemplateContentById(null, '00884fc8-eaac-485c-91d8-72c8b582a530').subscribe((result: any) => {
+        expect(result).toEqual(template);
         expect(serviceSpy).toHaveBeenCalled();
       });
     })));
@@ -95,21 +129,6 @@ describe('DtsService', () => {
     });
   })));
 
-  it('should throw an error searching for a template given a document type and template key which does not exist',
-    waitForAsync(inject([DtsService, HttpClient],
-    (dtsService: DtsService, http: HttpClient) => {
-      const serviceSpy = spyOn(http, 'get').and.returnValue(throwError({
-        error: {
-          code: '404',
-        }
-      }));
-
-      dtsService.getTemplateByKey('', '').subscribe(result => {
-        expect(result).toEqual(null);
-        expect(serviceSpy).toHaveBeenCalled();
-      });
-    })));
-
   it('should save a template given a document type, template key, and author', waitForAsync(inject([DtsService, HttpClient],
     (dtsService: DtsService, http: HttpClient) => {
       const url =  `${dtsService.url}/template`;
@@ -118,7 +137,10 @@ describe('DtsService', () => {
         docType: 'enrollment',
         key: 'default-ce',
         author: 'Robert Martin',
-        body: template
+        body: template,
+        metadata: {
+          type: 'template'
+        }
       };
 
       const postResponse = {
@@ -138,7 +160,7 @@ describe('DtsService', () => {
         .withArgs(url, postData)
         .and.returnValue(of(postResponse));
 
-      dtsService.saveTemplate(postData.key, postData.author, template).subscribe(result => {
+      dtsService.saveTemplate(TemplateTypeEnum.template, postData.key, postData.author, template).subscribe(result => {
         expect(result).toEqual(postResponse);
         expect(serviceSpy).toHaveBeenCalled();
       });
@@ -153,7 +175,10 @@ describe('DtsService', () => {
         docType: 'enrollment',
         key: 'default-ce',
         author: 'Robert Martin',
-        body: template
+        body: template,
+        metadata: {
+          type: 'template'
+        }
       };
 
       spyOn(http, 'post')
@@ -165,7 +190,7 @@ describe('DtsService', () => {
         }));
 
       let saveError = null;
-      dtsService.saveTemplate(postData.key, postData.author, template).subscribe(
+      dtsService.saveTemplate(TemplateTypeEnum.template, postData.key, postData.author, template).subscribe(
         () => { },
         err => {
           saveError = err;

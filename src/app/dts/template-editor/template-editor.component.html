@@ -2,17 +2,17 @@
   <div class="flex-row">
     <mat-form-field class="templateKey">
       <mat-label>Template Name</mat-label>
-      <input matInput type="text" formControlName="key" [readonly]="existingTemplate">
+      <input matInput type="text" formControlName="key" [readonly]="existingTemplate" (keydown.space)="$event.preventDefault()">
     </mat-form-field>
     <div class="push">
-      <mat-form-field class="dataKey">
+      <mat-form-field class="dataKey" *ngIf="templateType === templateTypeEnum.template">
         <mat-label>Data Key</mat-label>
         <input matInput type="text" formControlName="dataKey">
       </mat-form-field>
       <button id="close" mat-icon-button (click)="discardChangesAndClose()">
         <mat-icon>close</mat-icon>
       </button>
-      <button id="preview" [disabled]="!templateEditor.value.dataKey" (click)="renderTemplate()" type="button" mat-button>
+      <button id="preview" [disabled]="!templateEditor.value.dataKey" *ngIf="templateType === templateTypeEnum.template" (click)="renderTemplate()" type="button" mat-button>
         Preview
       </button>
     </div>
@@ -30,7 +30,7 @@
       </span>
     </div>
 
-    <button type="button" (click)="toggleDataFields()" class="push" mat-button>
+    <button type="button" (click)="toggleDataFields()" class="push" *ngIf="templateType !== templateTypeEnum.image" mat-button>
       Fields
     </button>
   </div>
@@ -40,7 +40,7 @@
       <div id="editor1" name="editor1">
       </div>
     </div>
-    <div class="dataFieldContainer" [hidden]="!dataFieldsVisible">
+    <div class="dataFieldContainer" [hidden]="!dataFieldsVisible || templateType === templateTypeEnum.image">
       <mat-accordion multi="false">
         <mat-expansion-panel>
           <mat-expansion-panel-header>
