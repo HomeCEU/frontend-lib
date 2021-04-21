@@ -1,7 +1,5 @@
 export const dataTableFirstPage = 0;
 export const dataTablePreviousPage = 1;
-export const dataTableNextPage = 6;
-export const dataTableLastPage = 7;
 
 const url = 'http://localhost:4200/'
 
@@ -23,11 +21,6 @@ export const dataTableAuthor = rowNumber =>
 export const dataTableDateTime = rowNumber =>
   cy.get(
     `:nth-child(${rowNumber}) > .datatable-body-row > .datatable-row-center > :nth-child(4) > .datatable-body-cell-label`
-  );
-
-export const dataTableDocumentType = rowNumber =>
-  cy.get(
-    `:nth-child(${rowNumber}) > .datatable-body-row > .datatable-row-center > :nth-child(5) > .datatable-body-cell-label`
   );
 
 export const dataTableTemplateDetails = id =>

@@ -10,7 +10,7 @@ Feature: View details of an existing template
     And Template details should contain a Body Uri "<body_uri>"
 
     Examples:
-    | row | template_id                            | body_uri                                       |
-    | 1   | 52602f9c-7547-11eb-b6f2-0242ac110003   | /template/52602f9c-7547-11eb-b6f2-0242ac110003 |
-    | 2   | bba87dc0-6583-11eb-a368-0242ac110003   | /template/bba87dc0-6583-11eb-a368-0242ac110003 |
+    | row | template_id                            | body_uri                                              |
+    | 1   | e854eedd-e0a3-4259-8fb2-4a126d52e715   | /api/v1/template/e854eedd-e0a3-4259-8fb2-4a126d52e715 |
+    | 2   | ea57e9dc-a203-11eb-871b-0242ac110003   | /api/v1/template/ea57e9dc-a203-11eb-871b-0242ac110003 |
 

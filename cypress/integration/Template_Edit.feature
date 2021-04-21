@@ -2,17 +2,6 @@ Feature: Manage existing template
 
   As a system administrator I want to view and edit an existing template so that I can manage my existing templates.
 
-  Scenario Outline: Display an existing template
-    Given A list of templates
-    When I select template "<template_name>"
-    And The editor is in "source" mode
-    And The editor is in "WYSIWYG" mode
-    Then A form containing the template text "<template_text>" is displayed to manage the template
-
-    Examples:
-      | template_name   | template_text |
-      | benchmark       | testing       |
-
   Scenario Outline: Close editor without changes
     Given A form displayed to manage template "<template_name>"
     When I request to close the form
