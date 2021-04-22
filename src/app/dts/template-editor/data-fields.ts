@@ -3,7 +3,7 @@ import {DataField} from '../models/data-field.types';
 export const DATA_FIELD_STUDENT: DataField[] = [
   {
     description: 'First name',
-    name: '{{ student.fistName }}'
+    name: '{{ student.firstName }}'
   },
   {
     description: 'Last name',

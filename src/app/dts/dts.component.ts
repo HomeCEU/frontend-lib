@@ -7,7 +7,7 @@ import {TemplateEditorComponent} from './template-editor/template-editor.compone
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {debounceTime, switchMap} from 'rxjs/operators';
 import {UnsubscribeOnDestroyAdapter} from './unsubscribe-on-destroy-adapter';
-import {DocumentTypeEnum} from './models/documentType.enum';
+import {TemplateTypeEnum} from './models/templateTypeEnum';
 
 @Component({
   selector: 'app-dts',
@@ -19,6 +19,8 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
    * List of templates as an observable
    */
   rows: Observable<Template[]>;
+
+  templateTypeEnum: typeof  TemplateTypeEnum = TemplateTypeEnum;
 
   /**
    * Selected template passed to the editor component
@@ -36,9 +38,9 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
   dtsForm: FormGroup;
 
   /**
-   * Type of document
+   * Type of template
    */
-  documentType = DocumentTypeEnum.Enrollment;
+  templateType = TemplateTypeEnum.template;
 
   dialogWidth = 1200;
 
@@ -67,14 +69,14 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
 
     this.subs.sink = this.dtsService.getStatus().subscribe(
       status => {
-        console.log(`v1.2 User: ${this.userName}  Status: ${status}  Endpoint: ${this.dtsService.url}`);
+        console.log(`v1.3 User: ${this.userName}  Status: ${status}  Endpoint: ${this.dtsService.url}`);
       },
       error => {
         console.error(`Failed to connect to ${this.dtsService.url} - ${error.message}`);
       });
 
     // populate grid with template data
-    this.rows = this.dtsService.getTemplates(this.documentType);
+    this.rows = this.dtsService.getTemplates(this.templateType);
 
     this.dtsForm = this.formBuilder.group({
       templateFilter: '',
@@ -85,20 +87,20 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
   }
 
   /**
-   * Listents to form field changes
+   * Listens to form field changes
    */
   registerReactiveFormFields(): void {
     // handle changing document type and refreshing the data grid
     this.subs.sink = this.dtsForm.get('searchOptions').valueChanges.subscribe(val => {
-      this.documentType = val;
-      this.rows = this.dtsService.getTemplates(this.documentType);
+      this.templateType = val;
+      this.rows = this.dtsService.getTemplates(this.templateType);
       this.table.offset = 0;
     });
 
     // filter grid of templates by template name and author
     this.subs.sink = this.dtsForm.get('templateFilter').valueChanges.pipe(
       debounceTime(500),
-      switchMap(() => this.dtsService.getTemplates(this.documentType))
+      switchMap(() => this.dtsService.getTemplates(this.templateType))
     ).subscribe( templates => {
       const searchTerm = this.dtsForm.controls.templateFilter.value;
       if (searchTerm) {
@@ -114,8 +116,7 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
    * @param rowEvent event data for the activated row
    */
   rowClick(rowEvent): void {
-    // todo - temporary fix to disable editing partials and images, see CEMS-2255
-    if (rowEvent.type === 'click' && rowEvent.column.name && rowEvent.row.docType === 'enrollment') {
+    if (rowEvent.type === 'click' && rowEvent.column.name) {
       this.selectedTemplate = {... rowEvent.row} as Template;
 
       const templateDialog = this.dialog.open(TemplateEditorComponent, {
@@ -124,14 +125,15 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
           docType: this.selectedTemplate.docType,
           key: this.selectedTemplate.key,
           author: this.userName,
-          createdAt: this.selectedTemplate.createdAt.date,
-          bodyUri: this.selectedTemplate.bodyUri
+          createdAt: this.selectedTemplate.createdAt,
+          bodyUri: this.selectedTemplate.bodyUri,
+          metadata: this.selectedTemplate.metadata
         },
         minWidth: this.dialogWidth
       });
 
       templateDialog.afterClosed().subscribe(() => {
-        this.rows = this.dtsService.getTemplates(this.documentType);
+        this.rows = this.dtsService.getTemplates(this.templateType);
       });
     }
   }
@@ -143,17 +145,20 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
     const templateDialog = this.dialog.open(TemplateEditorComponent, {
       data: {
         id: '',
-        docType: this.documentType,
+        docType: 'enrollment',
         key: '',
         author: this.userName,
         createdAt: '',
-        bodyUri: ''
+        bodyUri: '',
+        metadata: {
+          type: this.templateType
+        }
       },
       minWidth: this.dialogWidth
     });
 
     templateDialog.afterClosed().subscribe(() => {
-      this.rows = this.dtsService.getTemplates(this.documentType);
+      this.rows = this.dtsService.getTemplates(this.templateType);
     });
   }
 

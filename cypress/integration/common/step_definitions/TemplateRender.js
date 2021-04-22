@@ -1,4 +1,3 @@
-import {dataTableTemplateName} from "../../../page-objects/template.po";
 
 When('I enter data key {string}', (data_key) => {
   cy.get('input[formcontrolname*="dataKey"]').type(data_key)
@@ -12,7 +11,7 @@ When('I request to render a certificate', () => {
   //   });
   // })
 
-  cy.intercept('GET', '**/render/**').as('renderTemplate');
+  cy.intercept('GET', '**/hotrender/**').as('renderTemplate');
   cy.get('#preview').click();
   cy.wait('@renderTemplate');
 })

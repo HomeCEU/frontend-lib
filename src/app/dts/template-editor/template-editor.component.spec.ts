@@ -9,15 +9,33 @@ import {editorBodyTemplate, template} from '../../../test/template';
 import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {templatesEnrollment, templatesImage, templatesPartial} from '../../../test/templates';
+import {TemplateTypeEnum} from '../models/templateTypeEnum';
 
 /**
  * Initializes the editor with a template
  * @param component to display
  */
-function loadEditor(component: TemplateEditorComponent): void {
+function loadEditorWithTemplate(component: TemplateEditorComponent): void {
   // specify the doc type and template to load
   component.templateObject.docType = 'enrollment';
   component.templateObject.key = 'dummyTemplateKey';
+
+  // for testing we need to recreate the component with the template noted above
+  component.ngOnDestroy();
+  component.ngOnInit();
+}
+
+/**
+ * Initializes the editor with a partial
+ * @param component to display
+ */
+function loadEditorWithPartial(component: TemplateEditorComponent): void {
+  // specify the doc type and template to load
+  component.templateObject.docType = 'enrollment';
+  component.templateObject.key = 'dummyTemplateKey';
+  component.templateObject.metadata = {
+    type: 'partial'
+  };
 
   // for testing we need to recreate the component with the template noted above
   component.ngOnDestroy();
@@ -67,8 +85,8 @@ describe('TemplateEditorComponent', () => {
 
     spyOn(window, 'confirm').and.returnValue(true);
     spyOn(dtsService, 'getTemplates')
-      .withArgs('enrollment/partial').and.returnValue(of(templatesPartial.items))
-      .withArgs('enrollment/image').and.returnValue(of(templatesImage.items));
+      .withArgs(TemplateTypeEnum.partial).and.returnValue(of(templatesPartial.items))
+      .withArgs(TemplateTypeEnum.image).and.returnValue(of(templatesImage.items));
 
     component.templateObject = {} as Template;
 
@@ -99,10 +117,28 @@ describe('TemplateEditorComponent', () => {
     }, 1000);
   });
 
-  it('should get a template by template key on initialization and allow edit', (done) => {
-    spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
+  it('should initialize and allow creating a new partial template', (done) => {
+    const expectedBody = `<br>`;
 
-    loadEditor(component);
+    loadEditorWithPartial(component);
+
+    // wait for editor to display the default template
+    setTimeout(() => {
+      // get the template content from the CK Editor rendered in an iFrame
+      const editorData = fixture.debugElement.nativeElement.querySelectorAll('.cke_wysiwyg_frame');
+      const content = editorData[0].contentDocument;
+
+      // verify the CK Editor control has displayed the default partial template markup
+      expect(content.body.innerHTML).toEqual(expectedBody);
+
+      done();
+    }, 1000);
+  });
+
+  it('should get a template by template id on initialization and allow edit', (done) => {
+    spyOn(dtsService, 'getTemplateContentById').and.returnValue(of(template));
+
+    loadEditorWithTemplate(component);
 
     // wait for editor to display the template
     setTimeout(() => {
@@ -117,10 +153,10 @@ describe('TemplateEditorComponent', () => {
   });
 
   it('should save a template', (done) => {
-    spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
+    spyOn(dtsService, 'getTemplateContentById').and.returnValue(of(template));
     spyOn(dtsService, 'saveTemplate').and.returnValue(of(templatesEnrollment.items[0]));
 
-    loadEditor(component);
+    loadEditorWithTemplate(component);
 
     // wait for editor to display the template
     setTimeout(() => {
@@ -140,14 +176,14 @@ describe('TemplateEditorComponent', () => {
   });
 
   it('should handle an error when saving a template', (done) => {
-    spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
+    spyOn(dtsService, 'getTemplateContentById').and.returnValue(of(template));
     spyOn(dtsService, 'saveTemplate').and.returnValue(throwError({
       error: {
         code: '403'
       }
     }));
 
-    loadEditor(component);
+    loadEditorWithTemplate(component);
 
     // wait for editor to display the template
     setTimeout(() => {
@@ -164,9 +200,9 @@ describe('TemplateEditorComponent', () => {
   });
 
   it('should copy a template', (done) => {
-    spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
+    spyOn(dtsService, 'getTemplateContentById').and.returnValue(of(template));
 
-    loadEditor(component);
+    loadEditorWithTemplate(component);
 
     // wait for editor to display the template
     setTimeout(() => {
@@ -181,34 +217,4 @@ describe('TemplateEditorComponent', () => {
       done();
     }, 1000);
   });
-
-  // may remove this as there's a cypress test for this scenario
-  xit('should render a template', (done) => {
-    spyOn(dtsService, 'getTemplateByKey').and.returnValue(of(template));
-    // spyOn(dtsService, 'hotRenderTemplate').and.returnValue(of(certificate));
-
-    const doc = jasmine.createSpyObj('document', ['open', 'write', 'close']);
-    const windowDialog = jasmine.createSpyObj('modal', ['']);
-    windowDialog.document = doc;
-    spyOn(window, 'open').and.returnValue(windowDialog);
-
-    component.templateEditor.controls.dataKey.setValue('123456');
-    loadEditor(component);
-
-    // wait for editor to display the template
-    setTimeout(() => {
-      // switch display mode from code to wysiwyg
-      const sourceButton = fixture.debugElement.nativeElement.querySelector('.cke_button__source');
-      sourceButton.click();
-      component.renderTemplate();
-
-      expect(window.open).toHaveBeenCalled();
-      expect(doc.open).toHaveBeenCalled();
-      expect(doc.write).toHaveBeenCalled();
-      expect(doc.close).toHaveBeenCalled();
-
-      done();
-    }, 1000);
-  });
-
 });

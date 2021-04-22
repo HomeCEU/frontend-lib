@@ -20,6 +20,5 @@ CKEDITOR.editorConfig = function( config ) {
   ];
   config.startupMode = 'wysiwyg';
   config.allowedContent = true;
-  config.fullPage = true;
   config.height = '60vh';
 };

@@ -75,7 +75,7 @@ export const templatesImage = {
   items: [
     {
       id: '00884fc8-eaac-485c-91d8-72c8b582a530',
-      docType: 'enrollment/image',
+      docType: 'enrollment',
       key: 'acp_john_tawfik_signature.png',
       author: 'Dan',
       createdAt: {
@@ -83,17 +83,23 @@ export const templatesImage = {
         timezone_type: 3,
         timezone: 'UTC'
       },
+      metadata: {
+        type: 'image'
+      },
       bodyUri: '/template/00884fc8-eaac-485c-91d8-72c8b582a530'
     },
     {
       id: '01371f64-3238-40b0-ad31-98d85601a328',
-      docType: 'enrollment/image',
+      docType: 'enrollment',
       key: 'intergro_certificate_logo.jpg',
       author: 'Dan',
       createdAt: {
         date: '2020-03-23 15:40:06.000000',
         timezone_type: 3,
         timezone: 'UTC'
+      },
+      metadata: {
+        type: 'image'
       },
       bodyUri: '/template/01371f64-3238-40b0-ad31-98d85601a328'
     }
@@ -105,7 +111,7 @@ export const templatesPartial = {
   items: [
     {
       id: '024a5bfc-4fd4-4193-a4ac-2eccd9911259',
-      docType: 'enrollment/partial',
+      docType: 'enrollment',
       key: 'course_authors',
       author: 'Dan',
       createdAt: {
@@ -113,11 +119,14 @@ export const templatesPartial = {
         timezone_type: 3,
         timezone: 'UTC'
       },
+      metadata: {
+        type: 'partial'
+      },
       bodyUri: '/template/024a5bfc-4fd4-4193-a4ac-2eccd9911259'
     },
     {
       id: '102fe464-8946-43a1-af5c-9101f22744c8',
-      docType: 'enrollment/partial',
+      docType: 'enrollment',
       key: 'pt-pta',
       author: 'Dan',
       createdAt: {
@@ -125,11 +134,14 @@ export const templatesPartial = {
         timezone_type: 3,
         timezone: 'UTC'
       },
+      metadata: {
+        type: 'partial'
+      },
       bodyUri: '/template/102fe464-8946-43a1-af5c-9101f22744c8'
     },
     {
       id: '1e3269aa-a4a5-40d9-afba-3a01c222685e',
-      docType: 'enrollment/partial',
+      docType: 'enrollment',
       key: 'ot-cota',
       author: 'Dan',
       createdAt: {
@@ -137,17 +149,23 @@ export const templatesPartial = {
         timezone_type: 3,
         timezone: 'UTC'
       },
+      metadata: {
+        type: 'partial'
+      },
       bodyUri: '/template/1e3269aa-a4a5-40d9-afba-3a01c222685e'
     },
     {
       id: '23041b7b-0584-4546-9b5e-03b085d6b5b1',
-      docType: 'enrollment/partial',
+      docType: 'enrollment',
       key: 'cna',
       author: 'Dan',
       createdAt: {
         date: '2020-03-23 15:40:06.000000',
         timezone_type: 3,
         timezone: 'UTC'
+      },
+      metadata: {
+        type: 'partial'
       },
       bodyUri: '/template/23041b7b-0584-4546-9b5e-03b085d6b5b1'
     }

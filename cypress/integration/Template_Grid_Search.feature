@@ -10,7 +10,7 @@ Feature: Search list of existing templates
     Examples:
       | search_value    | num_of_templates |
       | badvalue        | 0                |
-      | vibrant         | 2                |
+      | nursing         | 2                |
       | encompass_care  | 1                |
       | admin-approved  | 1                |
       | infinity_rehab  | 1                |
@@ -23,7 +23,7 @@ Feature: Search list of existing templates
     Examples:
       | search_value    | num_of_templates |
       | badvalue        | 0                |
-      | Dan             | 8                |
+      | Dan             | 11               |
 
 #  Scenario: Clearing search field displays original list of templates
 #    Given Search results for "encompass_care" are shown

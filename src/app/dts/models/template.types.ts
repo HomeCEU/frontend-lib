@@ -8,6 +8,7 @@ export interface Template {
   author: string;
   createdAt: DtsDate;
   bodyUri: string;
+  metadata?: MetaData;
 }
 
 /**
@@ -17,6 +18,10 @@ export interface RenderedTemplate {
   id: string;
   createdAt: DtsDate;
   location: string;
+}
+
+export interface MetaData {
+  type: string;
 }
 
 interface DtsDate {

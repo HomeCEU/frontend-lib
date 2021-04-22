@@ -5,7 +5,7 @@ Given('A form displayed to manage template {string}', (template_name) => {
   getTemplates();
   searchTemplates(template_name);
 
-  cy.intercept('GET', '**/template/enrollment/*').as('getTemplate');
+  cy.intercept('GET', '**/template/*').as('getTemplate');
   cy.get(`:nth-child(1) > .datatable-body-row`).click();
   cy.wait('@getTemplate');
 })
