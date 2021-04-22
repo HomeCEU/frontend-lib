@@ -56,6 +56,7 @@ describe('DtsComponent', () => {
   });
 
   it('should create', inject([DtsService], (dtsService: DtsService) => {
+    spyOn(dtsService, 'getStatus').and.returnValue(of('OK'));
     spyOn(dtsService, 'getTemplates').and.returnValue(of(null));
     createComponent();
     expect(component).toBeTruthy();
