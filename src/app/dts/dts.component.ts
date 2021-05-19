@@ -69,7 +69,7 @@ export class DtsComponent extends UnsubscribeOnDestroyAdapter implements OnInit 
 
     this.subs.sink = this.dtsService.getStatus().subscribe(
       status => {
-        console.log(`v1.3 User: ${this.userName}  Status: ${status}  Endpoint: ${this.dtsService.url}`);
+        console.log(`v1.4 User: ${this.userName}  Status: ${status}  Endpoint: ${this.dtsService.url}`);
       },
       error => {
         console.error(`Failed to connect to ${this.dtsService.url} - ${error.message}`);
